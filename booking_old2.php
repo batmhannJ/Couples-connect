@@ -52,7 +52,7 @@ while($row_users = $stmt_users->fetch()){
 
             <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
                 <div style="flex:1.6;text-align:right;margin-right:25px">
-                    <a href="http://localhost/couplesconnectprog/select_option.php" style='color:black;text-decoration:none'>SERVICES</a>
+                    <a href="http://localhost/couples-connectprog/select_option.php" style='color:black;text-decoration:none'>SERVICES</a>
                 </div>
 
                 <div style="flex:1.8;text-align:center;margin-right:10px">
@@ -68,7 +68,7 @@ while($row_users = $stmt_users->fetch()){
                 </div>
 
                 <div style="flex:0.6;text-align:right;padding-right:25px">
-                    <a href="http://localhost/couplesconnectprog/logout_cc.php" style='color:black;text-decoration:none'>LOGOUT</a>
+                    <a href="http://localhost/couples-connectprog/logout_cc.php" style='color:black;text-decoration:none'>LOGOUT</a>
                 </div>
 
             </div> 

@@ -18,21 +18,21 @@ require "includes/cc_header.php";
 
             <div class="col-4 offset-5" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
                 <div style="flex:0.8">
-                    <a href="http://localhost/couplesconnectprog/login_cc.php"  class="has_hover" style='color:black;text-decoration:none'>HOME</a>
+                    <a href="http://localhost/couples-connect/login_cc.php"  class="has_hover" style='color:black;text-decoration:none'>HOME</a>
                 </div>
 
                 <div style="flex:1.1">
                     
-                    <a href="http://localhost/couplesconnect_wp/about-us/"  class="has_hover" style='color:black;text-decoration:none'>ABOUT US</a>
+                    <a href="http://localhost/couples-connect_wp/about-us/"  class="has_hover" style='color:black;text-decoration:none'>ABOUT US</a>
 
                 </div>
 
                 <div style="flex:1.1">
-                    <a href="http://localhost/couplesconnect_wp/contact-us/"  class="has_hover" style='color:black;text-decoration:none'>CONTACTS</a>
+                    <a href="http://localhost/couples-connect_wp/contact-us/"  class="has_hover" style='color:black;text-decoration:none'>CONTACTS</a>
                 </div>
 
                 <div style="flex:1">
-                    <a href="http://localhost/couplesconnectprog/login_cc.php" class="has_hover" style='color:black;text-decoration:none'>| LOGIN</a>
+                    <a href="http://localhost/couples-connect/login_cc.php" class="has_hover" style='color:black;text-decoration:none'>| LOGIN</a>
                 </div>
 
             </div> 

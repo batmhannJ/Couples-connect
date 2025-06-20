@@ -19,7 +19,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `couplesconnect_db`
+-- Database: `couples-connect_db`
 --
 
 -- --------------------------------------------------------
@@ -244,7 +244,7 @@ CREATE TABLE `header_menu` (
 --
 
 INSERT INTO `header_menu` (`recid`, `menprog`, `mencap`, `menidx`, `usrlvl`, `mengrp`) VALUES
-(1, 'http://localhost/couplesconnect_wp/index.php', 'Home', '1', 'ALL', 'LOGIN');
+(1, 'http://localhost/couples-connect_wp/index.php', 'Home', '1', 'ALL', 'LOGIN');
 
 -- --------------------------------------------------------
 

@@ -80,7 +80,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
 
             <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
                 <div style="flex:0.5;text-align:right;margin-right:10px">
-                    <a href="http://localhost/couplesconnectprog/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
+                    <a href="http://localhost/couples-connectprog/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
                 </div>
 
                 <div style="flex:.1;text-align:center;padding-right:10px">
@@ -92,7 +92,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
                 </div>
 
                 <div style="flex:0.6;text-align:right;padding-right:35px">
-                    <a href="http://localhost/couplesconnectprog/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
+                    <a href="http://localhost/couples-connectprog/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
                 </div>
 
             </div> 
@@ -110,7 +110,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
 
                                 <div class="row">
                                     <div class="col-2">
-                                        <a href="http://localhost/couplesconnectprog/cc_certification.php"><img src="images/Vector (1).png" style='height:30px;width:20px'></a>
+                                        <a href="http://localhost/couples-connectprog/cc_certification.php"><img src="images/Vector (1).png" style='height:30px;width:20px'></a>
                                     </div>
 
                                     <div class="col-10 d-flex justify-content-center" style='padding-right:280px'>

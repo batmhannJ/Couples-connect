@@ -20,19 +20,42 @@ $userid = $rs_all['userid'];
 
 $xcount = 0;
 $email = '';
-
-$select_db_partnerinfo="SELECT mf_prog_users.username as 'mf_username', mf_prog_users.secondary_email as 'ext_secondary_email', mf_prog_users.email as 'mf_email', mf_prog_users.secondary_email as 'mf_secondary_email', ext_couples_accountinfo.cellphone_number as 'ext_cellphone',
-ext_couples_accountinfo.first_name as 'ext_firstname', ext_couples_accountinfo.middle_name as 'ext_middlename', ext_couples_accountinfo.last_name as 'ext_last_name', ext_couples_accountinfo.sex as 'ext_sex',   ext_couples_accountinfo.occupation as 'ext_occupation',ext_couples_accountinfo.municipality as 'ext_municipality', 
-mf_prog_users.date_requested as 'mf_date_requested', mf_prog_users.doc_link as 'mf_doc_link', mf_prog_users.crm_link as 'mf_crm_link',
-mf_prog_users.doc_link as 'mf_doc_link', mf_prog_users.crm_link as 'mf_crm_link', mf_prog_users.justification as 'mf_justification'  FROM mf_prog_users LEFT JOIN ext_couples_accountinfo ON mf_prog_users.userid 
-=ext_couples_accountinfo.userid WHERE mf_prog_users.usertype='USR' AND mf_prog_users.act_status ='RVW' AND mf_prog_users.userid=?";
-$stmt_partnerinfo	= $link->prepare($select_db_partnerinfo);
+$select_db_partnerinfo="SELECT 
+    username as 'mf_username', 
+    secondary_email as 'mf_secondary_email', 
+    email as 'mf_email', 
+    partner1_fname as 'partner1_firstname',
+    partner1_mname as 'partner1_middlename', 
+    partner1_lname as 'partner1_lastname',
+    partner1_sex as 'partner1_sex',
+    partner1_bday as 'partner1_bday',
+    partner1_cellphone as 'partner1_cellphone',
+    partner1_occupation as 'partner1_occupation',
+    partner1_municipality as 'partner1_municipality',
+    partner2_fname as 'partner2_firstname',
+    partner2_mname as 'partner2_middlename', 
+    partner2_lname as 'partner2_lastname',
+    partner2_sex as 'partner2_sex',
+    partner2_bday as 'partner2_bday',
+    partner2_cellphone as 'partner2_cellphone',
+    partner2_occupation as 'partner2_occupation',
+    partner2_municipality as 'partner2_municipality',
+    date_requested as 'mf_date_requested', 
+    doc_link as 'mf_doc_link', 
+    crm_link as 'mf_crm_link',
+    justification as 'mf_justification'  
+FROM mf_prog_users 
+WHERE usertype='USR' AND act_status='FA' AND userid=?";
+$stmt_partnerinfo = $link->prepare($select_db_partnerinfo);
 $stmt_partnerinfo->execute(array($userid));
-while($rs_partnerinfo = $stmt_partnerinfo->fetch())
-{
+$rs_partnerinfo = $stmt_partnerinfo->fetch();
+
+if($rs_partnerinfo) {
     $email = $rs_partnerinfo['mf_email'];
     $secondary_email = $rs_partnerinfo['mf_secondary_email'];
-
+    $justification = $rs_partnerinfo['mf_justification'];
+    
+    // Handle document links
     if(isset($rs_partnerinfo['mf_doc_link']) && !empty($rs_partnerinfo['mf_doc_link'])){
         $doc_link = $rs_partnerinfo['mf_doc_link'];
         $doc_link_arr = explode("/",$rs_partnerinfo['mf_doc_link']);
@@ -45,46 +68,27 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
         $crm_link = $rs_partnerinfo['mf_crm_link'];
         $crm_link_arr = explode("/",$rs_partnerinfo['mf_crm_link']);
         $crm_link_filename = $crm_link_arr[1];
-    
     }else{
         $crm_link_filename = '';
     }
-
-
-
-
-
-
-    $justification = $rs_partnerinfo['mf_justification'];
- 
-    if($xcount == 0){
-        $username = $rs_partnerinfo['mf_username'];
-        $second_email= $rs_partnerinfo['ext_secondary_email'];
-        $full_name = $rs_partnerinfo['ext_firstname'].' '.$rs_partnerinfo['ext_middlename'].' '.$rs_partnerinfo['ext_last_name'];
-        $birthdate = date('F d, Y', strtotime($rs_partnerinfo['mf_date_requested']));
-        $contact = $rs_partnerinfo['ext_cellphone'];
-        $occupation = $rs_partnerinfo['ext_occupation'];
-        $address = $rs_partnerinfo['ext_municipality'];
-        $gender = $rs_partnerinfo['ext_sex'];
-    }else{
-        $username2 = $rs_partnerinfo['mf_username'];
-        $second_email2 = $rs_partnerinfo['ext_secondary_email'];
-        $full_name2 = $rs_partnerinfo['ext_firstname'].' '.$rs_partnerinfo['ext_middlename'].' '.$rs_partnerinfo['ext_last_name'];
-        $birthdate2 = date('F d, Y', strtotime($rs_partnerinfo['mf_date_requested']));
-        $contact2 = $rs_partnerinfo['ext_cellphone'];
-        $occupation2 = $rs_partnerinfo['ext_occupation'];
-        $address2 = $rs_partnerinfo['ext_municipality'];
-        $gender2 = $rs_partnerinfo['ext_sex'];
-    }
-
-
-    // ($xcount==0) ? ;
-    // ($xcount==0) ? $full_name : $full_name2 = $rs_partnerinfo['first_name'].' '.$rs_partnerinfo['middle_name'].' '.$rs_partnerinfo['last_name'];
     
-    $xcount = 1;  
-
+    // Partner 1 information
+    $username = $rs_partnerinfo['mf_username'];
+    $full_name = $rs_partnerinfo['partner1_firstname'].' '.$rs_partnerinfo['partner1_middlename'].' '.$rs_partnerinfo['partner1_lastname'];
+    $birthdate = date('F d, Y', strtotime($rs_partnerinfo['partner1_bday']));
+    $contact = $rs_partnerinfo['partner1_cellphone'];
+    $occupation = $rs_partnerinfo['partner1_occupation'];
+    $address = $rs_partnerinfo['partner1_municipality'];
+    $gender = $rs_partnerinfo['partner1_sex'];
+    
+    // Partner 2 information
+    $full_name2 = $rs_partnerinfo['partner2_firstname'].' '.$rs_partnerinfo['partner2_middlename'].' '.$rs_partnerinfo['partner2_lastname'];
+    $birthdate2 = date('F d, Y', strtotime($rs_partnerinfo['partner2_bday']));
+    $contact2 = $rs_partnerinfo['partner2_cellphone'];
+    $occupation2 = $rs_partnerinfo['partner2_occupation'];
+    $address2 = $rs_partnerinfo['partner2_municipality'];
+    $gender2 = $rs_partnerinfo['partner2_sex'];
 }
-
 ?>
     <style>
 
@@ -104,7 +108,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
 
             <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
                 <div style="flex:0.5;text-align:right;margin-right:10px">
-                    <a href="http://localhost/couplesconnectprog/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
+                    <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
                 </div>
 
                 <div style="flex:.1;text-align:center;padding-right:10px">
@@ -116,7 +120,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
                 </div>
 
                 <div style="flex:0.6;text-align:right;padding-right:35px">
-                    <a href="http://localhost/couplesconnectprog/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
+                    <a href="http://localhost/couples-connect/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
                 </div>
 
             </div> 
@@ -134,7 +138,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
 
                                 <div class="row">
                                     <div class="col-2">
-                                        <a href="http://localhost/couplesconnectprog/cc_account_confirm.php"><img src="images/Vector (1).png" style='height:30px;width:20px'></a>
+                                        <a href="http://localhost/couples-connect/cc_account_confirm.php"><img src="images/Vector (1).png" style='height:30px;width:20px'></a>
                                     </div>
 
                                     <div class="col-10 d-flex justify-content-center" style='padding-right:240px'>
