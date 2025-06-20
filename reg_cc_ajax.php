@@ -18,23 +18,28 @@ $ret["status"] = true;
 
 require_once('resources/connect4.php');
 
-$select_db="SELECT * FROM mf_prog_users WHERE username='".$email."'";
-$stmt	= $link->prepare($select_db);
-$stmt->execute();
-$row = $stmt->fetchAll();
-
-if (count($row) > 0) {
-
-    $ret['msg']="Invalid username or password."; 
-    $ret["status"] = false;
-    $xactivity = "Login";
-    $xremarks = "No such User";
-    //PDO_UserActivityLog($link, $xusrcde, $xusrname, $xtrndte, $xprog_module, $xactivity, $xfullname, $xremarks , $linenum, $parameter, $trncde, $trndsc, $compname, $xusrnme);
-    // PDO_UserActivityLog($link, '', '', '', '', $xactivity, , $xremarks , 0, '', '', '','',$username);
+if ($_POST) {
+    $email = trim($_POST['email']);
+    $password = trim($_POST['password']);
+    
+    // Validate email format
+    if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        echo json_encode(['status' => false, 'msg' => 'Invalid email format']);
+        exit;
+    }
+    
+    // Check if email already exists
+    $check_email = "SELECT COUNT(*) as count FROM mf_prog_users WHERE email = ?";
+    $stmt = $link->prepare($check_email);
+    $stmt->execute([$email]);
+    $result = $stmt->fetch();
+    
+    if ($result['count'] > 0) {
+        echo json_encode(['status' => false, 'msg' => 'Email already exists']);
+        exit;
+    }
+    
+    // Email is available, proceed to next step
+    echo json_encode(['status' => true, 'msg' => 'Email available']);
 }
-
-
-
-header('Content-Type: application/json');
-echo json_encode($ret);
 ?>
