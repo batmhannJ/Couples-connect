@@ -18,7 +18,7 @@ require "includes/cc_header.php";
 
             <div class="col-4 offset-5" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
                 <div style="flex:0.8">
-                    <a href="http://localhost/couples-connect/login_cc.php"  class="has_hover" style='color:black;text-decoration:none'>HOME</a>
+                    <a href="http://localhost/couples-connect/index.php"  class="has_hover" style='color:black;text-decoration:none'>HOME</a>
                 </div>
 
                 <div style="flex:1.1">
@@ -32,7 +32,7 @@ require "includes/cc_header.php";
                 </div>
 
                 <div style="flex:1">
-                    <a href="http://localhost/couples-connect/login_cc.php" class="has_hover" style='color:black;text-decoration:none'>| LOGIN</a>
+                    <a href="http://localhost/couples-connect/index.php" class="has_hover" style='color:black;text-decoration:none'>| index.php</a>
                 </div>
 
             </div> 
@@ -78,7 +78,7 @@ require "includes/cc_header.php";
 
                             <div class="mx-5 mb-5 px-3 pmoc_tab" style='display:none'>
 
-                                <div class="pt-4 text-left login_form_header">
+                                <div class="pt-4 text-left index.php_form_header">
                                     <p style="margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:33px">PMOC Application</p>
                                     <p style="line-height:0.9;margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:21px;color:#9B9B9B">Personal Information</p>
                                     <img src="images/Rectangle 11942.png" style='width:100%'/>
@@ -193,7 +193,7 @@ require "includes/cc_header.php";
         <input type="hidden" name="occupation2_h" id="occupation2_h" value="<?php echo $_POST['occupation2'];?>">
         <input type="hidden" name="cellphone_number2_h" id="cellphone_number2_h" value="<?php echo $_POST['cellphone_number2'];?>">
 
-        <!-- LOGIN INFO -->
+        <!-- index.php INFO -->
         <input type="hidden" name="reg_email_h" id="reg_email_h" value ="<?php echo $_POST['reg_email_h'];?>">
         <input type="hidden" name="confirm_email_h" id="confirm_email_h" value ="<?php echo $_POST['confirm_email_h'];?>">
         <input type="hidden" name="reg_pwd_h" id="reg_pwd_h" value ="<?php echo $_POST['reg_pwd_h'];?>">
@@ -259,7 +259,7 @@ require "includes/cc_header.php";
             var occupation2_h = $("#occupation2_h").val();
             var cellphone_number2_h = $("#cellphone_number2_h").val();
 
-            //login info
+            //index.php info
             var reg_email_h = $("#reg_email_h").val();
             var confirm_email_h = $("#confirm_email_h").val();
             var confirm_pwd_h = $("#confirm_pwd_h").val();
@@ -329,4 +329,3 @@ require "includes/cc_header.php";
 <?php 
 require "includes/cc_footer.php";
 ?>
-

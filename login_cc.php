@@ -10,21 +10,21 @@ require "includes/cc_header.php";
 
             <div class="col-4 offset-5" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
                 <div style="flex:0.8">
-                    <a href="http://localhost/couplesconnectprog/login_cc.php" class="has_hover" style='color:black;text-decoration:none'>HOME</a>
+                    <a href="http://localhost/couples-connect/login_cc.php" class="has_hover" style='color:black;text-decoration:none'>HOME</a>
                 </div>
 
                 <div style="flex:1.1">
                     
-                    <a href="http://localhost/couplesconnect_wp/about-us/" class="has_hover" style='color:black;text-decoration:none'>ABOUT US</a>
+                    <a href="http://localhost/couples-connect/about-us/" class="has_hover" style='color:black;text-decoration:none'>ABOUT US</a>
 
                 </div>
 
                 <div style="flex:1.1">
-                    <a href="http://localhost/couplesconnect_wp/contact-us/" class="has_hover" style='color:black;text-decoration:none'>CONTACTS</a>
+                    <a href="http://localhost/couples-connect/contact-us/" class="has_hover" style='color:black;text-decoration:none'>CONTACTS</a>
                 </div>
 
                 <div style="flex:1">
-                    <a href="http://localhost/couplesconnectprog/login_cc.php" class="has_hover" style='color:black;text-decoration:none'>| LOGIN</a>
+                    <a href="http://localhost/couples-connect/login_cc.php" class="has_hover" style='color:black;text-decoration:none'>| LOGIN</a>
                 </div>
 
             </div> 
@@ -48,7 +48,7 @@ require "includes/cc_header.php";
 
                             <div class="m-3 px-3  form-group">
                                 <label class='form-label' style="color:black;font-size:21px">Password: </label>
-                                <input type='password' name="pwd_login " placeholder='Enter your password' id='pwd_login' style="height:63px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
+                                <input type='password' name="pwd_login" placeholder='Enter your password' id='pwd_login' style="height:63px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
                             </div>
 
                             <div class="m-3 pt-3 form-group d-flex align-items-center justify-content-center">
@@ -85,7 +85,7 @@ require "includes/cc_header.php";
         
         </table>
 
-        <div class="modal fade  xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
+        <div class="modal fade xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -94,8 +94,16 @@ require "includes/cc_header.php";
                     </div>
                     <div class="modal-body">
                         <p class="error_msg">Modal body text goes here.</p>
+                        
+                        <!-- Add this reapply section -->
+                        <div id="reapply-section" style="display: none; margin-top: 15px;">
+                            <hr>
+                            <p class="text-info" style="font-size: 16px; margin-bottom: 10px;">You can reapply for account approval:</p>
+                            <button type="button" id="reapply-btn" class="btn btn-success" style="width: 100%; padding: 10px;">
+                                <i class="fas fa-redo"></i> Click to Reapply
+                            </button>
+                        </div>
                     </div>
-     
                 </div>
             </div>
         </div>
@@ -143,10 +151,7 @@ require "includes/cc_header.php";
     </form>
 
     <script>
-
-
         function onReg(){
-
             document.forms.myforms.method = "post";
             document.forms.myforms.target = "_self";
             document.forms.myforms.action = "register_cc.php";
@@ -161,25 +166,22 @@ require "includes/cc_header.php";
             } else {
                 return false;
             }
-
         }
 
         function onLogin(){
-
             var xemail_input = document.getElementById("email_login");
             var xpassword = $("#pwd_login").val();
             var xemail = $("#email_login").val();
             var xerror = true;
 
-
-
             if(!xpassword || !xemail){
                 $(".error_msg").html("Empty password or Email");
+                $("#reapply-section").hide(); // Hide reapply section
                 $(".xerror_modal").modal("show");
 
             }else if(validateEmail(xemail_input) == false){
-
                 $(".error_msg").html("Invalid Email");
+                $("#reapply-section").hide(); // Hide reapply section
                 $(".xerror_modal").modal("show");
             }else{
 
@@ -195,6 +197,15 @@ require "includes/cc_header.php";
 
                         if(xdata['status'] == false){
                             $('.error_msg').html(xdata['msg']);
+                            
+                            // Check if reapply button should be shown
+                            if(xdata['show_reapply'] === true){
+                                $('#reapply-section').show();
+                                $('#reapply-btn').data('recid', xdata['recid']); // Store recid for reapply
+                            } else {
+                                $('#reapply-section').hide();
+                            }
+                            
                             $(".xerror_modal").modal("show");
                         }else{
 
@@ -208,21 +219,49 @@ require "includes/cc_header.php";
                             document.forms.myforms.action = login_after;
                             document.forms.myforms.submit();
                         }
-
-                        
-
                     },
                     error: function (request, status, error) {
                     }
-                
                 })
             }
-
-
         }
+
+        // Handle reapply button click
+        $(document).ready(function() {
+            $('#reapply-btn').click(function() {
+                var recid = $(this).data('recid');
+                
+                // Show loading state
+                $(this).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+                $(this).prop('disabled', true);
+                
+                $.ajax({
+                    url: 'reapply_handler.php',
+                    type: 'POST',
+                    data: { recid: recid },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status) {
+                            $('.error_msg').html(response.msg);
+                            $('#reapply-section').hide();
+                        } else {
+                            $('.error_msg').html('Error: ' + response.msg);
+                        }
+                        
+                        // Reset button
+                        $('#reapply-btn').html('<i class="fas fa-redo"></i> Click to Reapply');
+                        $('#reapply-btn').prop('disabled', false);
+                    },
+                    error: function() {
+                        $('.error_msg').html('An error occurred. Please try again.');
+                        $('#reapply-btn').html('<i class="fas fa-redo"></i> Click to Reapply');
+                        $('#reapply-btn').prop('disabled', false);
+                    }
+                });
+            });
+        });
     </script>
 
 <?php 
 require "includes/cc_footer.php";
 ?>
-

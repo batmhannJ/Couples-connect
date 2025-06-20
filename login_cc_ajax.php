@@ -16,6 +16,7 @@ $ret['user']='';
 $ret['userlvl']='';
 $ret['recid']='';
 $ret['status']=true;
+$ret['show_reapply'] = false; // Add flag for reapply button
 
 require_once('resources/connect4.php');
 
@@ -37,6 +38,7 @@ else {
         $recid_select=$rs['recid'];
         $password_select=$rs['password'];
         $act_status = $rs['act_status']; // Get account status
+        $remarks = $rs['remarks']; // Get remarks
 
         if($password !== $password_select){
             $ret['msg']="Invalid username or password.";        
@@ -44,13 +46,21 @@ else {
         }
         else if($password == $password_select){
             
-            // Check if account status is FA (For Approval)
+            // Check account status
             if($act_status == 'FA'){
                 $ret['msg']="Your account is under pending approval. Wait for the admin to approve your account.";
                 $ret['status'] = false;
             }
+            else if($act_status == 'DEC'){
+                // Account has been declined, show remarks and enable reapply
+                $decline_reason = !empty($remarks) ? $remarks : "No reason provided.";
+                $ret['msg']="Your account has been declined. Reason: " . $decline_reason;
+                $ret['status'] = false;
+                $ret['show_reapply'] = true; // Enable reapply button
+                $ret['recid'] = $recid_select; // Pass recid for reapply functionality
+            }
             else {
-                // Account is approved, proceed with login
+                // Account is approved (APR status), proceed with index.php
                 $_SESSION["username"] = $username;
                 $_SESSION["password"] = $password;
                 $_SESSION["usertype"] = $rs['usertype'];
