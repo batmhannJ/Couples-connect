@@ -85,20 +85,28 @@ require "includes/cc_header.php";
         
         </table>
 
-        <div class="modal fade  xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Couples Connect Says:</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="error_msg">Modal body text goes here.</p>
-                    </div>
-     
+        <div class="modal fade xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Couples Connect Says:</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p class="error_msg">Modal body text goes here.</p>
+                
+                <!-- Add this reapply section -->
+                <div id="reapply-section" style="display: none; margin-top: 15px;">
+                    <hr>
+                    <p class="text-info" style="font-size: 16px; margin-bottom: 10px;">You can reapply for account approval:</p>
+                    <button type="button" id="reapply-btn" class="btn btn-success" style="width: 100%; padding: 10px;">
+                        <i class="fas fa-redo"></i> Click to Reapply
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
+</div>
 
         <footer style='height:100px;background-color:#23408E' class='footer'>
             <div class="container-fluid"  style='height:100px'>
