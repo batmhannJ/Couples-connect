@@ -211,6 +211,8 @@ function safe_date_format($date_string, $format = 'F d, Y') {
 
                                     $book_now_disbaled = "";
                                     $req_now_disabled = "";
+                                    $pmc_book_disabled = "disabled";
+
                                     if($act_status == "APR"){
                                         echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
                                             echo "<img src='images/Group.png'>";
@@ -289,13 +291,14 @@ function safe_date_format($date_string, $format = 'F d, Y') {
 
                                         $book_now_disbaled = "disabled";
                                         $req_now_disabled = "disabled";
-                                    }else if($act_status == "PCT"){
+                                    }else if ($act_status === "PCT" && ($prnt_status == "1" || $prnt_status == 1)) {
                                         echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
                                             echo "<img src='images/Group.png'>";
                                             echo "<span style='margin-left:10px'>Move on to Certification</span>";
                                         echo "</div>";
 
                                         $book_now_disbaled = "disabled";
+                                        $pmc_book_disabled = ""; // Enable the button
                                     } else {
                                         
                                         echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
@@ -459,69 +462,69 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                             </div>
 
                                             <div class="d-flex justify-content-center">
-    <button type="button" <?php echo $req_now_disabled; ?> class="btn" <?php
+                                                    <button type="button" <?php echo $req_now_disabled; ?> class="btn" <?php
 
-    if($act_status === "PCT") {
-        // Use loose comparison to handle both string and integer values
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
-        } else {
-            echo "onclick='onRequesting()'";
-        }
-    } else if($xcert_status==="PMC") {
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
-        } else {
-            echo "onclick='onRequesting()'";
-        }
-    } else if ($xcert_status==="DEC") { 
-        echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
-    } else if ($xcert_status === "APRV") {
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
-        } else {
-            echo "onclick='onRequesting()'";
-        }
-    } else if ($requested_btn === true || $prnt_status == "1" || $prnt_status == 1) { 
-        echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";  
-    } else if ($act_status === "PMC") {
-        echo "onclick='onRequesting()'";
-    }
+                                                    if($act_status === "PCT") {
+                                                        // Use loose comparison to handle both string and integer values
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
+                                                        } else {
+                                                            echo "onclick='onRequesting()'";
+                                                        }
+                                                    } else if($xcert_status==="PMC") {
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
+                                                        } else {
+                                                            echo "onclick='onRequesting()'";
+                                                        }
+                                                    } else if ($xcert_status==="DEC") { 
+                                                        echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
+                                                    } else if ($xcert_status === "APRV") {
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
+                                                        } else {
+                                                            echo "onclick='onRequesting()'";
+                                                        }
+                                                    } else if ($requested_btn === true || $prnt_status == "1" || $prnt_status == 1) { 
+                                                        echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";  
+                                                    } else if ($act_status === "PMC") {
+                                                        echo "onclick='onRequesting()'";
+                                                    }
 
-    ?>style="background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:200px;height:36px;font-size:17px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">
+                                                    ?>style="background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:200px;height:36px;font-size:17px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">
 
-    <?php
-    // Update the button text logic with same fix
-    $print = "Print Now"; 
-    $requests = "Request To Print";
+                                                    <?php
+                                                    // Update the button text logic with same fix
+                                                    $print = "Print Now"; 
+                                                    $requests = "Request To Print";
 
-    if($act_status === "PCT") {
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            echo $requests;
-        } else {
-            echo $print;
-        }
-    } else if($xcert_status==="PMC") { 
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            echo $requests;
-        } else {
-            echo $print;
-        }
-    } else if($xcert_status==="DEC") { 
-        echo $requests;
-    } else if ($xcert_status === "APRV") { 
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            echo $requests;
-        } else {
-            echo $print;
-        }
-    } else if($requested_btn === false) {
-        echo $requests;
-    } else if ($prnt_status == "1" || $prnt_status == 1) {
-        echo $requests;
-    }
-    ?>
-</button>
+                                                    if($act_status === "PCT") {
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo $requests;
+                                                        } else {
+                                                            echo $print;
+                                                        }
+                                                    } else if($xcert_status==="PMC") { 
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo $requests;
+                                                        } else {
+                                                            echo $print;
+                                                        }
+                                                    } else if($xcert_status==="DEC") { 
+                                                        echo $requests;
+                                                    } else if ($xcert_status === "APRV") { 
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo $requests;
+                                                        } else {
+                                                            echo $print;
+                                                        }
+                                                    } else if($requested_btn === false) {
+                                                        echo $requests;
+                                                    } else if ($prnt_status == "1" || $prnt_status == 1) {
+                                                        echo $requests;
+                                                    }
+                                                    ?>
+                                                </button>
 
                                             </div>
                                         </div>
@@ -529,6 +532,40 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-6 d-flex justify-content-center">
+    <div style='width:80%;background-color:white;border-radius:15px' class="mt-2">
+        <div class="pt-3 d-flex align-items-end justify-content-center" style='font-size:28px;font-family:inter;font-weight:800;text-align:center;height:60px;
+                background-color:#385399;color:#FFFFFF;
+                border-top-left-radius:15px;
+                border-top-right-radius:15px'>
+            <span style='filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.63))'>POST MARRIAGE</span>
+        </div>
+
+        <div>
+            <div>
+                <div class="col-12 text-center m-3" style='font-size:15px;font-family:inter;color:black;font-weight:800'>
+                Post Marriage Counselling (PMC) Booking
+                </div>
+
+                <div class="col-12 text-center mx-3 mb-2 d-flex justify-content-center" style='font-size:14px;font-family:inter;color:black;font-weight:500' >
+                    <div style='width:70%'>Book your Post Marriage Counselling session to strengthen your relationship and build lasting connections.</div>
+                </div>
+
+                <div class="d-flex justify-content-center mb-2">
+                    <button type="button" <?php echo $pmc_book_disabled; ?> onclick="onPostMarriageBooking()" class="btn" style="background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:200px;height:36px;font-size:17px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">
+                        <?php 
+                        if ($pmc_book_disabled === "disabled") {
+                            echo "Complete PMOC First";
+                        } else {
+                            echo "Book PMC Now";
+                        }
+                        ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
                         </div>
 
                     </div>
@@ -653,6 +690,13 @@ function safe_date_format($date_string, $format = 'F d, Y') {
     </form>
 
     <script>
+
+        function onPostMarriageBooking(){
+            document.forms.myforms.method = "post";
+            document.forms.myforms.target = "_self";
+            document.forms.myforms.action = "post_marriage_booking.php"; // Create this page
+            document.forms.myforms.submit();
+        }
 
         function openFeedback(){
             $("#modal_feedback").modal("show");
