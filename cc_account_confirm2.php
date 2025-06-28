@@ -328,7 +328,7 @@ if($rs_partnerinfo) {
                                             </div>
 
                                             <div class="m-3 pt-1 form-group d-flex align-items-center justify-content-center">
-                                                <button type="button" onclick="acc_choose('APR')" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Approve</button>
+                                                <button type="button" onclick="acc_choose('PMO')" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Approve</button>
                                             </div>
                                         </div>
                                     </div>

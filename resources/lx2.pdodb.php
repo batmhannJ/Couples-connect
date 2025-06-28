@@ -14,11 +14,8 @@
         $arr_qry_params = array();
         $i=0;
         foreach($record_parameters as $field_value){
-            if(get_magic_quotes_gpc()){
-                $arr_qry_params[$i++]=stripslashes($field_value);                
-            }else{
-                $arr_qry_params[$i++]=$field_value;                           
-            }
+            // Removed get_magic_quotes_gpc() check since it's removed in PHP 8.0+
+            $arr_qry_params[$i++]=$field_value;
         }        
         
         $fields = '';
@@ -86,11 +83,8 @@
         $count=1;
         foreach($record_parameters as $field => $value){
         
-            if(get_magic_quotes_gpc()){
-                $update_parameters[$i++]=stripslashes($value);
-            }else{
-                $update_parameters[$i++]=$value;
-            }
+            // Removed get_magic_quotes_gpc() check since it's removed in PHP 8.0+
+            $update_parameters[$i++]=$value;
 
             if ($count==$array_count){
                 $args.="`$field`=?";
@@ -109,11 +103,8 @@
         if(is_array($condition_parameters)){
             foreach($condition_parameters as $field => $value){
             
-                if(get_magic_quotes_gpc()){
-                    $update_parameters[$i++]=stripslashes($value);
-                }else{
-                    $update_parameters[$i++]=$value;
-                }
+                // Removed get_magic_quotes_gpc() check since it's removed in PHP 8.0+
+                $update_parameters[$i++]=$value;
             }
         }        
        

@@ -34,6 +34,8 @@ if($act_status == "APR"){
     $act_status2 = "PMO";
 }
 
+
+
 if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDate" ||  $_POST['event_action'] == "cancel_booking"){
 
     if(isset($_POST['event_action']) &&  $_POST['event_action'] == "cancel_booking"){
@@ -348,7 +350,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
         if($act_status2 == "PMO"){
             $mf_users1["userid"] = $_SESSION['usr_id'];
             $mf_users1["partnerid"] = 1;
-            $mf_users1["meiformid"] = $new_meiformid1;
+            //$mf_users1["meiformid"] = $new_meiformid1;
             $mf_users1["answers"] = $key['option'];
             $mf_users1["reasons"] = $key['input'];
             $mf_users1["venue"] = $_POST['venue_hidden'];
@@ -358,7 +360,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
         }else{
             $mf_users1["userid"] = $_SESSION['usr_id'];
             $mf_users1["partnerid"] = 1;
-            $mf_users1["meiformid"] = $new_meiformid1;
+            //$mf_users1["meiformid"] = $new_meiformid1;
             $mf_users1["answers"] = 'Agree';
             $mf_users1["reasons"] = '';
             $mf_users1["venue"] = $_POST['venue_hidden'];
@@ -380,7 +382,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
         if($act_status2 == "PMO"){
             $mf_users2["userid"] = $_SESSION['usr_id'];
             $mf_users2["partnerid"] = 2;
-            $mf_users2["meiformid"] = $new_meiformid2;
+            //$mf_users2["meiformid"] = $new_meiformid2;
             $mf_users2["answers"] = $key['option'];
             $mf_users2["reasons"] = $key['input'];
             $mf_users2["venue"] = $_POST['venue_hidden'];
@@ -390,7 +392,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
         }else{
             $mf_users2["userid"] = $_SESSION['usr_id'];
             $mf_users2["partnerid"] = 2;
-            $mf_users2["meiformid"] = $new_meiformid2;
+            //$mf_users2["meiformid"] = $new_meiformid2;
             $mf_users2["answers"] = "Agree";
             $mf_users2["reasons"] = "";
             $mf_users2["venue"] = $_POST['venue_hidden'];

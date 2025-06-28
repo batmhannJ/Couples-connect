@@ -11,7 +11,6 @@ if($_SESSION['usertype'] == 'DSK'){
     $header_name = "USER";
 }
 
-
 $select_db="SELECT * FROM mf_prog_users WHERE recid=?";
 $stmt	= $link->prepare($select_db);
 $stmt->execute(array($_SESSION['usr_recid']));
@@ -114,6 +113,26 @@ try {
     exit();
 }
 
+// FUNCTION TO SAFELY FORMAT DATES
+function safe_date_format($date_string, $format = 'F d, Y') {
+    // Check if date_string is null, empty, or invalid
+    if (empty($date_string) || is_null($date_string)) {
+        return 'No Date Available';
+    }
+    
+    // Try to create DateTime object
+    try {
+        $date = new DateTime($date_string);
+        return $date->format($format);
+    } catch (Exception $e) {
+        // If DateTime fails, try strtotime as fallback
+        $timestamp = strtotime($date_string);
+        if ($timestamp === false) {
+            return 'Invalid Date';
+        }
+        return date($format, $timestamp);
+    }
+}
 
 ?>
 
@@ -169,7 +188,7 @@ try {
                 </div>
 
                 <div style="flex:0.6;text-align:right;padding-right:145px">
-                    <a href="http://localhost/couplesconnectprog/logout_cc.php" style='color:black;text-decoration:none' class='has_hover'>LOGOUT</a>
+                    <a href="http://localhost/couples-connect/logout_cc.php" style='color:black;text-decoration:none' class='has_hover'>LOGOUT</a>
                 </div>
             </div> 
         </div>
@@ -198,13 +217,13 @@ try {
                                             echo "<span style='margin-left:10px'>Account is approved.</span>";
                                         echo "</div>";
 
-                                        $req_now_disabled = "";
-                                        $book_now_disbaled = "disabled";
+                                        $req_now_disabled = "disabled";
+                                        //$book_now_disbaled = "disabled";
 
                                     }else if($act_status == "PMO"){
                                         echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
                                             echo "<img src='images/Group.png'>";
-                                            echo "<span style='margin-left:10px'>Waiting for Approval</span>";
+                                            echo "<span style='margin-left:10px'>Account is approved.</span>";
                                         echo "</div>";
 
                                         // $book_now_disbaled = "disabled";
@@ -285,7 +304,6 @@ try {
                                         echo "</div>";
                                     }
 
-
                                     ?>
 
                                 </div>
@@ -309,10 +327,11 @@ try {
                                                 $stmt2->execute(array($_SESSION['usr_id']));
                                                 $row2 = $stmt2->fetch();
 
-                                                $from_to = $row2["from_to"];
-                                                $date_formatted = date('F d, Y', strtotime($row2["mf_date"]));
+                                                $from_to = $row2["from_to"] ?? '';
+                                                // FIXED: Use safe_date_format function instead of direct strtotime
+                                                $date_formatted = safe_date_format($row2["mf_date"] ?? null);
 
-                                                if(!empty($from_to) && !empty($date_formatted)){
+                                                if(!empty($from_to) && $date_formatted !== 'No Date Available' && $date_formatted !== 'Invalid Date'){
                                                     echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
                                                         echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
                                                         echo "<div style='display:flex;flex-direction:column'>";
@@ -333,10 +352,11 @@ try {
                                                 $stmt2->execute(array($_SESSION['usr_id']));
                                                 $row2 = $stmt2->fetch();
 
-                                                $from_to = $row2["from_to"];
-                                                $date_formatted = date('F d, Y', strtotime($row2["mf_date"]));
+                                                $from_to = $row2["from_to"] ?? '';
+                                                // FIXED: Use safe_date_format function instead of direct strtotime
+                                                $date_formatted = safe_date_format($row2["mf_date"] ?? null);
 
-                                                if(!empty($from_to) && !empty($date_formatted)){
+                                                if(!empty($from_to) && $date_formatted !== 'No Date Available' && $date_formatted !== 'Invalid Date'){
                                                     echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
                                                         echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
                                                         echo "<div style='display:flex;flex-direction:column'>";

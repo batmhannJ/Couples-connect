@@ -215,7 +215,7 @@ ul.checkout-bar:before {
                 </div>
 
                 <div style="flex:0.6;text-align:right;padding-right:145px">
-                    <a href="http://localhost/couples-connectprog/logout_cc.php" style='color:black;text-decoration:none' class='has_hover'>LOGOUT</a>
+                    <a href="http://localhost/couples-connect/logout_cc.php" style='color:black;text-decoration:none' class='has_hover'>LOGOUT</a>
                 </div>
             </div> 
         </div>
@@ -226,13 +226,13 @@ ul.checkout-bar:before {
             <tr style='height:175px'>
                 <td class="d-flex align-items-top mx-0 px-0">
                     <div class="d-flex" style="display:flex;flex-direction:row;width:200%">
-                        <div style="width:50%;display:flex;justify-content:center;flex-direction:column;align-items:center">
+                        <!--<div><div style="width:50%;display:flex;justify-content:center;flex-direction:column;align-items:center">
                             <div style='width:80%;height:150px;background-color:white;border-radius:15px' class="mt-4">
                                 <div class="pt-3" style='font-size:27px;font-family:inter;font-weight:700;text-align:center'>Status</div>
                                 <div style='width:100%;display:flex;justify-content:center'>
                                     <img src="images/Rectangle 11934.png" style='width:80%;height:4px'>
                                 </div>
-                                <div>
+                                
                                     <?php   
                                     if($act_status == "APR"){
                                         echo "<div class='text-center' style='font-family:inter;font-size:28px;font-weight:700;margin-top:20px'>";
@@ -252,10 +252,10 @@ ul.checkout-bar:before {
                                     }
                                     ?>
 
-                                </div>
+                               
                                 
                             </div>
-                        </div>
+                        </div> </div>-->
                     </div>
                 </td>
             </tr>
@@ -390,13 +390,13 @@ ul.checkout-bar:before {
 
                                     
                         
-                                            echo "<select>";    
+                                            echo "</select>";    
                                         echo "</td>";
 
                                         echo "<td>";
                                             echo "<select class='form-control w-75 ms-2''>";   
                                                 echo "<option disabled selected>"; 
-                                                    echo "Select a Date..."; 
+                                                    echo "Select a Time..."; 
                                                 echo "</option>"; 
                                             echo "</select>";
                                         echo "</td>";
@@ -404,7 +404,7 @@ ul.checkout-bar:before {
 
                                         if($act_status2 == "PMC") {
                                             echo "<td class='text-center'>";
-                                                echo "Select a Date...";    
+                                                echo "Select a Time...";    
                                             echo "</td>";
                                         }
                         
@@ -939,35 +939,44 @@ ul.checkout-bar:before {
         }        
 
 
-        $('.select_date').on('change', function(e) {
+        $(document).on('change', '.select_date', function(e) {
             var selectedOption = $(this).find('option:selected');
             var xdate = selectedOption.data('xdate');
             var xcounselorid = selectedOption.data('xcounselorid');
             var xrecid = selectedOption.data('xrecid');
             var xvenue = selectedOption.data('xvenue');
-
+            
+            // Store values in hidden fields
             $("#venue_hidden").val(xvenue);
             $("#date_hidden").val(xdate);
             $("#counselor_hidden").val(xcounselorid);
             $("#recid_hidden").val(xrecid);
-
-            ajaxNew("changeDate",xdate, xcounselorid, xrecid, '');
+            
+            // Get the time dropdown for this row
+            var timeDropdown = $(this).closest('tr').find('.select_time');
+            
+            // Update time dropdown via AJAX
+            ajaxNew("changeDate", xdate, xcounselorid, xrecid, '', $(this));
         });
 
-        $('.select_time').on('change', function(e) {
-            var selectedOption = $(this).find('option:selected');
-            var xdate = selectedOption.data('xdate');
-            var xcounselorid = selectedOption.data('xcounselorid');
-            var xrecid = selectedOption.data('xrecid');
-            var xvenue = selectedOption.data('xvenue');
+        $(document).on('change', '.select_time', function(e) {
+    var selected_time = $(this).val();
+    var selectedOption = $(this).find('option:selected');
+    
+    $("#timeline_hidden").val(selected_time);
+    
+    // Enable the book button for this row
+    var bookButton = $(this).closest('tr').find('button[onclick*="book_func"]');
+    if (selected_time && selected_time !== '') {
+        bookButton.prop('disabled', false);
+        bookButton.attr('onclick', 'book_func()');
+    }
+});
 
-            $("#venue_hidden").val(xvenue);
-            $("#date_hidden").val(xdate);
-            $("#counselor_hidden").val(xcounselorid);
-            $("#recid_hidden").val(xrecid);
-
-            ajaxNew("changeDate",xdate, xcounselorid, xrecid, '');
-        });        
+$(document).on('click', 'button[onclick*="book_func"]', function(e) {
+    e.preventDefault();
+    book_func();
+});
 
 
         // $('.select_time').on('change', function(e) {
@@ -975,109 +984,93 @@ ul.checkout-bar:before {
         //     $("#timeline_hidden").val(selected_time);
         // });
 
-    function ajaxNew(xevent_action,xdate,xcounselorid,xrecid,xmeiformid){
+    function ajaxNew(xevent_action, xdate, xcounselorid, xrecid, xmeiformid, sourceElement) {
+    var act_status_hidden = $("#act_status_hidden").val();
+    var timeline_hidden_val = $("#timeline_hidden").val();
 
-        var act_status_hidden = $("#act_status_hidden").val();
-        var timeline_hidden_val = $("#timeline_hidden").val();
+    if(xevent_action == "submitAll" || xevent_action == "cancel_booking"){
+        var date_hidden_val = $("#date_hidden").val();
+        var counselor_hidden_val = $("#counselor_hidden").val();
+        var recid_hidden_val = $("#recid_hidden").val();
 
-        if(xevent_action == "submitAll" || xevent_action == "cancel_booking"){
+        xdate = date_hidden_val;
+        xcounselorid = counselor_hidden_val;
+        xrecid = recid_hidden_val;
 
-            var date_hidden_val = $("#date_hidden").val();
-            var counselor_hidden_val = $("#counselor_hidden").val();
-            var recid_hidden_val = $("#recid_hidden").val();
-
-            xdate = date_hidden_val;
-            xcounselorid = counselor_hidden_val;
-            xrecid = recid_hidden_val;
-
-
-            if(xevent_action == "submitAll" && act_status_check !== 'PMC'){
-
-                
-
-                if(!checkDropdownsInModal('partner2_modal')){
-                    alert("Please submit all required fields");
-                    return;
-                }
+        if(xevent_action == "submitAll" && act_status_check !== 'PMC'){
+            if(!checkDropdownsInModal('partner2_modal')){
+                alert("Please submit all required fields");
+                return;
             }
-
-            // if(xevent_action == "submitAll"){
-
-            //     timeline_hidden_val = $('.selected_time option:selected').text();
-
-            //     alert(timeline_hidden_val);
-            // }
         }
-
-
-        var serializedData = $("#myforms *").serialize()+"&event_action="+xevent_action+"&date="+xdate+"&counselorid="+xcounselorid+"&ext_recid="+xrecid+"&timeline="+timeline_hidden_val+"&meiformid_post="+xmeiformid;
-
-        $.ajax({                                      
-            url: 'booking_ajax.php',              
-            type: "post",          
-            data: serializedData,               
-            success: function(xdata){
-
-                if(xevent_action == "changeDate"){
-                    $("#timeline_hidden").val(xdata["first_time"]);
-                }
-
-                $("#table_data").html(xdata["html"]);
-
-                if(xevent_action == 'submitAll'){
-
-
-                    //resets modal
-                    $("#partner1_modal").css({'display': 'unset'});
-                    $("#partner2_modal").css({'display': 'none'});
-                    $("#meiform_modal_footer").html("<div class='modal-footer d-flex justify-content-center' id='meiform_modal_footer'><button type='button' name='btn_modal' id='btn_modal' onclick='proceed_partner2()' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Proceed to Partner 2</button></div>");
-
-                    //clears select
-                    $('#partner1_modal select').each(function() {
-                        $(this).children('option:first').prop('selected', true);
-                    });
-                    $('#partner2_modal select').each(function() {
-                        $(this).children('option:first').prop('selected', true);
-                    });
-
-
-                    //clears all input 
-                    $('#partner1_modal input[type="text"]').val('');
-                    $('#partner2_modal input[type="text"]').val('');
-
-                    $("#meiform_modal").modal("hide");
-                }
-
-                $('.select_date').on('change', function(e) {
-                    var selectedOption = $(this).find('option:selected');
-                    var xdate = selectedOption.data('xdate');
-                    var xcounselorid = selectedOption.data('xcounselorid');
-                    var xrecid = selectedOption.data('xrecid');
-
-                    var xvenue = selectedOption.data('xvenue');
-
-                    
-                    $("#venue_hidden").val(xvenue);
-                    $("#date_hidden").val(xdate);
-                    $("#counselor_hidden").val(xcounselorid);
-                    $("#recid_hidden").val(xrecid);
-
-                    ajaxNew("changeDate",xdate, xcounselorid, xrecid,'');
-                });
-
-                $('.select_time').on('change', function(e) {
-                    var selected_time = $(this).find(":selected").val();
-                    $("#timeline_hidden").val(selected_time);
-                });
-
-
-
-            },
-            error: function (request, status, error) {
-            }
-        });
     }
 
+    var serializedData = $("#myforms *").serialize() + 
+        "&event_action=" + xevent_action + 
+        "&date=" + xdate + 
+        "&counselorid=" + xcounselorid + 
+        "&ext_recid=" + xrecid + 
+        "&timeline=" + timeline_hidden_val + 
+        "&meiformid_post=" + xmeiformid;
+
+    $.ajax({                                      
+        url: 'booking_ajax.php',              
+        type: "post",
+        dataType: "json", // Make sure to expect JSON response
+        data: serializedData,               
+        success: function(xdata){
+            if(xevent_action == "changeDate"){
+                // Update the time dropdown for the specific row
+                if(sourceElement) {
+                    var timeDropdown = sourceElement.closest('tr').find('.select_time');
+                    timeDropdown.html(''); // Clear existing options
+                    
+                    // Add default option
+                    timeDropdown.append('<option disabled selected>Select Time...</option>');
+                    
+                    // Add time options from response
+                    if(xdata.times && xdata.times.length > 0) {
+                        $.each(xdata.times, function(index, timeOption) {
+                            timeDropdown.append('<option value="' + timeOption.value + '">' + timeOption.text + '</option>');
+                        });
+                        timeDropdown.prop('disabled', false);
+                    }
+                    
+                    // Update slots available if applicable
+                    if(xdata.slots_available) {
+                        sourceElement.closest('tr').find('.slots-cell').text(xdata.slots_available);
+                    }
+                }
+                
+                $("#timeline_hidden").val(xdata["first_time"] || '');
+            }
+
+            // Update the entire table if needed
+            if(xdata["html"]) {
+                $("#table_data").html(xdata["html"]);
+            }
+
+            if(xevent_action == 'submitAll'){
+                // Reset modal
+                $("#partner1_modal").css({'display': 'unset'});
+                $("#partner2_modal").css({'display': 'none'});
+                $("#meiform_modal_footer").html("<button type='button' name='btn_modal' id='btn_modal' onclick='proceed_partner2()' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Proceed to Partner 2</button>");
+
+                // Clear form inputs
+                $('#partner1_modal select, #partner2_modal select').each(function() {
+                    $(this).children('option:first').prop('selected', true);
+                });
+                $('#partner1_modal input[type="text"], #partner2_modal input[type="text"]').val('');
+
+                $("#meiform_modal").modal("hide");
+            }
+        },
+        error: function (request, status, error) {
+            console.error("AJAX Error:", error);
+            console.error("Response:", request.responseText);
+        }
+    });
+}
 
 
     function book_func(){
