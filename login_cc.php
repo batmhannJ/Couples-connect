@@ -163,98 +163,175 @@ require "includes/cc_header.php";
         }
     });
 </script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Couples Connect</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%);
+            min-height: 100vh;
+            font-family: Inter, sans-serif;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column !important;
+                padding: 20px !important;
+                gap: 0 !important;
+            }
+            .form-section {
+                width: 100% !important;
+                padding: 10px !important;
+            }
+            .image-section {
+                display: none !important;
+            }
+        }
+        
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .form-section {
+                width: 50% !important;
+            }
+            .image-section {
+                width: 50% !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .main-container > .form-section > div {
+                max-width: 100% !important;
+                margin: 10px !important;
+                padding: 20px 15px !important;
+                border-radius: 15px !important;
+            }
+            
+            footer > div {
+                padding: 0 15px !important;
+            }
+            
+            footer > div > div {
+                flex-direction: column !important;
+                text-align: center !important;
+                gap: 15px !important;
+            }
+            
+            footer > div > div > div:first-child {
+                min-width: auto !important;
+                justify-content: center !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .main-container > .form-section > div {
+                padding: 18px 12px !important;
+            }
+            
+            .form-title {
+                font-size: 22px !important;
+            }
+            
+            footer img[src*="logo"] {
+                height: 50px !important;
+            }
+            
+            footer .office-name {
+                font-size: 12px !important;
+            }
+        }
 
-     <body style="margin: 0; padding: 0; min-height: 100vh; background: linear-gradient(135deg,rgb(215, 217, 225) 0%,rgb(162, 185, 231) 100%);"></body>
+        /* New styles for closer positioning */
+        .image-section img {
+            object-position: left center !important;
+        }
+    </style>
+</head>
+<body>
 
-     <form name='myforms' id="myforms" method="post" target="_self" style="min-height: 100vh; display: flex; flex-direction: column;">
+    <form name='myforms' id="myforms" method="post" target="_self" style="min-height: 100vh; display: flex; flex-direction: column;">
         
         <!-- Main Content Container -->
-        <div style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px;">
-            <div style="width: 100%; max-width: 420px; background-color: white; border-radius: 20px; padding: 30px; box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.15); margin: 20px;">
-                
-                <!-- Header -->
-                <div style="text-align: center; margin-bottom: 25px;">
-                    <p style="font-weight: bold; font-size: 28px; font-family: Inter; margin: 0; color: #333;">Login</p>
-                </div>
-
-                <!-- Email Field -->
-                <div style="margin-bottom: 20px;">
-                    <label style="color: black; font-size: 16px; font-weight: 500; margin-bottom: 8px; display: block;">Email:</label>
-                    <input type='text' name='email_login' id='email_login' placeholder='Enter your email' 
-                           style="height: 50px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 15px; font-size: 14px; box-sizing: border-box; transition: border-color 0.3s;" 
-                           autocomplete='off'
-                           onfocus="this.style.borderColor='#23408E'"
-                           onblur="this.style.borderColor='#ddd'">
-                </div>
-
-               <!-- Password Field -->
-<div style="margin-bottom: 25px;">
-   <label style="color: black; font-size: 16px; font-weight: 500; margin-bottom: 8px; display: block;">Password:</label>
-   <div style="position: relative; width: 100%;">
-       <input type='password' name="pwd_login" placeholder='Enter your password' id='pwd_login' 
-              style="height: 50px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 15px 0 15px; padding-right: 45px; font-size: 14px; box-sizing: border-box; transition: border-color 0.3s;" 
-              autocomplete='off'
-              onfocus="this.style.borderColor='#23408E'"
-              onblur="this.style.borderColor='#ddd'">
-       <button type="button" id="togglePassword" onclick="togglePasswordVisibility()" 
-               style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 16px; color: #666; padding: 0; width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;">
-           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-               <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-               <circle cx="12" cy="12" r="3"/>
-           </svg>
-       </button>
-   </div>
-</div>
-
-<script>
-function togglePasswordVisibility() {
-   const passwordInput = document.getElementById('pwd_login');
-   const toggleButton = document.getElementById('togglePassword');
-   
-   if (passwordInput.type === 'password') {
-       passwordInput.type = 'text';
-       toggleButton.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
-   } else {
-       passwordInput.type = 'password';
-       toggleButton.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
-   }
-}
-</script>
-
-                <!-- Login Button -->
-                <div style="text-align: center; margin-bottom: 10px;">
-                    <button type="button" onclick="onLogin()" 
-                            style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%); color: white; width: 100%; height: 50px; font-size: 16px; font-family: Inter; font-weight: 700; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0px 4px 15px rgba(35, 64, 142, 0.3); transition: transform 0.2s, box-shadow 0.2s;"
-                            onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0px 6px 20px rgba(35, 64, 142, 0.4)'"
-                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0px 4px 15px rgba(35, 64, 142, 0.3)'">
-                        Log in
-                    </button>
-                </div>
-
-                <!-- Forgot Password -->
-                <!--<div style="text-align: center; margin: 20px 0;">
-                    <div style="display: flex; align-items: center; justify-content: center; gap: 15px;">
-                        <div style="height: 1px; background-color: #e0e0e0; flex: 1;"></div>
-                        <span style="font-family: Inter; color: #9FA2B4; font-size: 14px; white-space: nowrap;">Forgot Password</span>
-                        <div style="height: 1px; background-color: #e0e0e0; flex: 1;"></div>
+        <div class="main-container" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px 10px; gap: 20px;">
+            
+            <!-- Form Section -->
+            <div class="form-section" style="width: 50%; display: flex; align-items: center; justify-content: flex-end; padding: 10px 90px 20px 20px;">
+                <div style="width: 100%; max-width: 550px; background-color: white; border-radius: 18px; padding: 25px; box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.15);">
+                    
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 18px;">
+                        <p class="form-title" style="font-weight: bold; font-size: 26px; font-family: Inter; margin: 0; color: #333;">Login</p>
+                        <p style="font-size: 14px; font-family: Inter; margin: 3px 0 0 0; color: #9B9B9B;">Welcome Back</p>
                     </div>
-                </div>-->
 
-                <!-- Create Account Button -->
-                <div style="text-align: center; margin-bottom: 15px;">
-                    <button type="button" onclick="onReg()" 
-                            style="background-color: #3DCF26; color: white; width: 100%; height: 50px; font-size: 16px; font-family: Inter; font-weight: 700; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0px 4px 15px rgba(61, 207, 38, 0.3); transition: transform 0.2s, box-shadow 0.2s;"
-                            onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0px 6px 20px rgba(61, 207, 38, 0.4)'"
-                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0px 4px 15px rgba(61, 207, 38, 0.3)'">
-                        Create new account
-                    </button>
-                </div>
+                    <!-- Email Field -->
+                    <div style="margin-bottom: 15px;">
+                        <label style="color: black; font-size: 15px; font-weight: 500; margin-bottom: 6px; display: block;">Email: <span style="color: red;">*</span></label>
+                        <input type='text' name='email_login' id='email_login' placeholder='Enter your email' 
+                               style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box; transition: border-color 0.3s;" 
+                               autocomplete='off'
+                               onfocus="this.style.borderColor='#23408E'"
+                               onblur="this.style.borderColor='#ddd'">
+                    </div>
 
-                <!-- Alert Message -->
-                <div style="display: none; background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; text-align: center; margin-top: 15px; border: 1px solid #f5c6cb;" id="div_msg" role="alert">
-                    <span id='span_msg'></span>
+                    <!-- Password Field -->
+                    <div style="margin-bottom: 20px;">
+                        <label style="color: black; font-size: 15px; font-weight: 500; margin-bottom: 6px; display: block;">Password: <span style="color: red;">*</span></label>
+                        <div style="position: relative; width: 100%;">
+                            <input type='password' name="pwd_login" id='pwd_login' placeholder='Enter your password' 
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 35px 0 12px; font-size: 14px; box-sizing: border-box; transition: border-color 0.3s;" 
+                                   autocomplete='off'
+                                   onfocus="this.style.borderColor='#23408E'"
+                                   onblur="this.style.borderColor='#ddd'">
+                            <button type="button" id="togglePassword" onclick="togglePasswordVisibility()" 
+                                    style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; font-size: 14px; color: #666; padding: 0; width: 20px; height: 20px; display: flex; align-items: center; justify-content: center;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Login Button -->
+                    <div style="text-align: center; margin-bottom: 10px;">
+                        <button type="button" onclick="onLogin()" 
+                                style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%); color: white; width: 100%; height: 45px; font-size: 16px; font-family: Inter; font-weight: 700; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0px 4px 15px rgba(35, 64, 142, 0.3); transition: transform 0.2s, box-shadow 0.2s;"
+                                onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0px 6px 20px rgba(35, 64, 142, 0.4)'"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0px 4px 15px rgba(35, 64, 142, 0.3)'">
+                            Log in
+                        </button>
+                    </div>
+
+                    <!-- Create Account Button -->
+                    <div style="text-align: center; margin-bottom: 15px;">
+                        <button type="button" onclick="onReg()" 
+                                style="background-color: #3DCF26; color: white; width: 100%; height: 45px; font-size: 16px; font-family: Inter; font-weight: 700; border-radius: 8px; border: none; cursor: pointer; box-shadow: 0px 4px 15px rgba(61, 207, 38, 0.3); transition: transform 0.2s, box-shadow 0.2s;"
+                                onmouseover="this.style.transform='translateY(-1px)'; this.style.boxShadow='0px 6px 20px rgba(61, 207, 38, 0.4)'"
+                                onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0px 4px 15px rgba(61, 207, 38, 0.3)'">
+                            Create new account
+                        </button>
+                    </div>
+
+                    <!-- Alert Message -->
+                    <div style="display: none; background-color: #f8d7da; color: #721c24; padding: 12px; border-radius: 8px; text-align: center; margin-top: 15px; border: 1px solid #f5c6cb;" id="div_msg" role="alert">
+                        <span id='span_msg'></span>
+                    </div>
                 </div>
             </div>
+            
+            <!-- Image Section -->
+            <div class="image-section" style="width: 40%; height: 67vh; position: relative; overflow: hidden;">
+                <img src="images/bgg.png" style="width: 100%; height: 100%; object-fit: cover; object-position: left center; border-radius: 18px;">
+            </div>
+            
         </div>
 
         <!-- Modal -->
@@ -279,7 +356,7 @@ function togglePasswordVisibility() {
         </div>
 
         <!-- Footer -->
-        <footer style="background-color: #23408E; padding: 20px 0; margin-top: auto;">
+        <footer style="background-color: #23408E; padding: 15px 0; margin-top: auto;">
             <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
                 <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
                     
@@ -287,7 +364,7 @@ function togglePasswordVisibility() {
                     <div style="display: flex; align-items: center; gap: 15px; flex: 1; min-width: 300px;">
                         <img src="images/op office logo.png" style="height: 60px; width: auto;">
                         <div style="font-family: Inter; color: white;">
-                            <div style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">
+                            <div class="office-name" style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">
                                 City Population Office of Cabuyao
                             </div>
                             <div style="font-size: 11px; margin-bottom: 2px;">
@@ -309,60 +386,21 @@ function togglePasswordVisibility() {
         
     </form>
 
-    <!-- Responsive CSS -->
-    <style>
-        @media (max-width: 768px) {
-            form > div:first-child {
-                padding: 10px !important;
-            }
-            
-            form > div:first-child > div {
-                max-width: 100% !important;
-                margin: 10px !important;
-                padding: 25px 20px !important;
-                border-radius: 15px !important;
-            }
-            
-            footer > div {
-                padding: 0 15px !important;
-            }
-            
-            footer > div > div {
-                flex-direction: column !important;
-                text-align: center !important;
-                gap: 15px !important;
-            }
-            
-            footer > div > div > div:first-child {
-                min-width: auto !important;
-                justify-content: center !important;
-            }
-        }
-        
-        @media (max-width: 480px) {
-            form > div:first-child > div {
-                padding: 20px 15px !important;
-            }
-            
-            form > div:first-child > div > div:first-child > p {
-                font-size: 24px !important;
-            }
-            
-            footer img[src*="logo"] {
-                height: 50px !important;
-            }
-            
-            footer > div > div > div:first-child > div > div:first-child {
-                font-size: 12px !important;
-            }
-        }
-    </style>
-
     <script>
+        function togglePasswordVisibility() {
+            const passwordInput = document.getElementById('pwd_login');
+            const toggleButton = document.getElementById('togglePassword');
+            
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                toggleButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24"/><line x1="1" y1="1" x2="23" y2="23"/></svg>';
+            } else {
+                passwordInput.type = 'password';
+                toggleButton.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>';
+            }
+        }
 
-
-        function onReg(){
-
+        function onReg() {
             document.forms.myforms.method = "post";
             document.forms.myforms.target = "_self";
             document.forms.myforms.action = "register_cc.php";
@@ -371,74 +409,52 @@ function togglePasswordVisibility() {
 
         function validateEmail(input) {
             var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-
-            if (input.value.match(validRegex)) {
-                return true;
-            } else {
-                return false;
-            }
-
+            return input.value.match(validRegex) ? true : false;
         }
 
-        function onLogin(){
-
+        function onLogin() {
             var xemail_input = document.getElementById("email_login");
-            var xpassword = $("#pwd_login").val();
-            var xemail = $("#email_login").val();
-            var xerror = true;
+            var xpassword = document.getElementById("pwd_login").value;
+            var xemail = document.getElementById("email_login").value;
 
-
-
-            if(!xpassword || !xemail){
-                $(".error_msg").html("Empty password or Email");
-                $(".xerror_modal").modal("show");
-
-            }else if(validateEmail(xemail_input) == false){
-
-                $(".error_msg").html("Invalid Email");
-                $(".xerror_modal").modal("show");
-            }else{
-
-                jQuery.ajax({    
-                    data:{
-                        email:xemail,
-                        password:xpassword
+            if (!xpassword || !xemail) {
+                document.querySelector('.error_msg').innerHTML = "Empty password or Email";
+                document.getElementById("xerror_modal").style.display = 'block';
+            } else if (validateEmail(xemail_input) == false) {
+                document.querySelector('.error_msg').innerHTML = "Invalid Email";
+                document.getElementById("xerror_modal").style.display = 'block';
+            } else {
+                // Simulate jQuery AJAX with fetch API
+                fetch("login_cc_ajax.php", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
                     },
-                    dataType:"json",
-                    type:"post",
-                    url:"login_cc_ajax.php", 
-                    success: function(xdata){
-
-                        if(xdata['status'] == false){
-                            $('.error_msg').html(xdata['msg']);
-                            $(".xerror_modal").modal("show");
-                        }else{
-
-                            var login_after = "select_option.php";
-
-                            if(xdata["userlvl"] == "USR"){
-                                login_after = "dashboard_user.php"
-                            }
-                            document.forms.myforms.method = "post";
-                            document.forms.myforms.target = "_self";
-                            document.forms.myforms.action = login_after;
-                            document.forms.myforms.submit();
-                        }
-
-                        
-
-                    },
-                    error: function (request, status, error) {
-                    }
-                
+                    body: "email=" + encodeURIComponent(xemail) + "&password=" + encodeURIComponent(xpassword)
                 })
+                .then(response => response.json())
+                .then(xdata => {
+                    if (xdata['status'] == false) {
+                        document.querySelector('.error_msg').innerHTML = xdata['msg'];
+                        document.getElementById("xerror_modal").style.display = 'block';
+                    } else {
+                        var login_after = "select_option.php";
+
+                        if (xdata["userlvl"] == "USR") {
+                            login_after = "dashboard_user.php";
+                        }
+                        document.forms.myforms.method = "post";
+                        document.forms.myforms.target = "_self";
+                        document.forms.myforms.action = login_after;
+                        document.forms.myforms.submit();
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                });
             }
-
-
         }
     </script>
 
-<?php 
-require "includes/cc_footer.php";
-?>
-
+</body>
+</html>
