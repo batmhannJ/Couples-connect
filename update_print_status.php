@@ -13,7 +13,7 @@ $userId = isset($_POST['userId']) ? (int)$_POST['userId'] : 0;
 
 try 
 { 
-	    $st = $link->prepare("UPDATE mf_prog_users SET print_status = :print_status WHERE recid=:recid");
+	    $st = $link->prepare("UPDATE mf_prog_users SET print_status = '1' WHERE recid = ?");
 	    $st->bindParam(':print_status', $status, PDO::PARAM_INT);
 	    $st->bindParam(':recid', $userId, PDO::PARAM_INT);
 
