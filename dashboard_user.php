@@ -322,7 +322,7 @@ function safe_date_format($date_string, $format = 'F d, Y') {
 
                                             if($act_status == "PMO"){
 
-                                                $select_db2="SELECT ext_mf_meiform.date as 'mf_date', ext_mf_meiform.from_to as 'from_to'  FROM ext_mf_meiform LEFT JOIN pro_meiform ON ext_mf_meiform.usermeiformid = pro_meiform.usermeiformid  WHERE ext_mf_meiform.userid=? AND pro_meiform.status = 'PMO' LIMIT 1";
+                                                $select_db2="SELECT ext_mf_meiform.date as 'mf_date', ext_mf_meiform.from_to as 'from_to'  FROM ext_mf_meiform LEFT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  WHERE ext_mf_meiform.userid=? AND pro_meiform.status = 'PMO' LIMIT 1";
                                                 $stmt2	= $link->prepare($select_db2);
                                                 $stmt2->execute(array($_SESSION['usr_id']));
                                                 $row2 = $stmt2->fetch();
@@ -347,7 +347,7 @@ function safe_date_format($date_string, $format = 'F d, Y') {
 
                                             } else if($act_status == "PMC"){
 
-                                                $select_db2="SELECT ext_mf_meiform.date as 'mf_date', ext_mf_meiform.from_to as 'from_to'  FROM ext_mf_meiform RIGHT JOIN pro_meiform ON ext_mf_meiform.usermeiformid = pro_meiform.usermeiformid  WHERE ext_mf_meiform.userid=? AND pro_meiform.status = 'PMC' LIMIT 1";
+                                                $select_db2="SELECT ext_mf_meiform.date as 'mf_date', ext_mf_meiform.from_to as 'from_to'  FROM ext_mf_meiform RIGHT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  WHERE ext_mf_meiform.userid=? AND pro_meiform.status = 'PMC' LIMIT 1";
                                                 $stmt2	= $link->prepare($select_db2);
                                                 $stmt2->execute(array($_SESSION['usr_id']));
                                                 $row2 = $stmt2->fetch();

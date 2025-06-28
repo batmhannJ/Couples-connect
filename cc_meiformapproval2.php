@@ -21,11 +21,11 @@ $userid = $rs_all['userid'];
 $partner1_name = '';
 $partner2_name = '';
 
-$select_db_users="SELECT  ext_couples_accountinfo.first_name as 'first_name', ext_couples_accountinfo.middle_name as 'middle_name',
-ext_couples_accountinfo.last_name as 'last_name' FROM mf_prog_users LEFT JOIN ext_couples_accountinfo ON mf_prog_users.userid = ext_couples_accountinfo.userid WHERE mf_prog_users.userid='".$userid."' 
- ORDER BY ext_couples_accountinfo.partnerno LIMIT 2";
-$stmt_users	= $link->prepare($select_db_users);
-$stmt_users->execute();
+$select_db_users = "SELECT ext_couples_accountinfo.first_name as 'first_name', ext_couples_accountinfo.middle_name as 'middle_name',
+ext_couples_accountinfo.last_name as 'last_name' FROM mf_prog_users LEFT JOIN ext_couples_accountinfo ON mf_prog_users.userid = ext_couples_accountinfo.userid WHERE mf_prog_users.userid = ? 
+ORDER BY ext_couples_accountinfo.partnerno LIMIT 2";
+$stmt_users = $link->prepare($select_db_users);
+$stmt_users->execute(array($userid));
 
 $xcounter_users = 0;
 while($row_users = $stmt_users->fetch()){
@@ -97,7 +97,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
 
             <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
                 <div style="flex:0.5;text-align:right;margin-right:10px">
-                    <a href="http://localhost/couples-connectprog/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
+                    <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
                 </div>
 
                 <div style="flex:.1;text-align:center;padding-right:10px">
@@ -109,7 +109,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
                 </div>
 
                 <div style="flex:0.6;text-align:right;padding-right:35px">
-                    <a href="http://localhost/couples-connectprog/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
+                    <a href="http://localhost/couples-connect/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
                 </div>
 
             </div> 
@@ -189,7 +189,7 @@ while($rs_partnerinfo = $stmt_partnerinfo->fetch())
                                         $select_db_meiform = "SELECT  * FROM mf_meiform";
                                         // $select_db_meiform = "SELECT mf_meiform.questions as 'questions',  FROM ext_mf_meiform LEFT JOIN mf_meiform ON ext_mf_meiform.meiformid =  mf_meiform .meiformid WHERE ext_mf_meiform.meiformid=?";
                                         $stmt_meiform	= $link->prepare($select_db_meiform);
-                                        $stmt_meiform->execute(array($_POST['cus_recid_hidden']));
+                                        $stmt_meiform->execute(); // Remove the array parameter
                                         while($row_meiform = $stmt_meiform->fetch()){
                                             echo "<tr>";
 

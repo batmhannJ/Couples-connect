@@ -11,17 +11,12 @@ if($_SESSION['usertype'] == 'DSK'){
     $header_name = "USER";
 }
 
-
 $select_db="SELECT * FROM mf_prog_users WHERE recid=?";
 $stmt	= $link->prepare($select_db);
 $stmt->execute(array($_SESSION['usr_recid']));
 $row = $stmt->fetch();
 $act_status = $row["act_status"];
-
 $act_status2 = $act_status;
-
-
-
 $partner1_name = '';
 $partner2_name = '';
 $xheader_top = "";
@@ -40,8 +35,6 @@ while($row_users = $stmt_users->fetch()){
     }
     $xcounter_users++;
 };
-
-
 ?>
 
 <style>
@@ -117,22 +110,6 @@ ul.checkout-bar li.active a {
 ul.checkout-bar li.visited a {
   color: #036c99;
 }
-/*.checkout-bar li.active:after {
-    -webkit-animation: myanimation 3s 0;
-    background-size: 35px 35px;
-    background-color: #A6447A;
-    background-image: -webkit-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
-    background-image: -moz-linear-gradient(-45deg, rgba(255, 255, 255, 0.2) 25%, transparent 25%, transparent 50%, rgba(255, 255, 255, 0.2) 50%, rgba(255, 255, 255, 0.2) 75%, transparent 75%, transparent);
-    -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
-    box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
-    content: "";
-    height: 15px;
-    width: 100%;
-    left: 50%;
-    position: absolute;
-    top: -50px;
-    z-index: 0;
-  }*/
 ul.checkout-bar {
     -webkit-box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
     box-shadow: inset 2px 2px 2px 0px rgba(0, 0, 0, 0.2);
@@ -199,7 +176,7 @@ ul.checkout-bar:before {
 
             <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
                 <div style="flex:1.6;text-align:right;margin-right:25px">
-                    <a href="http://localhost/couples-connectprog/dashboard_user.php" style='color:black;text-decoration:none' class='has_hover'>SERVICES</a>
+                    <a href="http://localhost/couples-connect/dashboard_user.php" style='color:black;text-decoration:none' class='has_hover'>SERVICES</a>
                 </div>
 
                 <div style="flex:1.8;text-align:center;margin-right:10px">
@@ -251,9 +228,6 @@ ul.checkout-bar:before {
                                         echo "</div>";
                                     }
                                     ?>
-
-                               
-                                
                             </div>
                         </div> </div>-->
                     </div>
@@ -272,9 +246,6 @@ ul.checkout-bar:before {
                             }else if($act_status == "PMO" || $act_status == "APR"){
                                 $xheader_top = "Pre-Marriage Orientation Schedules";
                             }
-
-
-
 
                             echo "<tr>";
                                 echo "<td colspan='5' style='height:100px'>";
@@ -344,10 +315,6 @@ ul.checkout-bar:before {
                                 $row_checker = $stmt_checker->fetchAll();
                                 
                                if(count($row_checker) == 0 ){
-
-
-                         
-
                                 echo "<tr>";
                                         echo "<td style='padding-bottom:15px;padding-top:10px'>";
                                             echo "<div class='container text-start' style='font-family:inter;font-weight:700;font-size:25px;color:black;padding-left:25px'>";                                    
@@ -381,15 +348,7 @@ ul.checkout-bar:before {
                                                     data-xrecid='".$row_xid["ext_recid"]."'
                                                     data-xvenue='".$row_xid["venue"]."'
                                                     >" . $row_xid2["clinic_date"] . "</option>"; 
-                                 
-                                            
-                                                }            
-                            
-                    
-                               
-
-                                    
-                        
+                                                }         
                                             echo "</select>";    
                                         echo "</td>";
 
@@ -408,8 +367,6 @@ ul.checkout-bar:before {
                                             echo "</td>";
                                         }
                         
-                                        
-                        
                                         echo "<td class='text-center'>";
                                             echo " <button type='button' disabled class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
                                         echo "</td>";
@@ -419,7 +376,7 @@ ul.checkout-bar:before {
 
                                }else{
 
-                                $select_db_times2 = "SELECT pro_meiform.userid as 'userid', ext_mf_meiform.date as 'date', ext_mf_meiform.venue as 'venue', pro_meiform.counselorid as 'counselorid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.usermeiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."' AND pro_meiform.status='".$act_status2."' LIMIT 1";
+                                $select_db_times2 = "SELECT pro_meiform.userid as 'userid', ext_mf_meiform.date as 'date', ext_mf_meiform.venue as 'venue', pro_meiform.counselorid as 'counselorid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.meiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."' AND pro_meiform.status='".$act_status2."' LIMIT 1";
                                 $stmt_times2	= $link->prepare($select_db_times2);
                                 $stmt_times2->execute();
                                 $row_times2 = $stmt_times2->fetch();
@@ -444,7 +401,7 @@ ul.checkout-bar:before {
                                         $dateObject = DateTime::createFromFormat('Y-m-d', $givendate);
                                         $weekday = strtolower($dateObject->format('l'));
                                             
-                                            $select_db_times = "SELECT ext_mf_meiform.date as 'date', ext_mf_meiform.from_to as 'from_to', pro_meiform.usermeiformid as 'usermeiformid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.usermeiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."'  AND pro_meiform.status='".$act_status2."' LIMIT 1";
+                                            $select_db_times = "SELECT ext_mf_meiform.date as 'date', ext_mf_meiform.from_to as 'from_to', pro_meiform.usermeiformid as 'usermeiformid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.meiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."'  AND pro_meiform.status='".$act_status2."' LIMIT 1";
                                             $stmt_times	= $link->prepare($select_db_times);
                                             $stmt_times->execute();
                                             $selected_timeline = '';
@@ -469,18 +426,13 @@ ul.checkout-bar:before {
                                                     echo "</select>";
                                                 echo "</td>";
                                             }
-                                
-                             
-                             
-                    
+
                                         if($act_status2 == "PMC"){
                                             echo "<td class='text-center'>";
                                                 echo $row_xid['slots_avail'];    
                                             echo "</td>";
                                         }
                                         
-                    
-                    
                                         echo "<td class='text-center'>";
                                             echo "<button type='button' onclick='ajaxNew(\"cancel_booking\",\"\",\"\",\"\",\"".$meiformuid."\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Cancel</button>";    
                                         echo "</td>";
@@ -504,25 +456,19 @@ ul.checkout-bar:before {
                                             echo "</select>";
                                         echo "</td>";
 
-
                                         if($act_status2 == "PMO"){
                                             echo "<td class='text-center'>";
                                                 echo "Select a Date...";    
                                             echo "</td>";
                                         }
 
-                                     
-                    
                                         echo "<td class='text-center'>";
                                             echo " <button type='button' disabled class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
                                         echo "</td>";
                                     }
-                                    
                         
                                 echo "</tr>";                       
                                } 
-
-                   
                             }                            
                             ?>
                         </table>
@@ -601,16 +547,12 @@ ul.checkout-bar:before {
                                 <span style='font-size:32px;font-weight:400px;'><?php echo $partner1_name; ?></span>
                             </div>
                             
-
                             <div class="container">
                                 <div style='width:100%'>
                                 Please answer this independently. By submitting this form you confirm the information provided on this form is accurate and is not influenced by your partner. Please be aware that submitting false or misleading information, including any attempt to misrepresent independent work, may be grounds for appointment rejection.
                                 </div>
-                                
                             </div>
-
                         </div>
-                        
                         <table>
                             <tr>
                                 <td style='font-size:25px;font-family:inter;font-weight:500;color:#797979;width:70%;padding-left:20px;padding-top:10px'>
@@ -626,9 +568,6 @@ ul.checkout-bar:before {
                                 </td>
                             </tr>
 
-                         
-                        
-
                             <?php
 
                                 $select_db_meiform = "SELECT * FROM mf_meiform";
@@ -643,7 +582,6 @@ ul.checkout-bar:before {
                                         echo "</td>";
 
                                         echo "<td class='px-3'>";
-
 
                                         echo '
                                             <div style="display:flex; gap: 23px; width: 202px;font-weight: bold;">
@@ -673,14 +611,11 @@ ul.checkout-bar:before {
                                     $mei_form1_counter++;
                                     
                                 }
-
                             ?>
                         </table>
                     </div>
 
                     <div class='partner2_modal' id='partner2_modal' style='display:none'>
-
-
                         <div class="row"> 
                           <div class="checkout-wrap col-sm-12 col-xs-12">
                             <ul class="checkout-bar">
@@ -691,18 +626,14 @@ ul.checkout-bar:before {
                         </div>
 
                         <div class="container-fluid">
-
                             <div class="container" style='font-family:inter;font-size:20px;'>
                                 <span style='font-size:32px;font-weight:400px;'><?php echo $partner2_name; ?></span>
                             </div>
-                            
-
                             <div class="container">
                                 <div style='width:100%'>
                                  Please answer this independently. By submitting this form you confirm the information provided on this form is accurate and is not influenced by your partner. Please be aware that submitting false or misleading information, including any attempt to misrepresent independent work, may be grounds for appointment rejection.
                                 </div>
                             </div>
-
                         </div>
                         
                         <table>
@@ -721,8 +652,6 @@ ul.checkout-bar:before {
                             </tr>
 
                             <?php
-
-
                                 $select_db_meiform2 = "SELECT * FROM mf_meiform";
                                 $stmt_meiform2	= $link->prepare($select_db_meiform2);
                                 $stmt_meiform2->execute();
@@ -733,8 +662,6 @@ ul.checkout-bar:before {
                                         echo "<td style='width:70%;font-weight:500;font-family:inter;font-size:19px;padding-left:20px;padding-top:10px'>";
                                             echo "<div style='width:90%'>".$mei_form2_counter.". ".$row_meiform2["questions"]."</div>";
                                         echo "</td>";
-
-
                                         echo "<td class='px-3'>";
                                             echo '
                                                 <div style="display:flex; gap: 23px; width: 202px;font-weight: bold;">
@@ -761,19 +688,14 @@ ul.checkout-bar:before {
                                     echo "</tr>";
 
                                     $mei_form2_counter++;
-                                    
                                 }
-
                             ?>
                         </table>   
                     
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center" id="meiform_modal_footer">
-
-
                     <button type='button' name='btn_modal' id="btn_modal" onclick="proceed_partner2()" class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Proceed to Partner 2</button>
-
                 </div>
                 </div>
             </div>
@@ -787,23 +709,17 @@ ul.checkout-bar:before {
                         <div style="color:black;font-family:inter;color:#252733;font-size:33px;font-weight:600">Feeback</div>
                         <div style="color:black;font-family:inter;color:#9B9B9B;font-size:21px;margin-top:-5px">Fill Up Form</div>
                     </div>
-          
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body mx-3">
-
                     <label for="" style='font-size:21px;color:252733;font-weight:600;font-family:inter'>Subject:</label>
                     <input type="text" class='form-control' style='border-radius:5px;height:50px;border:1px solid black' placeholder='Enter your subject' name="feedback_subject" id="feedback_subject">
-
-
                     <label for="" style='font-size:21px;color:252733;font-weight:600;font-family:inter;margin-top:20px'>Feedback:</label>
                     <textarea class="form-control" name="feedback_remarks" id="feedback_remarks" cols="30" rows="7" style='border-radius:5px;border:1px solid black' placeholder='Enter remarks'></textarea>
                     <div style='display:flex;justify-content:center;padding-top:25px;padding-bottom:20px'>
                         <button type="button" onclick="ajaxSubmit()" class="btn" style=";background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
                     </div>
-                    
                 </div>
-          
                 </div>
             </div>
         </div>           
@@ -817,14 +733,12 @@ ul.checkout-bar:before {
 
         <footer style='height:100px;background-color:#23408E' class='footer'>
             <div class="container-fluid"  style='height:100px'>
-
                 <div class="row"  style='height:100px'>
                     <div class="col-4">
                         <div class="row ms-3"  style='height:100px'>
                             <div class="col-2 d-flex align-items-center">
                                 <img src="images/op office logo.png" style="height:77px;width:auto">
                             </div>
-
                             <div class="col-10 d-flex align-items-center">
                                 <div class="container" style='font-family:inter;color:white'>
                                     <div class="col-12" style='font-size:15px;font-weight:bold'>
@@ -844,7 +758,6 @@ ul.checkout-bar:before {
                             </div>
                         </div>       
                     </div>
-
                     <div class="col-8 d-flex align-items-center justify-content-end">
                         <div>
                             <img src="images/pajamas_question.png" style='width:63px;height:auto;'>
@@ -854,7 +767,6 @@ ul.checkout-bar:before {
 
             </div>
         </footer>
-        
     </form>
 
     <script>
@@ -938,7 +850,6 @@ ul.checkout-bar:before {
 
         }        
 
-
         $(document).on('change', '.select_date', function(e) {
             var selectedOption = $(this).find('option:selected');
             var xdate = selectedOption.data('xdate');
@@ -952,10 +863,8 @@ ul.checkout-bar:before {
             $("#counselor_hidden").val(xcounselorid);
             $("#recid_hidden").val(xrecid);
             
-            // Get the time dropdown for this row
             var timeDropdown = $(this).closest('tr').find('.select_time');
             
-            // Update time dropdown via AJAX
             ajaxNew("changeDate", xdate, xcounselorid, xrecid, '', $(this));
         });
 
@@ -977,13 +886,6 @@ $(document).on('click', 'button[onclick*="book_func"]', function(e) {
     e.preventDefault();
     book_func();
 });
-
-
-        // $('.select_time').on('change', function(e) {
-        //     var selected_time = $(this).find(":selected").val();
-        //     $("#timeline_hidden").val(selected_time);
-        // });
-
     function ajaxNew(xevent_action, xdate, xcounselorid, xrecid, xmeiformid, sourceElement) {
     var act_status_hidden = $("#act_status_hidden").val();
     var timeline_hidden_val = $("#timeline_hidden").val();
@@ -1020,15 +922,11 @@ $(document).on('click', 'button[onclick*="book_func"]', function(e) {
         data: serializedData,               
         success: function(xdata){
             if(xevent_action == "changeDate"){
-                // Update the time dropdown for the specific row
                 if(sourceElement) {
                     var timeDropdown = sourceElement.closest('tr').find('.select_time');
-                    timeDropdown.html(''); // Clear existing options
-                    
-                    // Add default option
+                    timeDropdown.html('');
                     timeDropdown.append('<option disabled selected>Select Time...</option>');
                     
-                    // Add time options from response
                     if(xdata.times && xdata.times.length > 0) {
                         $.each(xdata.times, function(index, timeOption) {
                             timeDropdown.append('<option value="' + timeOption.value + '">' + timeOption.text + '</option>');
@@ -1036,7 +934,6 @@ $(document).on('click', 'button[onclick*="book_func"]', function(e) {
                         timeDropdown.prop('disabled', false);
                     }
                     
-                    // Update slots available if applicable
                     if(xdata.slots_available) {
                         sourceElement.closest('tr').find('.slots-cell').text(xdata.slots_available);
                     }
@@ -1045,7 +942,6 @@ $(document).on('click', 'button[onclick*="book_func"]', function(e) {
                 $("#timeline_hidden").val(xdata["first_time"] || '');
             }
 
-            // Update the entire table if needed
             if(xdata["html"]) {
                 $("#table_data").html(xdata["html"]);
             }
@@ -1091,10 +987,7 @@ $(document).on('click', 'button[onclick*="book_func"]', function(e) {
       });
     });
 
-
     </script>
-
-
 
 <?php 
 require "includes/cc_footer.php";
