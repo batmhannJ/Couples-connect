@@ -234,7 +234,7 @@ ul.checkout-bar:before {
                 </td>
             </tr>
 
-            <tr style='height:500px;max-height:500px'>
+            <tr style="height:500px;max-height:500px">
                 <td class="d-flex align-items-top mx-0 px-0">
                     <div class="container-fluid pt-4 d-flex justify-content-center" style="width:100%;">
                         <table id="table_data" name="table_data" style='background-color:white;border-radius:15px;width:92%'>
@@ -731,8 +731,8 @@ ul.checkout-bar:before {
         <input type="hidden" name="recid_hidden" id="recid_hidden">
         <input type="hidden" name="act_status_hidden" id="act_status_hidden" value="<?php echo $act_status2; ?>">
 
-        <footer style='height:100px;background-color:#23408E' class='footer'>
-            <div class="container-fluid"  style='height:100px'>
+        <footer style="height:100px;background-color:#23408E">
+            <div class="container-fluid"  style="height:100px">
                 <div class="row"  style='height:100px'>
                     <div class="col-4">
                         <div class="row ms-3"  style='height:100px'>
