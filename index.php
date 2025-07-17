@@ -414,47 +414,90 @@ require "includes/cc_header.php";
         }
 
         function onLogin() {
-            var xemail_input = document.getElementById("email_login");
-            var xpassword = document.getElementById("pwd_login").value;
-            var xemail = document.getElementById("email_login").value;
+    var xemail_input = document.getElementById("email_login");
+    var xpassword = document.getElementById("pwd_login").value;
+    var xemail = document.getElementById("email_login").value;
 
-            if (!xpassword || !xemail) {
-                document.querySelector('.error_msg').innerHTML = "Empty password or Email";
-                document.getElementById("xerror_modal").style.display = 'block';
-            } else if (validateEmail(xemail_input) == false) {
-                document.querySelector('.error_msg').innerHTML = "Invalid Email";
+    if (!xpassword || !xemail) {
+        document.querySelector('.error_msg').innerHTML = "Empty password or Email";
+        document.getElementById("xerror_modal").style.display = 'block';
+    } else if (validateEmail(xemail_input) == false) {
+        document.querySelector('.error_msg').innerHTML = "Invalid Email";
+        document.getElementById("xerror_modal").style.display = 'block';
+    } else {
+        // Simulate jQuery AJAX with fetch API
+        fetch("login_cc_ajax.php", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: "email=" + encodeURIComponent(xemail) + "&password=" + encodeURIComponent(xpassword)
+        })
+        .then(response => response.json())
+        .then(xdata => {
+            if (xdata['status'] == false) {
+                document.querySelector('.error_msg').innerHTML = xdata['msg'];
+                
+                // Check if reapply button should be shown
+                            if(xdata['show_reapply'] === true){
+                                $('#reapply-section').show();
+                                $('#reapply-btn').data('recid', xdata['recid']); // Store recid for reapply
+                            } else {
+                                $('#reapply-section').hide();
+                            }
+                
                 document.getElementById("xerror_modal").style.display = 'block';
             } else {
-                // Simulate jQuery AJAX with fetch API
-                fetch("login_cc_ajax.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/x-www-form-urlencoded",
-                    },
-                    body: "email=" + encodeURIComponent(xemail) + "&password=" + encodeURIComponent(xpassword)
-                })
-                .then(response => response.json())
-                .then(xdata => {
-                    if (xdata['status'] == false) {
-                        document.querySelector('.error_msg').innerHTML = xdata['msg'];
-                        document.getElementById("xerror_modal").style.display = 'block';
-                    } else {
-                        var login_after = "select_option.php";
+                var login_after = "select_option.php";
 
-                        if (xdata["userlvl"] == "USR") {
-                            login_after = "dashboard_user.php";
-                        }
-                        document.forms.myforms.method = "post";
-                        document.forms.myforms.target = "_self";
-                        document.forms.myforms.action = login_after;
-                        document.forms.myforms.submit();
-                    }
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                });
+                if (xdata["userlvl"] == "USR") {
+                    login_after = "dashboard_user.php";
+                }
+                document.forms.myforms.method = "post";
+                document.forms.myforms.target = "_self";
+                document.forms.myforms.action = login_after;
+                document.forms.myforms.submit();
             }
-        }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+        });
+    }
+}
+// Handle reapply button click
+        $(document).ready(function() {
+            $('#reapply-btn').click(function() {
+                var recid = $(this).data('recid');
+                
+                // Show loading state
+                $(this).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+                $(this).prop('disabled', true);
+                
+                $.ajax({
+                    url: 'reapply_handler.php',
+                    type: 'POST',
+                    data: { recid: recid },
+                    dataType: 'json',
+                    success: function(response) {
+                        if (response.status) {
+                            $('.error_msg').html(response.msg);
+                            $('#reapply-section').hide();
+                        } else {
+                            $('.error_msg').html('Error: ' + response.msg);
+                        }
+                        
+                        // Reset button
+                        $('#reapply-btn').html('<i class="fas fa-redo"></i> Click to Reapply');
+                        $('#reapply-btn').prop('disabled', false);
+                    },
+                    error: function() {
+                        $('.error_msg').html('An error occurred. Please try again.');
+                        $('#reapply-btn').html('<i class="fas fa-redo"></i> Click to Reapply');
+                        $('#reapply-btn').prop('disabled', false);
+                    }
+                });
+            });
+        });
     </script>
 
 </body>
