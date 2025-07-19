@@ -7,14 +7,10 @@ session_start();
 require_once('resources/db_init.php');
 require_once('resources/lx2.pdodb.php');
 
-$email=$_POST['email'];
-$password=$_POST['password'];
-
 $ret=array();
 $ret['msg']='';
 $ret['user']='';
 $ret["status"] = true;
-
 
 require_once('resources/connect4.php');
 
@@ -39,7 +35,13 @@ if ($_POST) {
         exit;
     }
     
+    // Store email and password in session for the next steps
+    $_SESSION['reg_email'] = $email;
+    $_SESSION['reg_password'] = $password;
+    
     // Email is available, proceed to next step
     echo json_encode(['status' => true, 'msg' => 'Email available']);
+} else {
+    echo json_encode(['status' => false, 'msg' => 'No data received']);
 }
 ?>

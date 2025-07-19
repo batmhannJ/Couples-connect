@@ -23,10 +23,24 @@ if ($_POST) {
             $userid = 'USR-00001';
         }
         
-        // Get all form data
-        $reg_email = trim($_POST['reg_email_h']);
-        $reg_password = $_POST['reg_pwd_h']; // Plain text password, no encryption
-        $secondary_email = trim($_POST['confirm_email_h']);
+        // Get email and password from session (stored during first step)
+        $reg_email = $_SESSION['reg_email'] ?? '';
+        $reg_password = $_SESSION['reg_password'] ?? '';
+        
+        // If not in session, try to get from POST (fallback)
+        if (empty($reg_email)) {
+            $reg_email = trim($_POST['reg_email_h'] ?? '');
+        }
+        if (empty($reg_password)) {
+            $reg_password = $_POST['reg_pwd_h'] ?? '';
+        }
+        
+        // Validate that we have email and password
+        if (empty($reg_email) || empty($reg_password)) {
+            throw new Exception('Email and password are required');
+        }
+        
+        $secondary_email = trim($_POST['confirm_email_h'] ?? '');
         
         // Partner 1 data
         $first_name = trim($_POST['first_name_h']);
@@ -109,7 +123,7 @@ if ($_POST) {
         
         $stmt = $link->prepare($insert_sql);
         
-        // Create username from partner 1's name
+        // Create username from email
         $username = $reg_email;
         
         // Execute the statement
@@ -157,6 +171,10 @@ if ($_POST) {
         // Commit transaction
         $link->commit();
         
+        // Clear the session data after successful registration
+        unset($_SESSION['reg_email']);
+        unset($_SESSION['reg_password']);
+        
         // Send success response
         echo json_encode([
             'status' => true, 
@@ -173,5 +191,7 @@ if ($_POST) {
             'msg' => 'Registration failed: ' . $e->getMessage()
         ]);
     }
+} else {
+    echo json_encode(['status' => false, 'msg' => 'No data received']);
 }
 ?>
