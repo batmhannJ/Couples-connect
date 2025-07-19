@@ -206,13 +206,6 @@ ul.checkout-bar:before {
     
     <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
         <table style="width:100%;height:calc(100% - 100px);	filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))">
-            <tr style='height:175px'>
-                <td class="d-flex align-items-top mx-0 px-0">
-                    <div class="d-flex" style="display:flex;flex-direction:row;width:200%">
-                    </div>
-                </td>
-            </tr>
-
             <tr style='height:500px;max-height:500px'>
                 <td class="d-flex align-items-top mx-0 px-0">
                     <div class="container-fluid pt-4 d-flex justify-content-center" style="width:100%;">
