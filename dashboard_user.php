@@ -303,8 +303,14 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                         $book_now_disbaled = "disabled";
                                         $pmc_book_disabled = ""; // Enable the button
                                     } else if ($act_status === "PCT") {
-                                        // When PCT but print_status is not 1, enable certification
                                         $req_now_disabled = "";
+                                        $book_now_disbaled = "disabled";
+                                    } else if ($act_status === "POST") {
+                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                            echo "<img src='images/Group.png'>";
+                                            echo "<span style='margin-left:10px'>Post Marriage Counselling</span>";
+                                        echo "</div>";
+                                        $req_now_disabled = "disables";
                                         $book_now_disbaled = "disabled";
                                     } else {
                                         echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
