@@ -71,18 +71,57 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            overflow-x: hidden;
+        }
+        
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 99px);
+        }
+        
+        .sidebar-container {
+            width: 30%;
+            min-width: 350px;
+            position: sticky;
+            top: 0;
+            align-self: flex-start;
+            padding: 20px;
+        }
+        
+        .content-container {
+            width: 70%;
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-card {
+            width: 100%;
+            max-width: 437px;
+            height: 700px;
+            background-color: white;
+            border-radius: 30px;
+            filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
+            position: sticky;
+            top: 20px;
+        }
+        
         .inquiry-card {
             border: 1px solid #dee2e6;
             border-radius: 8px;
             margin-bottom: 20px;
             overflow: hidden;
         }
+        
         .unanswered {
             border-left: 4px solid #dc3545;
         }
+        
         .answered {
             border-left: 4px solid #28a745;
         }
+        
         .customer-message {
             background-color: #f8f9fa;
             padding: 15px;
@@ -90,6 +129,7 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 5px;
             border-left: 3px solid #007bff;
         }
+        
         .staff-response {
             background-color: #e8f5e8;
             padding: 15px;
@@ -97,57 +137,79 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 5px;
             border-left: 3px solid #28a745;
         }
+        
+        @media (max-width: 992px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar-container,
+            .content-container {
+                width: 100%;
+            }
+            
+            .sidebar-container {
+                position: relative;
+                min-height: auto;
+            }
+            
+            .sidebar-card {
+                position: relative;
+                height: auto;
+                min-height: 400px;
+            }
+        }
     </style>
 </head>
 <body class="bg-light">
+    <!-- Header -->
     <div class="container-fluid">
-    <div class='row bg-white' style="height:99px">
-        <div class="col-3 pe-0 d-flex align-items-center">
-            <img src="images/350 x 88.png" style='height:76px;width:auto;'>
-        </div>
-
-        <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center">
-            <div style="flex:0.5;text-align:right;margin-right:10px">
-                <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
+        <div class='row bg-white' style="height:99px">
+            <div class="col-3 pe-0 d-flex align-items-center">
+                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
             </div>
 
-            <div style="flex:.1;text-align:center;padding-right:10px">
-                <a style='color:black;text-decoration:none'>|</a>
-            </div>
+            <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center">
+                <div style="flex:0.5;text-align:right;margin-right:10px">
+                    <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
+                </div>
 
-            <div style="flex:.3;text-align:center;padding-right:15px">
-                <a style='color:black;text-decoration:none'><?php echo $header_name; ?> </a>
-            </div>
+                <div style="flex:.1;text-align:center;padding-right:10px">
+                    <a style='color:black;text-decoration:none'>|</a>
+                </div>
 
-            <div style="flex:0.6;text-align:right;padding-right:35px">
-                <a href="http://localhost/couples-connect/logout_cc.php" class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
-            </div>
+                <div style="flex:.3;text-align:center;padding-right:15px">
+                    <a style='color:black;text-decoration:none'><?php echo $header_name; ?> </a>
+                </div>
 
+                <div style="flex:0.6;text-align:right;padding-right:35px">
+                    <a href="http://localhost/couples-connect/logout_cc.php" class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<table>
-            <tr>
-                <td style='width:30%'>
-                <div class="row h-100 justify-content-center align-items-center">
-                    <div style='width:437px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))'>
-                        <div class="m-3 pt-2 text-center login_form_header">
-                            <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Options</p>
-                            <img src="images/Rectangle 11934.png" style='width:100%'>
-                        </div>
 
-                        <?php
-                        require 'cc_mf_menu.php';
-                        ?>
-
-
+    <!-- Main Content Area -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <div class="d-flex justify-content-center">
+                <div class="sidebar-card">
+                    <div class="m-3 pt-2 text-center login_form_header">
+                        <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Options</p>
+                        <img src="images/Rectangle 11934.png" style='width:100%'>
                     </div>
+
+                    <?php
+                    require 'cc_mf_menu.php';
+                    ?>
                 </div>
-            </td>
-      <td style='width:70%'>
-    <div class="container py-4">
-        <div class="row">
-            <div class="col-12">
+            </div>
+        </div>
+
+        <!-- Content Area -->
+        <div class="content-container">
+            <div class="container-fluid">
                 <h2 class="mb-4"><i class="fas fa-comments"></i> Customer Inquiries</h2>
                 
                 <?php if ($success_message): ?>
@@ -200,6 +262,9 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                         <small class="text-muted">
                                             Responded on 
                                             <?php echo date('F j, Y - g:i A', strtotime($inquiry['answered_at'])); ?>
+                                            <?php if ($inquiry['answered_by']): ?>
+                                                by <?php echo htmlspecialchars($inquiry['answered_by']); ?>
+                                            <?php endif; ?>
                                         </small>
                                     </div>
                                 
@@ -232,9 +297,6 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-                </td>
-                </tr>
-                </table>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
