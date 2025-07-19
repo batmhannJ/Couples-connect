@@ -125,7 +125,7 @@ if ($_SESSION['usertype'] == 'DSK') {
 
         <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center">
             <div style="flex:0.5;text-align:right;margin-right:10px">
-                <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
+                <a href="http://localhost/couples-connect/dashboard_user.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
             </div>
 
             <div style="flex:.1;text-align:center;padding-right:10px">

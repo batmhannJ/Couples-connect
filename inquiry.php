@@ -71,18 +71,57 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
+        body {
+            overflow-x: hidden;
+        }
+        
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 99px);
+        }
+        
+        .sidebar-container {
+            width: 30%;
+            min-width: 350px;
+            position: sticky;
+            top: 0;
+            align-self: flex-start;
+            padding: 20px;
+        }
+        
+        .content-container {
+            width: 70%;
+            flex: 1;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        
+        .sidebar-card {
+            width: 100%;
+            max-width: 437px;
+            height: 700px;
+            background-color: white;
+            border-radius: 30px;
+            filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));
+            position: sticky;
+            top: 20px;
+        }
+        
         .inquiry-card {
             border: 1px solid #dee2e6;
             border-radius: 8px;
             margin-bottom: 20px;
             overflow: hidden;
         }
+        
         .unanswered {
             border-left: 4px solid #dc3545;
         }
+        
         .answered {
             border-left: 4px solid #28a745;
         }
+        
         .customer-message {
             background-color: #f8f9fa;
             padding: 15px;
@@ -90,6 +129,7 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 5px;
             border-left: 3px solid #007bff;
         }
+        
         .staff-response {
             background-color: #e8f5e8;
             padding: 15px;
@@ -97,65 +137,81 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             border-radius: 5px;
             border-left: 3px solid #28a745;
         }
+        
+        @media (max-width: 992px) {
+            .main-container {
+                flex-direction: column;
+            }
+            
+            .sidebar-container,
+            .content-container {
+                width: 100%;
+            }
+            
+            .sidebar-container {
+                position: relative;
+                min-height: auto;
+            }
+            
+            .sidebar-card {
+                position: relative;
+                height: auto;
+                min-height: 400px;
+            }
+        }
     </style>
 </head>
 <body class="bg-light">
+    <!-- Header -->
     <div class="container-fluid">
-    <div class='row bg-white' style="height:99px">
-        <div class="col-3 pe-0 d-flex align-items-center">
-            <img src="images/350 x 88.png" style='height:76px;width:auto;'>
-        </div>
-
-        <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center">
-            <div style="flex:0.5;text-align:right;margin-right:10px">
-                <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
+        <div class='row bg-white' style="height:99px">
+            <div class="col-3 pe-0 d-flex align-items-center">
+                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
             </div>
 
-            <div style="flex:.1;text-align:center;padding-right:10px">
-                <a style='color:black;text-decoration:none'>|</a>
-            </div>
+            <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center">
+                <div style="flex:0.5;text-align:right;margin-right:10px">
+                    <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
+                </div>
 
-            <div style="flex:.3;text-align:center;padding-right:15px">
-                <a style='color:black;text-decoration:none'><?php echo $header_name; ?> </a>
-            </div>
+                <div style="flex:.1;text-align:center;padding-right:10px">
+                    <a style='color:black;text-decoration:none'>|</a>
+                </div>
 
-            <div style="flex:0.6;text-align:right;padding-right:35px">
-                <a href="http://localhost/couples-connect/logout_cc.php" class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
-            </div>
+                <div style="flex:.3;text-align:center;padding-right:15px">
+                    <a style='color:black;text-decoration:none'><?php echo $header_name; ?> </a>
+                </div>
 
+                <div style="flex:0.6;text-align:right;padding-right:35px">
+                    <a href="http://localhost/couples-connect/logout_cc.php" class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-<form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
-    <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 24px; height: calc(100vh - 40px);">
-        
-        <!-- Left Sidebar -->
-        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 24px 20px; height: fit-content; max-height: calc(100vh - 80px); border: 1px solid rgba(255, 255, 255, 0.2); overflow-y: auto;">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2 style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0 0 12px 0;">Options</h2>
-                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 100%;"></div>
-            </div>
 
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <?php
-                require 'cc_mf_menu.php';
-                ?>
+    <!-- Main Content Area -->
+    <div class="main-container">
+        <!-- Sidebar -->
+        <div class="sidebar-container">
+            <div class="d-flex justify-content-center">
+                <div class="sidebar-card">
+                    <div class="m-3 pt-2 text-center login_form_header">
+                        <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Options</p>
+                        <img src="images/Rectangle 11934.png" style='width:100%'>
+                    </div>
+
+                    <?php
+                    require 'cc_mf_menu.php';
+                    ?>
+                </div>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.2); height: calc(100vh - 80px); overflow: hidden;">
-
-            <!-- Header -->
-            <div style="padding: 20px 32px 16px 32px; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.05); flex-shrink: 0;">
-                <h1 style="font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0 0 10px 0;">Customer Inquiries</h1>
-                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 260px; margin: 0 auto;"></div>
-            </div>
-
-            <!-- Content Area -->
-            <div style="flex: 1; padding: 24px 32px; overflow-y: auto; min-height: 0;">
+        <!-- Content Area -->
+        <div class="content-container">
+            <div class="container-fluid">
+                <h2 class="mb-4"><i class="fas fa-comments"></i> Customer Inquiries</h2>
                 
-                <!-- Success Message -->
                 <?php if ($success_message): ?>
                     <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); border: 1px solid rgba(255, 255, 255, 0.2);">
                         <?php echo $success_message; ?>
@@ -215,42 +271,36 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                             </div>
                                         </div>
 
-                                        <!-- Staff Response (if answered) -->
-                                        <?php if ($inquiry['is_answered'] && $inquiry['staff_response']): ?>
-                                            <div style="margin-bottom: 16px;">
-                                                <h4 style="font-size: 16px; font-weight: 700; color: #059669; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
-                                                    <span>↩️</span> Staff Response:
-                                                </h4>
-                                                <div style="background: rgba(16, 185, 129, 0.05); padding: 16px 20px; border-radius: 12px; border-left: 4px solid #10b981;">
-                                                    <p style="color: #374151; margin: 0 0 8px 0; line-height: 1.6; white-space: pre-line; font-size: 16px; font-weight: 500;"><?php echo htmlspecialchars($inquiry['staff_response']); ?></p>
-                                                    <small style="color: #6b7280; font-size: 13px;">
-                                                        Responded on <?php echo date('F j, Y - g:i A', strtotime($inquiry['answered_at'])); ?>
-                                                    </small>
-                                                </div>
-                                            </div>
-                                        
-                                        <!-- Response Form (if not answered and user is staff) -->
-                                        <?php elseif (in_array($_SESSION['usertype'], ['DSK', 'CNR', 'HED'])): ?>
-                                            <div style="margin-top: 20px;">
-                                                <input type="hidden" name="message_id" value="<?php echo $inquiry['id']; ?>">
-                                                <div style="margin-bottom: 16px;">
-                                                    <label style="display: block; font-size: 16px; font-weight: 700; color: #059669; margin-bottom: 8px;">
-                                                        <span style="margin-right: 8px;">↩️</span> Your Response:
-                                                    </label>
-                                                    <textarea name="staff_response" style="width: 100%; padding: 12px 16px; border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 12px; font-family: inherit; font-size: 14px; line-height: 1.5; resize: vertical; min-height: 120px; background: rgba(255, 255, 255, 0.8); transition: all 0.3s ease;" 
-                                                            placeholder="Type your response here..." required 
-                                                            onfocus='this.style.borderColor="#4f46e5"; this.style.boxShadow="0 0 0 3px rgba(79, 70, 229, 0.1)";'
-                                                            onblur='this.style.borderColor="rgba(0, 0, 0, 0.1)"; this.style.boxShadow="none";'></textarea>
-                                                </div>
-                                                <button type="submit" name="respond" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-size: 15px; font-family: Inter; font-weight: 600; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; width: 140px;" 
-                                                       onmouseover='this.style.transform="translateY(-2px)"; this.style.boxShadow="0 6px 20px rgba(5, 150, 105, 0.4)";' 
-                                                       onmouseout='this.style.transform="translateY(0)"; this.style.boxShadow="0 4px 12px rgba(5, 150, 105, 0.3)";'>
-                                                    <span>📤</span> Send Response
-                                                </button>
-                                            </div>
-                                        <?php endif; ?>
+                                <!-- Staff Response (if answered) -->
+                                <?php if ($inquiry['is_answered'] && $inquiry['staff_response']): ?>
+                                    <div class="staff-response">
+                                        <h6><i class="fas fa-reply text-success"></i> Staff Response:</h6>
+                                        <p class="mb-0"><?php echo nl2br(htmlspecialchars($inquiry['staff_response'])); ?></p>
+                                        <small class="text-muted">
+                                            Responded on 
+                                            <?php echo date('F j, Y - g:i A', strtotime($inquiry['answered_at'])); ?>
+                                            <?php if ($inquiry['answered_by']): ?>
+                                                by <?php echo htmlspecialchars($inquiry['answered_by']); ?>
+                                            <?php endif; ?>
+                                        </small>
                                     </div>
-                                <?php endforeach; ?>
+                                
+                                <!-- Response Form (if not answered and user is staff) -->
+                                <?php elseif (in_array($_SESSION['usertype'], ['DSK', 'CNR', 'HED'])): ?>
+                                    <form method="POST" class="mt-3">
+                                        <input type="hidden" name="message_id" value="<?php echo $inquiry['id']; ?>">
+                                        <div class="mb-3">
+                                            <label class="form-label">
+                                                <i class="fas fa-reply text-success"></i> Your Response:
+                                            </label>
+                                            <textarea name="staff_response" class="form-control" rows="4" 
+                                                    placeholder="Type your response here..." required></textarea>
+                                        </div>
+                                        <button type="submit" name="respond" class="btn btn-success">
+                                            <i class="fas fa-paper-plane"></i> Send Response
+                                        </button>
+                                    </form>
+                                <?php endif; ?>
                             </div>
                         </div>
                     
@@ -266,85 +316,6 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
             </div>
         </div>
     </div>
-
-    <!-- Responsive Design -->
-    <style>
-        @media (max-width: 1200px) {
-            form > div {
-                grid-template-columns: 1fr !important;
-                gap: 16px !important;
-            }
-            
-            form > div > div:first-child {
-                order: 2;
-                height: auto !important;
-                max-height: none !important;
-            }
-            
-            form > div > div:last-child {
-                order: 1;
-                height: auto !important;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            form {
-                padding: 12px !important;
-            }
-            
-            h1 {
-                font-size: 22px !important;
-            }
-            
-            h2 {
-                font-size: 20px !important;
-            }
-            
-            /* Mobile inquiry card styling */
-            form > div > div:last-child > div:last-child > div > div:last-child > div > div {
-                padding: 16px !important;
-                margin: 0 -8px !important;
-            }
-        }
-        
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
-        }
-        
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb {
-            background: rgba(79, 70, 229, 0.3);
-            border-radius: 4px;
-        }
-        
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(79, 70, 229, 0.5);
-        }
-        
-        /* Form Focus States */
-        textarea:focus {
-            outline: none !important;
-        }
-        
-        /* Button Hover Effects */
-        button:active {
-            transform: translateY(0px) !important;
-        }
-        
-        /* Smooth Animations */
-        * {
-            transition: all 0.3s ease;
-        }
-    </style>
-
-    <input type="hidden" name="ac_recid_hidden" id="ac_recid_hidden">
-    
-</form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>

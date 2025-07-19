@@ -15,7 +15,7 @@ require_once("resources/stdfunc100.php");
 
 ?>
 <!doctype html>
-<html lang="en" style="height:100%;">
+<html lang="en" class="full-height">
 
     <head>
         <!-- NEEDED TO MMAKE THE SIZE AND FORMAT OF WEBPAGE RIGHT -->
@@ -60,6 +60,10 @@ require_once("resources/stdfunc100.php");
         <script src="fullcalendar-6.1.11/dist/index.global.min.js"></script>
 
         <style>
+            .full-height {
+                height: 100%;
+            }
+
             .footer {
                 background-color: #23408E;
                 position: absolute;

@@ -200,40 +200,6 @@ ul.checkout-bar:before {
     
     <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
         <table style="width:100%;height:calc(100% - 100px);	filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))">
-            <tr style='height:175px'>
-                <td class="d-flex align-items-top mx-0 px-0">
-                    <div class="d-flex" style="display:flex;flex-direction:row;width:200%">
-                        <!--<div><div style="width:50%;display:flex;justify-content:center;flex-direction:column;align-items:center">
-                            <div style='width:80%;height:150px;background-color:white;border-radius:15px' class="mt-4">
-                                <div class="pt-3" style='font-size:27px;font-family:inter;font-weight:700;text-align:center'>Status</div>
-                                <div style='width:100%;display:flex;justify-content:center'>
-                                    <img src="images/Rectangle 11934.png" style='width:80%;height:4px'>
-                                </div>
-                                
-                                    <?php   
-                                    if($act_status == "APR"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:28px;font-weight:700;margin-top:20px'>";
-                                            echo "<img src='images/Group.png'>";
-                                            echo "<span style='margin-left:10px'>Requires Pre-Marriage Orientation</span>";
-                                        echo "</div>";
-                                    }else if($act_status == "PMO"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:28px;font-weight:700;margin-top:20px'>";
-                                            echo "<img src='images/Group.png'>";
-                                            echo "<span style='margin-left:10px'>Waiting for Approval</span>";
-                                        echo "</div>";
-                                    }else if($act_status == "PMC"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:28px;font-weight:700;margin-top:20px'>";
-                                            echo "<img src='images/Group.png'>";
-                                            echo "<span style='margin-left:10px'>Eligible for Post Marriage Counseling</span>";
-                                        echo "</div>";
-                                    }
-                                    ?>
-                            </div>
-                        </div> </div>-->
-                    </div>
-                </td>
-            </tr>
-
             <tr style="height:500px;max-height:500px">
                 <td class="d-flex align-items-top mx-0 px-0">
                     <div class="container-fluid pt-4 d-flex justify-content-center" style="width:100%;">
