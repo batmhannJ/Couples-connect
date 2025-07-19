@@ -50,11 +50,70 @@ if ($_SESSION['usertype'] == 'DSK') {
         .bot-message {
             color: #333;
             font-weight: bold;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background-color: #f0f0f0;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 80%;
+        }
+        .bot-question {
+            color: #0066cc;
+            font-weight: bold;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background-color: #e6f3ff;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 80%;
+            cursor: pointer;
+            border: 1px solid #cce6ff;
+            transition: all 0.2s ease;
+        }
+        .bot-question:hover {
+            background-color: #cce6ff;
+            border-color: #99ccff;
+            transform: translateY(-1px);
         }
         .user-message {
             text-align: right;
             color: #0066cc;
+            padding: 8px 12px;
+            margin: 5px 0;
+            background-color: #0066cc;
+            color: white;
+            border-radius: 10px;
+            display: inline-block;
+            max-width: 80%;
+            margin-left: auto;
         }
+        .message-container {
+            width: 100%;
+            margin: 3px 0;
+        }
+        .message-container.user {
+            text-align: right;
+        }
+        .message-container.bot {
+            text-align: left;
+        }
+        .staff-message {
+    color: #fff;
+    font-weight: bold;
+    padding: 8px 12px;
+    margin: 5px 0;
+    background-color: #28a745;
+    border-radius: 10px;
+    display: inline-block;
+    max-width: 80%;
+    border: 1px solid #1e7e34;
+}
+
+.staff-message::before {
+    content: "Staff: ";
+    font-size: 0.8em;
+    opacity: 0.8;
+}
 </style>
 
 
@@ -98,25 +157,31 @@ if ($_SESSION['usertype'] == 'DSK') {
 
         // Fetch questions and chat history from the backend
         function loadChat() {
-            $.ajax({
-                url: 'fetch_questions.php',  // PHP file to fetch questions and chat history
-                method: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    questions = data.questions;  // Data contains an array of question objects
-                    chatHistory = data.chat_history;  // Existing chat history for the user
-                    displayChatHistory();
-                    displayQuestions();
-                },
-                error: function(error) {
-                    console.error('Error fetching chat data:', error);
-                }
-            });
+    $.ajax({
+        url: 'fetch_questions.php',
+        method: 'GET',
+        dataType: 'json',
+        success: function(data) {
+            console.log('Chat data received:', data); // Debug log
+            questions = data.questions || [];
+            chatHistory = data.chat_history || [];
+            displayChatHistory();
+            displayQuestions();
+            
+            // Check for new staff responses periodically
+            setTimeout(loadChat, 5000); // Refresh every 5 seconds
+        },
+        error: function(error) {
+            console.error('Error fetching chat data:', error);
+            // Retry after 10 seconds on error
+            setTimeout(loadChat, 10000);
         }
+    });
+}
 
         // Display chat history
         function displayChatHistory() {
-            $('#chatlog').empty();  // Clear chat log
+            $('#chatlog').empty();
 
             // Display each message from the chat history
             chatHistory.forEach(item => {
@@ -124,35 +189,66 @@ if ($_SESSION['usertype'] == 'DSK') {
             });
         }
 
-        // Display questions and answers
+        // Display questions as clickable elements
         function displayQuestions() {
             questions.forEach(question => {
-                displayMessage(question.questions, 'bot', question.questions_id);
+                displayMessage(question.questions, 'question', question.questions_id);
             });
         }
 
-        // Display message in the chat window
-        function displayMessage(message, sender, questionId) {
+        // Display message in the chat window with proper styling and click handlers
+        function displayMessage(message, sender, questionId = null) {
             const chatlog = $('#chatlog');
-            const messageElement = $('<div></div>')
-                .addClass(sender === 'bot' ? 'bot-message' : 'user-message')
-                .text(message)
-                .attr('data-id', questionId)
-                .on('click', function() {
-                    if (sender === 'bot') {
-                        fetchAnswer(questionId);
-                    }
-                });
+            
+            // Create message container
+            const messageContainer = $('<div></div>')
+                .addClass('message-container')
+                .addClass(sender === 'user' ? 'user' : 'bot');
 
-            chatlog.append(messageElement);
-            chatlog.scrollTop(chatlog[0].scrollHeight);  // Auto-scroll to the latest message
+            let messageClass = '';
+            let clickable = false;
+
+            if (sender === 'user') {
+                messageClass = 'user-message';
+            } else if (sender === 'question') {
+                messageClass = 'bot-question';
+                clickable = true;
+            } else {
+                messageClass = 'bot-message';
+            }
+
+            const messageElement = $('<div></div>')
+                .addClass(messageClass)
+                .text(message);
+
+            // Add click handler for questions
+            if (clickable && questionId) {
+                messageElement
+                    .attr('data-question-id', questionId)
+                    .attr('title', 'Click to see answer')
+                    .on('click', function() {
+                        fetchAnswer(questionId);
+                    });
+            }
+
+            messageContainer.append(messageElement);
+            chatlog.append(messageContainer);
+            
+            // Auto-scroll to the latest message
+            chatlog.scrollTop(chatlog[0].scrollHeight);
         }
 
         // Send user message to the backend and store it in the session
         function sendMessage() {
             const userInput = $('#userInput');
             const userMessage = userInput.val().trim();
+            
             if (userMessage) {
+                // Display user message immediately
+                displayMessage(userMessage, 'user');
+                userInput.val('');
+
+                // Send to backend
                 $.ajax({
                     url: 'fetch_questions.php',
                     method: 'POST',
@@ -161,8 +257,7 @@ if ($_SESSION['usertype'] == 'DSK') {
                         sender: 'user'
                     },
                     success: function(response) {
-                        displayMessage(userMessage, 'user');
-                        userInput.val('');
+                        console.log('Message sent successfully');
                     },
                     error: function(error) {
                         console.error('Error sending message:', error);
@@ -173,24 +268,83 @@ if ($_SESSION['usertype'] == 'DSK') {
 
         // Fetch and display the answer when a question is clicked
         function fetchAnswer(questionId) {
-            const questionData = questions.find(q => q.questions_id === String(questionId));
+            console.log('Fetching answer for question ID:', questionId);
+            
+            // Find the question in our questions array
+            const questionData = questions.find(q => q.questions_id == questionId);
+            
             if (questionData && questionData.answers) {
+                // Display the answer immediately
+                displayMessage(questionData.answers, 'bot');
+
+                // Store the answer in chat history via backend
                 $.ajax({
                     url: 'fetch_questions.php',
                     method: 'POST',
                     data: {
                         message: questionData.answers,
-                        sender: 'bot'
+                        sender: 'bot',
+                        question_id: questionId
                     },
                     success: function(response) {
-                        displayMessage(questionData.answers, 'bot');
+                        console.log('Answer stored in chat history');
                     },
                     error: function(error) {
-                        console.error('Error fetching answer:', error);
+                        console.error('Error storing answer:', error);
                     }
                 });
+            } else {
+                console.error('Question not found or no answer available for ID:', questionId);
+                displayMessage('Sorry, no answer is available for this question.', 'bot');
             }
         }
+
+        // Initialize chat when the page is ready
+        $(document).ready(function() {
+            loadChat();
+        });
+        function displayMessage(message, sender, questionId = null) {
+        const chatlog = $('#chatlog');
+        
+        // Create message container
+        const messageContainer = $('<div></div>')
+            .addClass('message-container')
+            .addClass(sender === 'user' ? 'user' : 'bot');
+
+        let messageClass = '';
+        let clickable = false;
+
+        if (sender === 'user') {
+            messageClass = 'user-message';
+        } else if (sender === 'question') {
+            messageClass = 'bot-question';
+            clickable = true;
+        } else if (sender === 'staff') {
+            messageClass = 'staff-message';  // New class for staff messages
+        } else {
+            messageClass = 'bot-message';
+        }
+
+        const messageElement = $('<div></div>')
+            .addClass(messageClass)
+            .text(message);
+
+        // Add click handler for questions
+        if (clickable && questionId) {
+            messageElement
+                .attr('data-question-id', questionId)
+                .attr('title', 'Click to see answer')
+                .on('click', function() {
+                    fetchAnswer(questionId);
+                });
+        }
+
+        messageContainer.append(messageElement);
+        chatlog.append(messageContainer);
+        
+        // Auto-scroll to the latest message
+        chatlog.scrollTop(chatlog[0].scrollHeight);
+    }
 
         // Initialize chat when the page is ready
         $(document).ready(function() {
@@ -206,10 +360,3 @@ if ($_SESSION['usertype'] == 'DSK') {
 </tr>
 
 </table>
-
-
-
-
-
-
-
