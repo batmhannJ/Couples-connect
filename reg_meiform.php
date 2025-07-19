@@ -2,6 +2,12 @@
 require "includes/cc_header.php";
 ?>
 
+<style>
+    html.full-height{
+        height: 140%;
+    }
+</style>
+
      <div style="width: 100%; font-family: Inter, sans-serif;">
     <div style="width: 100%; background-color: white; height: 80px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; position: relative;">
         
