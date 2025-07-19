@@ -30,7 +30,7 @@ require "includes/cc_header.php";
         </div>
     </div>
 
-    <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
+    <form name='myforms' id="myforms" method="post" target="_self" style='height:100px'> 
         <table style="width:100%;height:calc(100% - 100px);	filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))">
             <tr style='height:100%;display:flex'>
                 <td style='display:flex;justify-content:center;align-items:center;height:100%;flex:1'>
