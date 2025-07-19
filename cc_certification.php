@@ -47,277 +47,302 @@ if($_SESSION['usertype'] == 'DSK'){
         </div>
     </div>
 
-    <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
-    <table style="width:100%;height:100%;background-color:#f2f2f2">
-            <tr>
-                <td style='width:30%'>
-                    <div class="row h-100 justify-content-center align-items-center">
-                        <div style='width:437px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))'>
-                            <div class="m-3 pt-2 text-center login_form_header">
-                                <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Options</p>
-                                <img src="images/Rectangle 11934.png" style='width:100%'>
-                            </div>
+    <form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
+    <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 24px; height: calc(100vh - 40px);">
+        
+        <!-- Left Sidebar -->
+        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 24px 20px; height: fit-content; max-height: calc(100vh - 80px); border: 1px solid rgba(255, 255, 255, 0.2); overflow-y: auto;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0 0 12px 0;">Options</h2>
+                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 100%;"></div>
+            </div>
 
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <?php
+                    require 'cc_mf_menu.php';
+                ?>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.2); height: calc(100vh - 80px); max-height: 650px;">
+
+            <!-- Header -->
+            <div style="padding: 20px 24px 16px 24px; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.05); flex-shrink: 0;">
+                <h1 style="font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0 0 10px 0;">Certificates</h1>
+                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 150px; margin: 0 auto;"></div>
+            </div>
+
+            <!-- Filter Section -->
+            <div style="padding: 16px 24px; flex-shrink: 0;">
+                <?php if(isset($_GET['dateFrom']) && isset($_GET['dateTo'])):?>
+                    <div style="text-align: center;">
+                        <a href="cc_certification.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 12px 24px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 14px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); transition: all 0.2s ease;">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16">
+                                <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
+                            </svg>
+                            Clear Filter
+                        </a>
+                    </div>
+                <?php else: ?>
+                    <div style="background: rgba(255, 255, 255, 0.7); border-radius: 12px; padding: 16px; border: 1px solid rgba(0, 0, 0, 0.05);">
+                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px;">
+                                <label style="font-weight: 600; color: #374151; font-size: 13px; white-space: nowrap;">Date From:</label>
+                                <input type="date" class="form-control" id="dateFrom" style="border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 8px 12px; font-size: 13px; background: white; flex: 1; transition: all 0.2s ease;">
+                            </div>
+                            <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px;">
+                                <label style="font-weight: 600; color: #374151; font-size: 13px; white-space: nowrap;">Date To:</label>
+                                <input type="date" class="form-control" id="dateTo" style="border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 8px 12px; font-size: 13px; background: white; flex: 1; transition: all 0.2s ease;">
+                            </div>
+                            <button type="button" class="btn btn-primary btn-filter" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border: none; color: white; padding: 8px 16px; border-radius: 8px; font-weight: 600; font-size: 13px; box-shadow: 0 3px 8px rgba(79, 70, 229, 0.3); cursor: pointer; transition: all 0.2s ease; white-space: nowrap;">
+                                <svg width="14" height="14" fill="currentColor" viewBox="0 0 16 16" style="margin-right: 4px;">
+                                    <path d="M6 10.5a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-2-3a.5.5 0 0 1 .5-.5h11a.5.5 0 0 1 0 1h-11a.5.5 0 0 1-.5-.5z"/>
+                                </svg>
+                                Filter
+                            </button>
+                        </div>
+                    </div>
+                <?php endif; ?>
+            </div>
+
+            <script>
+                $('.btn-filter').click((e)=>{
+                    let dateFrom = $('#dateFrom').val(), dateTo = $('#dateTo').val();
+                    window.location.href = `?dateFrom=${encodeURIComponent(dateFrom)}&dateTo=${encodeURIComponent(dateTo)}`;
+                })
+            </script>
+
+            <!-- Table Container -->
+            <div style="flex: 1; padding: 0 24px 24px 24px; overflow: hidden; min-height: 0;">
+                <div style="background: rgba(255, 255, 255, 0.7); border-radius: 12px; height: 100%; overflow: auto; border: 1px solid rgba(0, 0, 0, 0.05);">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead style="position: sticky; top: 0; background: rgba(249, 250, 251, 0.95); backdrop-filter: blur(10px);">
+                            <tr>
+                                <th style="padding: 16px 20px; text-align: left; font-weight: 700; font-size: 14px; color: #374151; border-bottom: 2px solid rgba(0, 0, 0, 0.05);">Email</th>
+                                <th style="padding: 16px 20px; text-align: left; font-weight: 700; font-size: 14px; color: #374151; border-bottom: 2px solid rgba(0, 0, 0, 0.05);">Date Printed</th>
+                                <th style="padding: 16px 20px; text-align: left; font-weight: 700; font-size: 14px; color: #374151; border-bottom: 2px solid rgba(0, 0, 0, 0.05);">Control Number</th>
+                                <th style="padding: 16px 20px; text-align: center; font-weight: 700; font-size: 14px; color: #374151; border-bottom: 2px solid rgba(0, 0, 0, 0.05);">Action</th>
+                            </tr>
+                        </thead>
+
+                        <tbody name="tbody_table" id="tbody_table">
                             <?php
-                                require 'cc_mf_menu.php';
+                            if(isset($_GET['dateFrom']) && isset($_GET['dateTo'])) {
+                                $datefrom = $_GET['dateFrom'];
+                                $dateto = $_GET['dateTo'];
+                                $select_db_ac = "
+                                    SELECT 
+                                        pro_cert_table.status AS 'cert_status', 
+                                        mf_prog_users.username AS 'username', 
+                                        pro_cert_table.date_claimed AS 'date_claimed', 
+                                        pro_cert_table.control_number AS 'cntrl_number', 
+                                        pro_cert_table.recid AS 'recid_cert', 
+                                        pro_cert_table.reason AS 'reason', 
+                                        mf_prog_users.recid AS 'recid_users'
+                                    FROM 
+                                        pro_cert_table 
+                                    LEFT JOIN 
+                                        mf_prog_users 
+                                    ON 
+                                        pro_cert_table.userid = mf_prog_users.userid
+                                    WHERE 
+                                        pro_cert_table.date_claimed BETWEEN '$datefrom' AND '$dateto'
+                                    ORDER BY 
+                                        pro_cert_table.status ASC, 
+                                        mf_prog_users.date_requested DESC
+                                ";
+                            } else {
+                                $select_db_ac="SELECT pro_cert_table.status as 'cert_status', 
+                                  mf_prog_users.username  as 'username', 
+                                  pro_cert_table.date_claimed as 'date_claimed',
+                                  pro_cert_table.control_number as 'cntrl_number',
+                                  pro_cert_table.recid as 'recid_cert',
+                                  pro_cert_table.reason as 'reason',
+                                  mf_prog_users.recid as 'recid_users'
+                                    FROM pro_cert_table LEFT JOIN mf_prog_users ON pro_cert_table.userid = mf_prog_users.userid ORDER BY pro_cert_table.status ASC, mf_prog_users.date_requested DESC";
+                            }
+
+                            $stmt = $link->prepare($select_db_ac);
+                            $stmt->execute();
+                            $row_count = 0;
+                            while($rs_ac = $stmt->fetch()){
+                                $cert_color = '';
+                                if($rs_ac['cert_status'] == 'PRP'){
+                                    $cert_color = '#f59e0b';
+                                }else if($rs_ac['cert_status'] == 'PUP'){
+                                    $cert_color = '#10b981';
+                                }else if($rs_ac['cert_status'] == 'RCV'){
+                                    $cert_color = '#3b82f6';
+                                }
+
+                                if ($rs_ac['cert_status'] === 'APRV' ) {
+                                    $status = "APPROVED";
+                                    $status_color = '#10b981';
+                                } else if ($rs_ac['cert_status'] === 'DEC' ) {
+                                    $status = "DECLINED";
+                                    $status_color = '#ef4444';
+                                } else {
+                                    $status = "PENDING";
+                                    $status_color = '#f59e0b';
+                                }
+
+                                $bg_color = $row_count % 2 == 0 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(249, 250, 251, 0.5)';
+                                
+                                echo "<tr style='background: {$bg_color}; transition: all 0.2s ease;' onmouseover='this.style.background=\"rgba(79, 70, 229, 0.05)\"' onmouseout='this.style.background=\"{$bg_color}\"'>";
+                                    echo "<td style='padding: 12px 20px; font-size: 13px; font-weight: 500; color: #1f2937; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
+                                        echo htmlspecialchars($rs_ac['username']);
+                                    echo "</td>";
+
+                                    echo "<td style='padding: 12px 20px; font-size: 13px; font-weight: 500; color: #6b7280; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
+                                        echo date('M d, Y', strtotime($rs_ac['date_claimed']));
+                                    echo "</td>";
+
+                                    echo "<td style='padding: 12px 20px; font-size: 13px; font-weight: 600; color: {$cert_color}; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
+                                        echo htmlspecialchars($rs_ac['cntrl_number']);
+                                    echo "</td>";
+
+                                    echo "<td style='padding: 12px 20px; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
+                                        echo "<button onclick='review(\"{$rs_ac['recid_users']}\",\"{$rs_ac['recid_cert']}\",\"{$rs_ac['reason']}\")' type='button' style='background: linear-gradient(135deg, {$status_color} 0%, {$status_color}dd 100%); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);' onmouseover='this.style.transform=\"translateY(-1px)\"; this.style.boxShadow=\"0 3px 10px rgba(0, 0, 0, 0.2)\"' onmouseout='this.style.transform=\"translateY(0)\"; this.style.boxShadow=\"0 2px 6px rgba(0, 0, 0, 0.1)\"'>";
+                                            echo $status;
+                                        echo "</button>";
+                                    echo "</td>";
+                                echo "</tr>";
+                                $row_count++;
+                            }
                             ?>
-                         
-                        </div>
-                    </div>
-                </td>
-
-                <td style='width:70%'>
-                    <div class="row h-100 justify-content-center align-items-center">
-                        <div style='width:1025px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));display:flex;flex-direction:column'>
-
-                            <div class="m-3 pt-2 text-center">
-                                    <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Certificates</p>
-                                    <img src="images/Rectangle 11934.png" style='width:100%;height:4px'>
-                            </div>
-
-                            <div class="container text-center">
-                           
-                                        <?php if(isset($_GET['dateFrom']) && isset($_GET['dateTo'])):?>
-                                            <a href="cc_certification.php" class="btn btn-primary text-white">Clear</a>
-                                        <?php else: ?>
-                                    <div class="card">
-                                    <div class="card-body d-flex justify-content-between align-items-center gap-2">
-                                         <label>Date Form:</label>
-                                        <input type="date" class="form-control" id="dateFrom">
-                                        <label>Date To:</label>
-                                        <input type="date" class="form-control" id="dateTo">
-                                        <br>
-                                            <button type="button" class="btn btn-primary btn-filter">Filter</button>
-                                    </div>
-                                </div>
-                                        <?php endif; ?>
-                                  
-                            </div>
-                            <script>
-                                $('.btn-filter').click((e)=>{
-                                    let dateFrom = $('#dateFrom').val(), dateTo = $('#dateTo').val();
-
-                                    window.location.href = `?dateFrom=${encodeURIComponent(dateFrom)}&dateTo=${encodeURIComponent(dateTo)}`;
-
-                                })
-                            </script>
-
-
-                            <div class="m-3 d-flex justify-content-center" style='overflow:auto'>
-                                <table style='width:80%;height:100%'>
-
-                                    <thead>
-                                        <tr>
-                                            <td colspan="2">
-                                                <!-- <div class="input-group mb-3" style='
-                                                width:300px;
-                                                height:40px;
-                                                filter: drop-shadow(0px 4px 10px rgba(0, 0, 0, 0.25))'>
-                                                    <span class="input-group-text" id="inputGroup-sizing-sm" style='
-                                                    background-color:white;
-                                                    border-top-left-radius:15px;
-                                                    border-bottom-left-radius:15px;'><i class="fas fa-search"></i></span>
-                                                    <input type="text" style='
-                                                    border-left:none;
-                                                    border-top-right-radius:15px;
-                                                    border-bottom-right-radius:15px' name="search_text" id="search_text" class="form-control shadow-none" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm" placeholder='Search'> 
-                                                </div>-->
-                                            </td>
-                                        </tr>
-
-                                        <tr style='font-size:21px;font-family:inter;font-weight:700;color:#797979'>
-                                            <td>
-                                                Email
-                                            </td>
-
-                                            <td>
-                                                Date Printed
-                                            </td>
-
-                                            <td>
-                                                Control Number
-                                            </td>
-
-                                            <td>
-                                                &nbsp; &nbsp;
-                                            </td>
-                                        </tr>
-
-                                    </thead>
-
-
-                                    <tbody name="tbody_table" id="tbody_table">
-                                        <?php
-
-                                        if(isset($_GET['dateFrom']) && isset($_GET['dateTo'])) {
-
-                                            $datefrom = $_GET['dateFrom'];
-                                            $dateto = $_GET['dateTo'];
-
-                                            $select_db_ac = "
-                                                SELECT 
-                                                    pro_cert_table.status AS 'cert_status', 
-                                                    mf_prog_users.username AS 'username', 
-                                                    pro_cert_table.date_claimed AS 'date_claimed', 
-                                                    pro_cert_table.control_number AS 'cntrl_number', 
-                                                    pro_cert_table.recid AS 'recid_cert', 
-                                                    pro_cert_table.reason AS 'reason', 
-                                                    mf_prog_users.recid AS 'recid_users'
-                                                FROM 
-                                                    pro_cert_table 
-                                                LEFT JOIN 
-                                                    mf_prog_users 
-                                                ON 
-                                                    pro_cert_table.userid = mf_prog_users.userid
-                                                WHERE 
-                                                    pro_cert_table.date_claimed BETWEEN '$datefrom' AND '$dateto'
-                                                ORDER BY 
-                                                    pro_cert_table.status ASC, 
-                                                    mf_prog_users.date_requested DESC
-                                            ";
-
-                                        } else {
-
-                                              $select_db_ac="SELECT pro_cert_table.status as 'cert_status', 
-                                              mf_prog_users.username  as 'username', 
-                                              pro_cert_table.date_claimed as 'date_claimed',
-                                              pro_cert_table.control_number as 'cntrl_number',
-                                              pro_cert_table.recid as 'recid_cert',
-                                              pro_cert_table.reason as 'reason',
-                                              mf_prog_users.recid as 'recid_users'
-                                                FROM pro_cert_table LEFT JOIN mf_prog_users ON pro_cert_table.userid = mf_prog_users.userid ORDER BY pro_cert_table.status ASC, mf_prog_users.date_requested DESC";
-                                        }
-
-
-
-                                              $stmt	= $link->prepare($select_db_ac);
-                                              $stmt->execute();
-                                              while($rs_ac = $stmt->fetch()){
-
-                                                    $cert_color = '';
-                                                    if($rs_ac['cert_status'] == 'PRP'){
-                                                        $cert_color = '#FF7800';
-                                                    }else if($rs_ac['cert_status'] == 'PUP'){
-                                                        $cert_color = '#2ECD6E';
-                                                    }else if($rs_ac['cert_status'] == 'RCV'){
-                                                        $cert_color = '#08A9F4';
-                                                    }
-
-                                                    if ($rs_ac['cert_status'] === 'APRV' ) {
-                                                        $status = "APPROVED";
-                                                    } else if ($rs_ac['cert_status'] === 'DEC' ) {
-                                                        $status = "DECLINED";
-                                                    } else {
-                                                        $status = "PENDING";
-                                                    }
-                                                  
-                                                  echo "<tr style='font-size:21px;font-family:inter;font-weight:700;color:black'>";
-                                                        echo "<td class='pt-4'>";
-                                                            echo "".$rs_ac['username']."";
-                                                        echo "</td>";
-
-                                              
-                                                        echo "<td class='pt-4'>";
-                                                            echo "".date('F d, Y', strtotime($rs_ac['date_claimed']))."";
-                                                        echo "</td>";
-
-                                                        echo "<td class='pt-4' style='color:".$cert_color."'>";
-                                                            echo $rs_ac['cntrl_number'];
-                                                        echo "</td>";
-
-                                                        echo "<td class='pt-4 d-flex justify-content-end'>";
-                                 
-                                                                echo "<button onclick='review(\"{$rs_ac['recid_users']}\",\"{$rs_ac['recid_cert']}\",\"{$rs_ac['reason']}\")' type='button' style='border:none;background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;padding-top:5px;padding-bottom:5px;height:auto;font-size:21px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>";
-                                                                echo $status;
-                                                                echo "</button>";
-                            
-                                                        echo "</td>";
-                                                  echo "</tr>";
-              
-                                              }
-
-                                        ?>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-                </td>    
-            </tr>
-        
-        </table>
-
-        <div class="modal fade  xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Couples Connect Says:</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="error_msg">Modal body text goes here.</p>
-                    </div>
-     
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- Responsive Design -->
+    <style>
+        @media (max-width: 1200px) {
+            form > div {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            
+            form > div > div:first-child {
+                order: 2;
+            }
+            
+            form > div > div:last-child {
+                order: 1;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            form {
+                padding: 12px !important;
+            }
+            
+            form > div > div:nth-child(2) .filter-container {
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+            
+            form > div > div:nth-child(2) .filter-container > div {
+                flex-direction: column !important;
+                min-width: 100% !important;
+            }
+            
+            table th, table td {
+                padding: 12px 8px !important;
+                font-size: 12px !important;
+            }
+            
+            h1 {
+                font-size: 24px !important;
+            }
+            
+            h2 {
+                font-size: 20px !important;
+            }
+        }
+        
+        input[type="date"]:focus {
+            border-color: #4f46e5 !important;
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
+            outline: none !important;
+        }
+        
+        .btn-filter:hover {
+            transform: translateY(-2px) !important;
+            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4) !important;
+        }
+        
+        tbody tr:hover button {
+            transform: scale(1.05) !important;
+        }
+    </style>
 
-        <div class="modal fade modal_cert_reason" id="modal_cert_reason" style="display: none;" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style='border-radius:25px'>
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <div style="color:black;font-family:inter;color:#252733;font-size:33px;font-weight:600">Certification</div>
-                        <div style="color:black;font-family:inter;color:#9B9B9B;font-size:21px;margin-top:-5px">Request</div>
-                    </div>
-          
+    <!-- Modals -->
+    <div class="modal fade xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius: 16px; border: none; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding: 24px;">
+                    <h5 class="modal-title" style="font-weight: 700; color: #1f2937;">Couples Connect Says:</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body mx-3">
-                    <label for="" style='font-size:21px;color:252733;font-weight:600;font-family:inter'>Reason for request:</label>
-                    <p id="reason" cols="30" rows="10" style='font-size: 18px;'></p>
-                    <div style='display:flex;justify-content:center;padding-top:25px;padding-bottom:20px'>
-                        <button type="button" class="btn" id="appBtn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25)); margin-right: 12px;">APPROVE</button>
-                        <button type="button" id="decBtn" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">DECLINE</button>
-                    </div>
-                    
-                </div>
-          
+                <div class="modal-body" style="padding: 24px;">
+                    <p class="error_msg" style="color: #6b7280; margin: 0;">Modal body text goes here.</p>
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="modal fade modal_dec_cert_reason" id="modal_dec_cert_reason" style="display: none;" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style='border-radius:25px'>
-                <div class="modal-header">
+    <div class="modal fade modal_cert_reason" id="modal_cert_reason" style="display: none;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding: 24px 32px;">
                     <div class="modal-title">
-                        <div style="color:black;font-family:inter;color:#252733;font-size:33px;font-weight:600">Certification</div>
-                        <div style="color:black;font-family:inter;color:#9B9B9B;font-size:21px;margin-top:-5px">Request</div>
+                        <div style="color: #1f2937; font-family: Inter, sans-serif; font-size: 28px; font-weight: 700;">Certification</div>
+                        <div style="color: #6b7280; font-family: Inter, sans-serif; font-size: 16px; margin-top: -2px;">Request</div>
                     </div>
-          
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body mx-3">
-                    <label for="" style='font-size:21px;color:252733;font-weight:600;font-family:inter'>Reason for declination:</label>
-                    <textarea id="dec_reason" class="form-control" cols="30" rows="10" placeholder="Enter reason" style='font-size: 18px;'></textarea>
-                    <div style='display:flex;justify-content:center;padding-top:25px;padding-bottom:20px'>
-                        <button type="button" id="decReasonBtn" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">SUBMIT</button>
+                <div class="modal-body" style="padding: 24px 32px 32px 32px;">
+                    <label style="font-size: 16px; color: #374151; font-weight: 600; font-family: Inter, sans-serif; display: block; margin-bottom: 12px;">Reason for request:</label>
+                    <p id="reason" style="font-size: 14px; color: #6b7280; background: rgba(249, 250, 251, 0.5); padding: 16px; border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.05); margin-bottom: 24px; line-height: 1.5;"></p>
+                    <div style="display: flex; justify-content: center; gap: 12px; flex-wrap: wrap;">
+                        <button type="button" class="btn" id="appBtn" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; width: 140px; height: 44px; font-size: 14px; font-family: Inter, sans-serif; font-weight: 600; border-radius: 12px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.3)'">APPROVE</button>
+                        <button type="button" id="decBtn" class="btn" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; width: 140px; height: 44px; font-size: 14px; font-family: Inter, sans-serif; font-weight: 600; border-radius: 12px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(239, 68, 68, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.3)'">DECLINE</button>
                     </div>
-                    
-                </div>
-          
                 </div>
             </div>
         </div>
+    </div>
 
-        <input type="hidden" name="ac_recid_hidden" id="ac_recid_hidden">
-        <input type="hidden" name="cert_recid_hidden" id="cert_recid_hidden">
+    <div class="modal fade modal_dec_cert_reason" id="modal_dec_cert_reason" style="display: none;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding: 24px 32px;">
+                    <div class="modal-title">
+                        <div style="color: #1f2937; font-family: Inter, sans-serif; font-size: 28px; font-weight: 700;">Certification</div>
+                        <div style="color: #6b7280; font-family: Inter, sans-serif; font-size: 16px; margin-top: -2px;">Request</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 24px 32px 32px 32px;">
+                    <label style="font-size: 16px; color: #374151; font-weight: 600; font-family: Inter, sans-serif; display: block; margin-bottom: 12px;">Reason for declination:</label>
+                    <textarea id="dec_reason" class="form-control" cols="30" rows="6" placeholder="Enter reason for declining..." style="font-size: 14px; border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 12px; padding: 16px; background: rgba(249, 250, 251, 0.5); resize: vertical; transition: all 0.2s ease; margin-bottom: 24px;" onfocus="this.style.borderColor='#4f46e5'; this.style.boxShadow='0 0 0 3px rgba(79, 70, 229, 0.1)'" onblur="this.style.borderColor='rgba(0, 0, 0, 0.1)'; this.style.boxShadow='none'"></textarea>
+                    <div style="display: flex; justify-content: center;">
+                        <button type="button" id="decReasonBtn" class="btn" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; width: 160px; height: 44px; font-size: 14px; font-family: Inter, sans-serif; font-weight: 600; border-radius: 12px; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); cursor: pointer; transition: all 0.2s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(79, 70, 229, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(79, 70, 229, 0.3)'">SUBMIT</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <input type="hidden" name="cus_recid_hidden" id="cus_recid_hidden">
-        
-    </form>
+    <input type="hidden" name="ac_recid_hidden" id="ac_recid_hidden">
+    <input type="hidden" name="cert_recid_hidden" id="cert_recid_hidden">
+    <input type="hidden" name="cus_recid_hidden" id="cus_recid_hidden">
+</form>
+
 
     <script>
 

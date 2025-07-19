@@ -100,6 +100,7 @@ if($rs_partnerinfo) {
     </style>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+    
     <div class="container-fluid">
         <div class='row bg-white' style="height:99px">
             <div class="col-3 pe-0 d-flex align-items-center">
@@ -127,303 +128,314 @@ if($rs_partnerinfo) {
         </div>
     </div>
 
-    <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
-    <table style="width:100%;height:100%;background-color:#f2f2f2">
-            <tr>
-                <td style='width:100%'>
-                    <div class="row h-100 justify-content-center align-items-center">
-                        <div style='width:1400px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.21));display:flex;flex-direction:column'>
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Confirmation Review</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
 
-                            <div class="m-3 pt-2">
-
-                                <div class="row">
-                                    <div class="col-2">
-                                        <a href="http://localhost/couples-connect/cc_account_confirm.php"><img src="images/Vector (1).png" style='height:30px;width:20px'></a>
-                                    </div>
-
-                                    <div class="col-10 d-flex justify-content-center" style='padding-right:240px'>
-                                        <p style="font-weight:bold;font-size:24px;font-family:inter;margin-bottom:0">Account Confirmation</p>
-                                    </div>
-
-                                </div>
-                         
-                                    
-                                <img src="images/Rectangle 11934.png" style='width:100%;height:4px'>
-                                    
-                            </div>
-
+<form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
+    <div style="max-width: 1400px; margin: 0 auto; height: calc(100vh - 40px);">
         
-                            <div class="m-3 px-4">
-                                <div class="row">
-                                    <div class="col-12 text-left" style='font-size:19px;font-weight:700;font-family:inter'>
-                                     Account Information   
-                                    </div>
+        <!-- Main Content Card -->
+        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.2); height: 100%; overflow: hidden;">
 
-                                    <div class="col-12 text-left mt-3" style='font-size:19px;font-weight:500;font-family:inter'>
-                                        Email Address: 
-                                        <span style='margin-left:20px;font-weight:700'>
-                                        <?php echo $email;?>                                      
-                                        </span>
-                                    </div>
+            <!-- Header with Back Button -->
+            <div style="padding: 20px 32px 16px 32px; border-bottom: 1px solid rgba(0, 0, 0, 0.05); flex-shrink: 0;">
+                <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 12px;">
+                    <a href="http://localhost/couples-connect/cc_account_confirm.php" style="background: rgba(79, 70, 229, 0.1); padding: 12px; border-radius: 12px; text-decoration: none; transition: all 0.2s ease;" onmouseover="this.style.background='rgba(79, 70, 229, 0.2)'" onmouseout="this.style.background='rgba(79, 70, 229, 0.1)'">
+                        <i class="fas fa-arrow-left" style="color: #4f46e5; font-size: 18px;"></i>
+                    </a>
+                    <h1 style="font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0; flex: 1; text-align: center; padding-right: 50px;">Account Confirmation</h1>
+                </div>
+                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 100%;"></div>
+            </div>
 
-                                    
-                                    <div class="col-12 text-left mt-2" style='font-size:19px;font-weight:500;font-family:inter'>
-                                        Secondary Email Address: 
-                                        <span style='margin-left:20px;font-weight:700'>
-                                        <?php echo $secondary_email;?>                                      
-                                        </span>
-                                    </div>
+            <!-- Content Area -->
+            <div style="flex: 1; overflow-y: auto; padding: 24px 32px;">
+                
+                <!-- Account Information Section -->
+                <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid rgba(0, 0, 0, 0.05);">
+                    <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 20px 0; display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 6px; height: 24px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border-radius: 3px;"></div>
+                        Account Information
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                        <div style="background: rgba(79, 70, 229, 0.05); border-radius: 12px; padding: 16px; border-left: 4px solid #4f46e5;">
+                            <span style="font-size: 16px; font-weight: 500; color: #374151;">Email Address: </span>
+                            <span style="font-weight: 700; color: #1f2937;"><?php echo $email;?></span>
+                        </div>
+                        <div style="background: rgba(16, 185, 129, 0.05); border-radius: 12px; padding: 16px; border-left: 4px solid #10b981;">
+                            <span style="font-size: 16px; font-weight: 500; color: #374151;">Secondary Email: </span>
+                            <span style="font-weight: 700; color: #1f2937;"><?php echo $secondary_email;?></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Personal Information Section -->
+                <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid rgba(0, 0, 0, 0.05);">
+                    <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 20px 0; display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 6px; height: 24px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 3px;"></div>
+                        Personal Information
+                    </h3>
+                    
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 32px;">
+                        <!-- Partner 1 -->
+                        <div style="background: rgba(255, 255, 255, 0.8); border-radius: 12px; padding: 20px; border: 1px solid rgba(0, 0, 0, 0.05);">
+                            <h4 style="font-size: 18px; font-weight: 700; color: #4f46e5; margin: 0 0 16px 0; text-align: center; padding-bottom: 8px; border-bottom: 2px solid rgba(79, 70, 229, 0.2);">Partner 1</h4>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Name:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $full_name;?></span>
                                 </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Birthdate:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $birthdate;?></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Gender:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $gender;?></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Contact:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $contact;?></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Occupation:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $occupation;?></span>
+                                </div>
+                                <div style="padding: 8px 0;">
+                                    <span style="font-weight: 500; color: #6b7280; display: block; margin-bottom: 4px;">Address:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $address;?></span>
+                                </div>
+                            </div>
+                        </div>
 
-                                <div class="row pt-4">
-                                    <div class="col-8 text-left" style='font-size:19px;font-family:inter'>
-
-                                        <span style='font-weight:700'>
-                                            Personal Information:       
-                                        </span>
-                                
-                                        <div class="row pt-3">
-                                            <div class="col-6">
-                                                Partner 1
-                                            </div>
-                                            <div class="col-6">
-                                                Partner 2
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Name: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $full_name;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Name: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $full_name2;?>                                      
-                                                </span>
-                                            </div>
-
-
-                                            <div class="col-6 pt-3">
-                                                Brithdate: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $birthdate;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Birthdate: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $birthdate2;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Gender: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $gender;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Gender: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $gender2;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Contact: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $contact;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Contact: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $contact2;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Occupation: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $occupation;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Occupation: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $occupation2;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                                Address: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $address;?>                                      
-                                                </span>
-                                            </div>
-
-                                            <div class="col-6 pt-3">
-                                            Address: 
-                                                <span style='margin-left:20px;font-weight:700'>
-                                                    <?php echo $address2;?>                                      
-                                                </span>
-                                            </div>                                            
-                                        </div>   
-                                    </div>
-
-                                    <div class="col-4 text-left" style='font-size:19px;font-weight:700;font-family:inter'>
-                                     Personal Documents:   
-                                        <div class="row">
-                                                <div class="col-12 mt-3">
-                                                    <div style='font-weight:500'>
-                                                    Proof of residency       
-                                                    </div>
-                                                    <div class='ellipsis'>
-                                                        <a href="<?php echo $doc_link; ?>" style='color:blue!important;text-decoration:underline!important' download="<?php echo $doc_link_filename;?>"> <?php echo $doc_link_filename; ?> <i class="fas fa-download"></i></a>
-                                                    </div>
-                                                
-                                                </div>
-
-                                                <div class="col-12 mt-3">
-                                                    <div style='font-weight:700;font-size:19px'>
-                                                    Application for PMOC       
-                                                    </div>
-                                                    <div>
-                                                        <label class='mt-2' style='font-weight:500'>Justification</label>
-
-                                                        <textarea rows='3' readonly class='form-control' style='font-weight:500;font-size:20px;'><?php echo $justification; ?></textarea>
-                                                    </div>
-
-                                                    <div style='display:flex;flex-direction:column' class='pt-3 ellipsis'>
-                                                        <label style='font-weight:500'>Evidence</label>
-                                                        
-                                                        <div>
-                                                            <?php
-
-                                                            if(empty($crm_link)){
-                                                                echo "User Did not apply for PMOC";
-                                                            }else{
-                                                                // echo $crm_link."<i class='fas fa-download'></i>";
-                                                                echo "<a href='".$crm_link."' style='color:blue!important;text-decoration:underline!important' download='".$crm_link_filename."'> ".$crm_link_filename."<i class='fas fa-download'></i></a>";
-                                                            }
-                                                            ?>
-                                     
-                                                        </div>
-                                                    </div>
-                                                
-                                                </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12 d-flex justify-content-center">
-                                        <div class="container d-flex justify-content-center align-items-center">
-                                            <div class="m-3 pt-1 form-group d-flex align-items-center justify-content-center">
-                                                <button type="button" onclick="decline()" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Decline</button>
-                                            </div>
-
-                                            <div class="m-3 pt-1 form-group d-flex align-items-center justify-content-center">
-                                                <button type="button" onclick="acc_choose('PMO')" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Approve</button>
-                                            </div>
-                                        </div>
-                                    </div>
+                        <!-- Partner 2 -->
+                        <div style="background: rgba(255, 255, 255, 0.8); border-radius: 12px; padding: 20px; border: 1px solid rgba(0, 0, 0, 0.05);">
+                            <h4 style="font-size: 18px; font-weight: 700; color: #7c3aed; margin: 0 0 16px 0; text-align: center; padding-bottom: 8px; border-bottom: 2px solid rgba(124, 58, 237, 0.2);">Partner 2</h4>
+                            
+                            <div style="display: flex; flex-direction: column; gap: 12px;">
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Name:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $full_name2;?></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Birthdate:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $birthdate2;?></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Gender:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $gender2;?></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Contact:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $contact2;?></span>
+                                </div>
+                                <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid rgba(0, 0, 0, 0.05);">
+                                    <span style="font-weight: 500; color: #6b7280;">Occupation:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $occupation2;?></span>
+                                </div>
+                                <div style="padding: 8px 0;">
+                                    <span style="font-weight: 500; color: #6b7280; display: block; margin-bottom: 4px;">Address:</span>
+                                    <span style="font-weight: 700; color: #1f2937;"><?php echo $address2;?></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </td>    
-            </tr>
-        
-        </table>
+                </div>
 
-        <div class="modal fade  xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Couples Connect Says:</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <!-- Documents Section -->
+                <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; padding: 24px; margin-bottom: 24px; border: 1px solid rgba(0, 0, 0, 0.05);">
+                    <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 20px 0; display: flex; align-items: center; gap: 8px;">
+                        <div style="width: 6px; height: 24px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 3px;"></div>
+                        Personal Documents
+                    </h3>
+                    
+                    <div style="display: flex; flex-direction: column; gap: 20px;">
+                        <!-- Proof of Residency -->
+                        <div style="background: rgba(249, 115, 22, 0.05); border-radius: 12px; padding: 16px; border-left: 4px solid #f97316;">
+                            <div style="font-weight: 600; color: #1f2937; margin-bottom: 8px;">Proof of Residency</div>
+                            <a href="<?php echo $doc_link; ?>" style="color: #4f46e5; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(79, 70, 229, 0.1); border-radius: 8px; transition: all 0.2s ease;" download="<?php echo $doc_link_filename;?>" onmouseover="this.style.background='rgba(79, 70, 229, 0.2)'" onmouseout="this.style.background='rgba(79, 70, 229, 0.1)'">
+                                <i class="fas fa-download"></i>
+                                <?php echo $doc_link_filename; ?>
+                            </a>
+                        </div>
+
+                        <!-- PMOC Application -->
+                        <div style="background: rgba(239, 68, 68, 0.05); border-radius: 12px; padding: 16px; border-left: 4px solid #ef4444;">
+                            <div style="font-weight: 700; color: #1f2937; margin-bottom: 12px;">Application for PMOC</div>
+                            
+                            <div style="margin-bottom: 16px;">
+                                <label style="font-weight: 600; color: #374151; display: block; margin-bottom: 8px;">Justification</label>
+                                <textarea readonly style="width: 100%; border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 12px; font-size: 14px; font-weight: 500; background: rgba(255, 255, 255, 0.8); resize: none; min-height: 80px;"><?php echo $justification; ?></textarea>
+                            </div>
+
+                            <div>
+                                <label style="font-weight: 600; color: #374151; display: block; margin-bottom: 8px;">Evidence</label>
+                                <div>
+                                    <?php
+                                    if(empty($crm_link)){
+                                        echo "<span style='color: #6b7280; font-style: italic;'>User did not apply for PMOC</span>";
+                                    }else{
+                                        echo "<a href='".$crm_link."' style='color: #4f46e5; text-decoration: none; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; padding: 8px 16px; background: rgba(79, 70, 229, 0.1); border-radius: 8px; transition: all 0.2s ease;' download='".$crm_link_filename."' onmouseover='this.style.background=\"rgba(79, 70, 229, 0.2)\"' onmouseout='this.style.background=\"rgba(79, 70, 229, 0.1)\"'>";
+                                        echo "<i class='fas fa-download'></i>";
+                                        echo $crm_link_filename;
+                                        echo "</a>";
+                                    }
+                                    ?>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <p class="error_msg">Modal body text goes here.</p>
-                    </div>
-     
+                </div>
+
+                <!-- Action Buttons -->
+                <div style="display: flex; justify-content: center; gap: 20px; padding: 20px 0;">
+                    <button type="button" onclick="decline()" style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-size: 16px; font-family: Inter; font-weight: 700; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); cursor: pointer; transition: all 0.3s ease; min-width: 160px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(239, 68, 68, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(239, 68, 68, 0.3)'">
+                        <i class="fas fa-times" style="margin-right: 8px;"></i>
+                        Decline
+                    </button>
+                    <button type="button" onclick="acc_choose('PMO')" style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; border: none; padding: 16px 32px; border-radius: 12px; font-size: 16px; font-family: Inter; font-weight: 700; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); cursor: pointer; transition: all 0.3s ease; min-width: 160px;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(16, 185, 129, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(16, 185, 129, 0.3)'">
+                        <i class="fas fa-check" style="margin-right: 8px;"></i>
+                        Approve
+                    </button>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- <footer style='height:100px;background-color:#23408E' class='footer'>
-            <div class="container-fluid"  style='height:100px'>
+    <!-- Responsive Design -->
+    <style>
+        @media (max-width: 1024px) {
+            form > div > div > div:nth-child(3) > div:nth-child(2) > div {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            
+            form > div > div > div:nth-child(2) > div > div {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            form {
+                padding: 12px !important;
+            }
+            
+            h1 {
+                font-size: 22px !important;
+                padding-right: 0 !important;
+            }
+            
+            h3 {
+                font-size: 18px !important;
+            }
+            
+            h4 {
+                font-size: 16px !important;
+            }
+            
+            /* Stack action buttons on mobile */
+            form > div > div > div:last-child > div {
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+            
+            form > div > div > div:last-child > div > button {
+                width: 100% !important;
+                min-width: auto !important;
+            }
+            
+            /* Adjust partner cards spacing */
+            div[style*="Partner 1"], div[style*="Partner 2"] {
+                padding: 16px !important;
+            }
+            
+            /* Make download links more mobile friendly */
+            a[download] {
+                word-break: break-all !important;
+                font-size: 13px !important;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(79, 70, 229, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(79, 70, 229, 0.5);
+        }
 
-                <div class="row"  style='height:100px'>
-                    <div class="col-4">
-                        <div class="row ms-3"  style='height:100px'>
-                            <div class="col-2 d-flex align-items-center">
-                                <img src="images/op office logo.png" style="height:77px;width:auto">
-                            </div>
+        .ellipsis {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+    </style>
 
-                            <div class="col-10 d-flex align-items-center">
-                                <div class="container" style='font-family:inter;color:white'>
-                                    <div class="col-12" style='font-size:15px;font-weight:bold'>
-                                        City Population Office of Cabuyao
-                                    </div>
-
-                                    <div class="col-12" style='font-size:9px'>
-                                        Brgy Dos. Cabuyao Retail Plaza, Cabuyao, Philippines
-                                    </div>
-
-                                    <div class="col-12" style='font-size:9px'>
-                                        cpocabuyao@gmail.com
-                                    </div>
-
-                                </div>
-          
-                            </div>
-                        </div>       
-                    </div>
-
-                    <div class="col-8 d-flex align-items-center justify-content-end">
-                        <div>
-                            <img src="images/pajamas_question.png" style='width:63px;height:auto;'>
-                        </div>   
-                    </div>
-                </div>
-
-            </div>
-        </footer> -->
-
-        <div class="modal fade modal_dec_cert_reason" id="modal_dec_cert_reason" style="display: none;" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered">
-                <div class="modal-content" style='border-radius:25px'>
-                <div class="modal-header">
-                    <div class="modal-title">
-                        <div style="color:black;font-family:inter;color:#252733;font-size:33px;font-weight:600">Certification</div>
-                        <div style="color:black;font-family:inter;color:#9B9B9B;font-size:21px;margin-top:-5px">Request</div>
-                    </div>
-          
+    <!-- Error Modal -->
+    <div class="modal fade xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding: 24px 32px;">
+                    <h5 class="modal-title" style="font-weight: 700; color: #1f2937; font-size: 20px;">Couples Connect Says:</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body mx-3">
-                    <label for="" style='font-size:21px;color:252733;font-weight:600;font-family:inter'>Reason for declination:</label>
-                    <textarea id="dec_reason" class="form-control" cols="30" rows="10" placeholder="Enter reason" style='font-size: 18px;'></textarea>
-                    <div style='display:flex;justify-content:center;padding-top:25px;padding-bottom:20px'>
-                        <button type="button" id="decReasonBtn" class="btn" style=";background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">SUBMIT</button>
-                    </div>
-                    
-                </div>
-          
+                <div class="modal-body" style="padding: 24px 32px 32px 32px;">
+                    <p class="error_msg" style="color: #6b7280; margin: 0; font-size: 14px; line-height: 1.5;">Modal body text goes here.</p>
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- Decline Reason Modal -->
+    <div class="modal fade modal_dec_cert_reason" id="modal_dec_cert_reason" style="display: none;" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none; box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15); background: rgba(255, 255, 255, 0.98); backdrop-filter: blur(20px);">
+                <div class="modal-header" style="border-bottom: 1px solid rgba(0, 0, 0, 0.05); padding: 24px 32px;">
+                    <div class="modal-title">
+                        <div style="color: #1f2937; font-family: Inter; font-size: 24px; font-weight: 700;">Certification</div>
+                        <div style="color: #9b9b9b; font-family: Inter; font-size: 16px; margin-top: -2px;">Request</div>
+                    </div>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" style="padding: 24px 32px 32px 32px;">
+                    <label style="font-size: 16px; color: #1f2937; font-weight: 600; font-family: Inter; display: block; margin-bottom: 12px;">Reason for declination:</label>
+                    <textarea id="dec_reason" class="form-control" cols="30" rows="6" placeholder="Enter reason" style="font-size: 14px; border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 12px; padding: 16px; resize: vertical; font-family: Inter;"></textarea>
+                    <div style="display: flex; justify-content: center; padding-top: 24px;">
+                        <button type="button" id="decReasonBtn" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; padding: 16px 48px; border-radius: 12px; font-size: 16px; font-family: Inter; font-weight: 700; box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3); cursor: pointer; transition: all 0.3s ease;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(79, 70, 229, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 12px rgba(79, 70, 229, 0.3)'">
+                            SUBMIT
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        <input type="hidden" name="ac_recid_hidden" id="ac_recid_hidden" value="<?php echo $_POST['ac_recid_hidden']; ?>">
-        
-    </form>
+    <input type="hidden" name="ac_recid_hidden" id="ac_recid_hidden" value="<?php echo $_POST['ac_recid_hidden']; ?>">
+    
+</form>
 
     <script>
     

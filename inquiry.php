@@ -126,115 +126,225 @@ $inquiries = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </div>
     </div>
 </div>
-<table>
-            <tr>
-                <td style='width:30%'>
-                <div class="row h-100 justify-content-center align-items-center">
-                    <div style='width:437px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))'>
-                        <div class="m-3 pt-2 text-center login_form_header">
-                            <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Options</p>
-                            <img src="images/Rectangle 11934.png" style='width:100%'>
-                        </div>
+<form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
+    <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 24px; height: calc(100vh - 40px);">
+        
+        <!-- Left Sidebar -->
+        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 24px 20px; height: fit-content; max-height: calc(100vh - 80px); border: 1px solid rgba(255, 255, 255, 0.2); overflow-y: auto;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0 0 12px 0;">Options</h2>
+                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 100%;"></div>
+            </div>
 
-                        <?php
-                        require 'cc_mf_menu.php';
-                        ?>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <?php
+                require 'cc_mf_menu.php';
+                ?>
+            </div>
+        </div>
 
+        <!-- Main Content -->
+        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.2); height: calc(100vh - 80px); overflow: hidden;">
 
-                    </div>
-                </div>
-            </td>
-      <td style='width:70%'>
-    <div class="container py-4">
-        <div class="row">
-            <div class="col-12">
-                <h2 class="mb-4"><i class="fas fa-comments"></i> Customer Inquiries</h2>
+            <!-- Header -->
+            <div style="padding: 20px 32px 16px 32px; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.05); flex-shrink: 0;">
+                <h1 style="font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0 0 10px 0;">Customer Inquiries</h1>
+                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 260px; margin: 0 auto;"></div>
+            </div>
+
+            <!-- Content Area -->
+            <div style="flex: 1; padding: 24px 32px; overflow-y: auto; min-height: 0;">
                 
+                <!-- Success Message -->
                 <?php if ($success_message): ?>
-                    <div class="alert alert-success"><?php echo $success_message; ?></div>
+                    <div style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 16px 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3); border: 1px solid rgba(255, 255, 255, 0.2);">
+                        <?php echo $success_message; ?>
+                    </div>
                 <?php endif; ?>
                 
+                <!-- Error Message -->
                 <?php if ($error_message): ?>
-                    <div class="alert alert-danger"><?php echo $error_message; ?></div>
+                    <div style="background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); color: white; padding: 16px 20px; border-radius: 16px; margin-bottom: 20px; box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3); border: 1px solid rgba(255, 255, 255, 0.2);">
+                        <?php echo $error_message; ?>
+                    </div>
                 <?php endif; ?>
 
-                <?php if (!empty($inquiries)): ?>
-                    <?php foreach ($inquiries as $inquiry): ?>
-                        <div class="inquiry-card <?php echo $inquiry['is_answered'] ? 'answered' : 'unanswered'; ?>">
-                            <div class="card-header bg-white">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <h6 class="mb-0">
-                                            <i class="fas fa-user"></i> 
-                                            <?php 
-                                            $name = $inquiry['partner1_fname'] ? $inquiry['partner1_fname'] . ' ' . $inquiry['partner1_lname'] : $inquiry['username'];
-                                            echo htmlspecialchars($name ?: 'Unknown User'); 
-                                            ?>
-                                        </h6>
-                                        <small class="text-muted">
-                                            <?php echo date('F j, Y - g:i A', strtotime($inquiry['created_at'])); ?>
-                                        </small>
-                                    </div>
-                                    <div>
-                                        <?php if ($inquiry['is_answered']): ?>
-                                            <span class="badge bg-success">Answered</span>
-                                        <?php else: ?>
-                                            <span class="badge bg-danger">Pending</span>
+                <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; border: 1px solid rgba(0, 0, 0, 0.05); min-height: 100%; display: flex; flex-direction: column;">
+                    
+                    <!-- Inquiries List -->
+                    <?php if (!empty($inquiries)): ?>
+                        <div style="flex: 1; padding: 0 32px 24px 32px; overflow-y: auto;">
+                            <div style="display: flex; flex-direction: column; gap: 20px; padding-top: 24px;">
+                                <?php foreach ($inquiries as $inquiry): ?>
+                                    <div style="background: rgba(255, 255, 255, 0.8); border-radius: 12px; padding: 20px; border: 1px solid rgba(0, 0, 0, 0.05); transition: all 0.2s ease; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);" onmouseover='this.style.boxShadow="0 4px 16px rgba(0, 0, 0, 0.08)"; this.style.transform="translateY(-2px)";' onmouseout='this.style.boxShadow="0 2px 8px rgba(0, 0, 0, 0.04)"; this.style.transform="translateY(0)";'>
+                                        
+                                        <!-- Card Header -->
+                                        <div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid rgba(0, 0, 0, 0.08);">
+                                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                                                <h3 style="font-size: 16px; font-weight: 600; color: #1f2937; margin: 0; display: flex; align-items: center; gap: 8px;">
+                                                    <span style="color: #4f46e5;">👤</span>
+                                                    <?php 
+                                                    $name = $inquiry['partner1_fname'] ? $inquiry['partner1_fname'] . ' ' . $inquiry['partner1_lname'] : $inquiry['username'];
+                                                    echo htmlspecialchars($name ?: 'Unknown User'); 
+                                                    ?>
+                                                </h3>
+                                                <div>
+                                                    <?php if ($inquiry['is_answered']): ?>
+                                                        <span style="background: linear-gradient(135deg, #10b981 0%, #059669 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Answered
+                                                        </span>
+                                                    <?php else: ?>
+                                                        <span style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white; padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.5px;">
+                                                            Pending
+                                                        </span>
+                                                    <?php endif; ?>
+                                                </div>
+                                            </div>
+                                            <p style="font-size: 14px; color: #6b7280; margin: 0;">
+                                                <?php echo date('F j, Y - g:i A', strtotime($inquiry['created_at'])); ?>
+                                            </p>
+                                        </div>
+                                        
+                                        <!-- Customer Question -->
+                                        <div style="margin-bottom: 20px;">
+                                            <h4 style="font-size: 16px; font-weight: 700; color: #4f46e5; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                                                <span>❓</span> Customer Question:
+                                            </h4>
+                                            <div style="background: rgba(79, 70, 229, 0.05); padding: 16px 20px; border-radius: 12px; border-left: 4px solid #4f46e5;">
+                                                <p style="color: #374151; margin: 0; line-height: 1.6; white-space: pre-line; font-size: 16px; font-weight: 500;"><?php echo htmlspecialchars($inquiry['message']); ?></p>
+                                            </div>
+                                        </div>
+
+                                        <!-- Staff Response (if answered) -->
+                                        <?php if ($inquiry['is_answered'] && $inquiry['staff_response']): ?>
+                                            <div style="margin-bottom: 16px;">
+                                                <h4 style="font-size: 16px; font-weight: 700; color: #059669; margin: 0 0 12px 0; display: flex; align-items: center; gap: 8px;">
+                                                    <span>↩️</span> Staff Response:
+                                                </h4>
+                                                <div style="background: rgba(16, 185, 129, 0.05); padding: 16px 20px; border-radius: 12px; border-left: 4px solid #10b981;">
+                                                    <p style="color: #374151; margin: 0 0 8px 0; line-height: 1.6; white-space: pre-line; font-size: 16px; font-weight: 500;"><?php echo htmlspecialchars($inquiry['staff_response']); ?></p>
+                                                    <small style="color: #6b7280; font-size: 13px;">
+                                                        Responded on <?php echo date('F j, Y - g:i A', strtotime($inquiry['answered_at'])); ?>
+                                                    </small>
+                                                </div>
+                                            </div>
+                                        
+                                        <!-- Response Form (if not answered and user is staff) -->
+                                        <?php elseif (in_array($_SESSION['usertype'], ['DSK', 'CNR', 'HED'])): ?>
+                                            <div style="margin-top: 20px;">
+                                                <input type="hidden" name="message_id" value="<?php echo $inquiry['id']; ?>">
+                                                <div style="margin-bottom: 16px;">
+                                                    <label style="display: block; font-size: 16px; font-weight: 700; color: #059669; margin-bottom: 8px;">
+                                                        <span style="margin-right: 8px;">↩️</span> Your Response:
+                                                    </label>
+                                                    <textarea name="staff_response" style="width: 100%; padding: 12px 16px; border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 12px; font-family: inherit; font-size: 14px; line-height: 1.5; resize: vertical; min-height: 120px; background: rgba(255, 255, 255, 0.8); transition: all 0.3s ease;" 
+                                                            placeholder="Type your response here..." required 
+                                                            onfocus='this.style.borderColor="#4f46e5"; this.style.boxShadow="0 0 0 3px rgba(79, 70, 229, 0.1)";'
+                                                            onblur='this.style.borderColor="rgba(0, 0, 0, 0.1)"; this.style.boxShadow="none";'></textarea>
+                                                </div>
+                                                <button type="submit" name="respond" style="background: linear-gradient(135deg, #059669 0%, #047857 100%); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-size: 15px; font-family: Inter; font-weight: 600; box-shadow: 0 4px 12px rgba(5, 150, 105, 0.3); cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 8px; width: 140px;" 
+                                                       onmouseover='this.style.transform="translateY(-2px)"; this.style.boxShadow="0 6px 20px rgba(5, 150, 105, 0.4)";' 
+                                                       onmouseout='this.style.transform="translateY(0)"; this.style.boxShadow="0 4px 12px rgba(5, 150, 105, 0.3)";'>
+                                                    <span>📤</span> Send Response
+                                                </button>
+                                            </div>
                                         <?php endif; ?>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <div class="card-body">
-                                <!-- Customer Question -->
-                                <div class="customer-message">
-                                    <h6><i class="fas fa-question-circle text-primary"></i> Customer Question:</h6>
-                                    <p class="mb-0"><?php echo nl2br(htmlspecialchars($inquiry['message'])); ?></p>
-                                </div>
-
-                                <!-- Staff Response (if answered) -->
-                                <?php if ($inquiry['is_answered'] && $inquiry['staff_response']): ?>
-                                    <div class="staff-response">
-                                        <h6><i class="fas fa-reply text-success"></i> Staff Response:</h6>
-                                        <p class="mb-0"><?php echo nl2br(htmlspecialchars($inquiry['staff_response'])); ?></p>
-                                        <small class="text-muted">
-                                            Responded on 
-                                            <?php echo date('F j, Y - g:i A', strtotime($inquiry['answered_at'])); ?>
-                                        </small>
-                                    </div>
-                                
-                                <!-- Response Form (if not answered and user is staff) -->
-                                <?php elseif (in_array($_SESSION['usertype'], ['DSK', 'CNR', 'HED'])): ?>
-                                    <form method="POST" class="mt-3">
-                                        <input type="hidden" name="message_id" value="<?php echo $inquiry['id']; ?>">
-                                        <div class="mb-3">
-                                            <label class="form-label">
-                                                <i class="fas fa-reply text-success"></i> Your Response:
-                                            </label>
-                                            <textarea name="staff_response" class="form-control" rows="4" 
-                                                    placeholder="Type your response here..." required></textarea>
-                                        </div>
-                                        <button type="submit" name="respond" class="btn btn-success">
-                                            <i class="fas fa-paper-plane"></i> Send Response
-                                        </button>
-                                    </form>
-                                <?php endif; ?>
+                                <?php endforeach; ?>
                             </div>
                         </div>
-                    <?php endforeach; ?>
-                <?php else: ?>
-                    <div class="text-center py-5">
-                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
-                        <h4 class="text-muted">No Inquiries Found</h4>
-                        <p class="text-muted">There are no customer inquiries at this time.</p>
-                    </div>
-                <?php endif; ?>
+                    
+                    <!-- No Inquiries State -->
+                    <?php else: ?>
+                        <div style="text-align: center; padding: 80px 20px; color: #6b7280; flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: center;">
+                            <div style="font-size: 64px; margin-bottom: 20px; opacity: 0.5;">📥</div>
+                            <h3 style="font-size: 24px; font-weight: 600; color: #9ca3af; margin: 0 0 12px 0;">No Inquiries Found</h3>
+                            <p style="font-size: 16px; margin: 0; opacity: 0.8;">There are no customer inquiries at this time.</p>
+                        </div>
+                    <?php endif; ?>
+                </div>
             </div>
         </div>
     </div>
-                </td>
-                </tr>
-                </table>
+
+    <!-- Responsive Design -->
+    <style>
+        @media (max-width: 1200px) {
+            form > div {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            
+            form > div > div:first-child {
+                order: 2;
+                height: auto !important;
+                max-height: none !important;
+            }
+            
+            form > div > div:last-child {
+                order: 1;
+                height: auto !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            form {
+                padding: 12px !important;
+            }
+            
+            h1 {
+                font-size: 22px !important;
+            }
+            
+            h2 {
+                font-size: 20px !important;
+            }
+            
+            /* Mobile inquiry card styling */
+            form > div > div:last-child > div:last-child > div > div:last-child > div > div {
+                padding: 16px !important;
+                margin: 0 -8px !important;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(79, 70, 229, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(79, 70, 229, 0.5);
+        }
+        
+        /* Form Focus States */
+        textarea:focus {
+            outline: none !important;
+        }
+        
+        /* Button Hover Effects */
+        button:active {
+            transform: translateY(0px) !important;
+        }
+        
+        /* Smooth Animations */
+        * {
+            transition: all 0.3s ease;
+        }
+    </style>
+
+    <input type="hidden" name="ac_recid_hidden" id="ac_recid_hidden">
+    
+</form>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
