@@ -128,16 +128,6 @@ function safe_date_format($date_string, $format = 'F d, Y') {
         padding: 0;
     }
 
-    .main-container {
-        min-height: 100vh;
-        display: flex;
-        flex-direction: column;
-    }
-
-    .content-wrapper {
-        flex: 1;
-    }
-
     .footer {
         margin-top: auto;
     }
@@ -168,37 +158,133 @@ function safe_date_format($date_string, $format = 'F d, Y') {
             background-color: #0056b3;
         }
 </style>
+
 <div class="main-container">
     <div class="content-wrapper">
-<div class="container-fluid">
-        <div class='row bg-white' style="height:99px">
-            <div class="col-3 pe-0 d-flex align-items-center">
-                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+        <div style="width: 100%; font-family: Inter, sans-serif;">
+            <div style="width: 100%; background-color: white; height: 80px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; position: relative;">
+                
+                <!-- Logo Section -->
+                <div style="flex: 0 0 auto; display: flex; align-items: center;">
+                    <img src="images/350 x 88.png" style="height: 60px; width: auto;">
+                </div>
+
+                <!-- Desktop Navigation -->
+                <div id="desktop-nav" style="display: flex; flex-direction: row; justify-content: center; font-family: Inter; font-size: 18px; align-items: center; gap: 30px;">
+                    <div>
+                        <a href="http://localhost/couples-connect/dashboard_user.php" 
+                           style="color: black; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 8px 12px; border-radius: 6px;"
+                           onmouseover="this.style.color='#23408E'; this.style.backgroundColor='#f8f9fa'"
+                           onmouseout="this.style.color='black'; this.style.backgroundColor='transparent'">SERVICES</a>
+                    </div>
+
+                    <div>
+                        <a onclick="openFeedback()" 
+                           style="color: black; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 8px 12px; border-radius: 6px; cursor: pointer;"
+                           onmouseover="this.style.color='#23408E'; this.style.backgroundColor='#f8f9fa'"
+                           onmouseout="this.style.color='black'; this.style.backgroundColor='transparent'">FEEDBACK</a>
+                    </div>
+
+                    <div style="height: 20px; width: 1px; background-color: #ddd; margin: 0 5px;"></div>
+
+                    <div>
+                        <span style="color: #23408E; text-decoration: none; font-weight: 600; padding: 8px 12px; border-radius: 6px;">
+                            <?php echo $header_name; ?>
+                        </span>
+                    </div>
+
+                    <div>
+                        <a href="http://localhost/couples-connect/logout_cc.php" 
+                           style="color: #23408E; text-decoration: none; font-weight: 600; padding: 10px 16px; border: 2px solid #23408E; border-radius: 8px; transition: all 0.3s ease;"
+                           onmouseover="this.style.backgroundColor='#23408E'; this.style.color='white'"
+                           onmouseout="this.style.backgroundColor='transparent'; this.style.color='#23408E'">LOGOUT</a>
+                    </div>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <button id="mobile-btn" onclick="toggleMenu()" 
+                        style="display: none; background: none; border: none; font-size: 24px; cursor: pointer; padding: 8px; border-radius: 6px; color: #333;">
+                    <span id="menu-icon">☰</span>
+                </button>
             </div>
 
-            <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
-                <div style="flex:1.6;text-align:right;margin-right:25px">
-                    <a href="http://localhost/couples-connect/dashboard_user.php" style='color:black;text-decoration:none' class='has_hover'>SERVICES</a>
-                </div>
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" style="display: none; background-color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: absolute; top: 80px; left: 0; right: 0; z-index: 1000; padding: 20px;">
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <a href="http://localhost/couples-connect/dashboard_user.php" 
+                       style="color: black; text-decoration: none; font-weight: 500; padding: 12px 16px; border-radius: 8px; transition: background-color 0.3s ease; font-family: Inter;"
+                       onmouseover="this.style.backgroundColor='#f8f9fa'"
+                       onmouseout="this.style.backgroundColor='transparent'">SERVICES</a>
 
-                <div style="flex:1.8;text-align:center;margin-right:10px">
-                    <a style='color:black;text-decoration:none' class='has_hover' onclick="openFeedback()">FEEDBACK</a>
-                </div>
+                    <a onclick="openFeedback()" 
+                       style="color: black; text-decoration: none; font-weight: 500; padding: 12px 16px; border-radius: 8px; transition: background-color 0.3s ease; font-family: Inter; cursor: pointer;"
+                       onmouseover="this.style.backgroundColor='#f8f9fa'"
+                       onmouseout="this.style.backgroundColor='transparent'">FEEDBACK</a>
 
-                <div style="flex:0.3;text-align:center;padding-right:10px">
-                    <a href="" style='color:black;text-decoration:none'>|</a>
-                </div>
+                    <div style="color: #23408E; font-weight: 600; padding: 12px 16px; border-radius: 8px; font-family: Inter;">
+                        <?php echo $header_name; ?>
+                    </div>
 
-                <div style="flex:1;text-align:center;margin-right:20px">
-                    <a style='color:black;text-decoration:none'><?php echo $header_name;?> </a>
+                    <a href="http://localhost/couples-connect/logout_cc.php" 
+                       style="color: white; text-decoration: none; font-weight: 600; padding: 12px 16px; background: linear-gradient(90deg, rgb(35, 64, 142) 35%, rgb(60, 148, 198) 100%); border-radius: 8px; text-align: center; margin-top: 10px; transition: all 0.3s ease; font-family: Inter;"
+                       onmouseover="this.style.background='linear-gradient(90deg, rgb(30, 58, 122) 35%, rgb(50, 128, 178) 100%)'"
+                       onmouseout="this.style.background='linear-gradient(90deg, rgb(35, 64, 142) 35%, rgb(60, 148, 198) 100%)'">LOGOUT</a>
                 </div>
-
-                <div style="flex:0.6;text-align:right;padding-right:145px">
-                    <a href="http://localhost/couples-connect/logout_cc.php" style='color:black;text-decoration:none' class='has_hover'>LOGOUT</a>
-                </div>
-            </div> 
+            </div>
         </div>
     </div>
+</div>
+
+<style>
+    @media (max-width: 768px) {
+        #desktop-nav {
+            display: none !important;
+        }
+        #mobile-btn {
+            display: block !important;
+        }
+    }
+    @media (min-width: 769px) {
+        #mobile-btn {
+            display: none !important;
+        }
+        #mobile-menu {
+            display: none !important;
+        }
+    }
+</style>
+
+<script>
+    function toggleMenu() {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const menuIcon = document.getElementById('menu-icon');
+        
+        if (mobileMenu.style.display === 'none' || mobileMenu.style.display === '') {
+            mobileMenu.style.display = 'block';
+            menuIcon.textContent = '✕';
+        } else {
+            mobileMenu.style.display = 'none';
+            menuIcon.textContent = '☰';
+        }
+    }
+
+    document.addEventListener('click', function(event) {
+        const mobileMenu = document.getElementById('mobile-menu');
+        const mobileBtn = document.getElementById('mobile-btn');
+        
+        if (!mobileMenu.contains(event.target) && !mobileBtn.contains(event.target)) {
+            mobileMenu.style.display = 'none';
+            document.getElementById('menu-icon').textContent = '☰';
+        }
+    });
+
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768) {
+            document.getElementById('mobile-menu').style.display = 'none';
+            document.getElementById('menu-icon').textContent = '☰';
+        }
+    });
+</script>
     
     <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
         <table>
@@ -583,7 +669,7 @@ if($act_status === "PCT") {
                     <label for="" style='font-size:21px;color:252733;font-weight:600;font-family:inter;margin-top:20px'>Feedback:</label>
                     <textarea class="form-control" name="feedback_remarks" id="feedback_remarks" cols="30" rows="7" style='border-radius:5px;border:1px solid black' placeholder='Enter remarks'></textarea>
                     <div style='display:flex;justify-content:center;padding-top:25px;padding-bottom:20px'>
-                        <button type="button" onclick="ajaxSubmit()" class="btn" style=";background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
+                        <button type="button" onclick="ajaxSubmit()" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
                     </div>
                 </div>
                 </div>
@@ -604,7 +690,7 @@ if($act_status === "PCT") {
                     <label for="" style='font-size:21px;color:252733;font-weight:600;font-family:inter'>Reason for request:</label>
                     <textarea class="form-control" name="textarea_reason" id="textarea_reason" cols="30" rows="10" style='border-radius:5px;border: 1px solid black' placeholder='Enter Your Request'></textarea>
                     <div style='display:flex;justify-content:center;padding-top:25px;padding-bottom:20px'>
-                        <button type="button" onclick="ajaxNew()" class="btn" style=";background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
+                        <button type="button" onclick="ajaxNew()" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
                     </div>
                 </div>
                 </div>

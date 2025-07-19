@@ -1,14 +1,13 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Host: localhost
--- Generation Time: Jun 02, 2025 at 04:36 PM
--- Server version: 10.1.37-MariaDB
--- PHP Version: 7.3.0
+-- Host: 127.0.0.1
+-- Generation Time: Jul 19, 2025 at 05:34 PM
+-- Server version: 10.4.32-MariaDB
+-- PHP Version: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-SET AUTOCOMMIT = 0;
 START TRANSACTION;
 SET time_zone = "+00:00";
 
@@ -19,8 +18,34 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Database: `couples-connect_db`
+-- Database: `couplesconnect_db`
 --
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `chat_sessions`
+--
+
+CREATE TABLE `chat_sessions` (
+  `id` int(11) NOT NULL,
+  `user_id` varchar(100) NOT NULL,
+  `session_id` varchar(255) NOT NULL,
+  `usertype` varchar(10) NOT NULL,
+  `started_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `last_activity` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `chat_sessions`
+--
+
+INSERT INTO `chat_sessions` (`id`, `user_id`, `session_id`, `usertype`, `started_at`, `last_activity`) VALUES
+(1, 'USR-00065', 'chat_687ba188c7e656.42446911', 'USR', '2025-07-19 14:22:04', '2025-07-19 14:22:04'),
+(2, 'USR-00065', 'chat_687baab6e2a9c9.63826693', 'USR', '2025-07-19 14:25:00', '2025-07-19 14:25:00'),
+(3, 'USR-00065', 'chat_687bab076f0bb8.34934233', 'USR', '2025-07-19 14:26:22', '2025-07-19 14:26:22'),
+(4, 'USR-00065', 'chat_687baf0d034fb6.46785239', 'USR', '2025-07-19 14:43:36', '2025-07-19 15:11:15'),
+(9, 'USR-00065', 'chat_687bb601a10172.61691361', 'USR', '2025-07-19 15:13:30', '2025-07-19 15:13:30');
 
 -- --------------------------------------------------------
 
@@ -40,7 +65,7 @@ CREATE TABLE `ext_appointment_info` (
   `venue` varchar(100) NOT NULL,
   `venue_id` varchar(100) NOT NULL,
   `counseloremail` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `ext_appointment_info`
@@ -65,7 +90,7 @@ INSERT INTO `ext_appointment_info` (`recid`, `appointment_info_id`, `clinic_date
 (293, 'APP-00014', '2025-02-27', '', '12:00PM', '2:00PM', '2025-02-26', '10', '', 'V-00005', 'cnr2@gmail.com'),
 (294, 'APP-00014', '2025-02-28', '', '12:00PM', '3:00PM', '2025-02-26', '', '', 'V-00005', 'cnr2@gmail.com'),
 (295, 'APP-00014', '2025-02-28', '', '11:00AM', '12:00PM', '2025-02-26', '10', '', 'V-00005', 'cnr2@gmail.com'),
-(296, 'APP-00014', '2025-03-31', '', '12:00PM', '4:00PM', '2025-03-25', '10', '', 'V-00002', 'cnr@gmail.com');
+(296, 'APP-00014', '2025-03-31', '', '12:00PM', '4:00PM', '2025-03-25', '5', '', 'V-00002', 'cnr@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -88,7 +113,7 @@ CREATE TABLE `ext_couples_accountinfo` (
   `cellphone_number` varchar(100) NOT NULL,
   `status` varchar(100) NOT NULL,
   `cert_status` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `ext_couples_accountinfo`
@@ -213,6 +238,35 @@ INSERT INTO `ext_couples_accountinfo` (`recid`, `userid`, `partnerno`, `first_na
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `ext_mf_meiform`
+--
+
+CREATE TABLE `ext_mf_meiform` (
+  `id` int(11) NOT NULL,
+  `meiformid` int(11) NOT NULL,
+  `userid` int(11) NOT NULL,
+  `date` date NOT NULL,
+  `from_to` varchar(50) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `updated_at` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp(),
+  `venue` varchar(255) DEFAULT NULL,
+  `partnerid` int(11) DEFAULT NULL,
+  `answers` varchar(255) DEFAULT NULL,
+  `reasons` text DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `ext_mf_meiform`
+--
+
+INSERT INTO `ext_mf_meiform` (`id`, `meiformid`, `userid`, `date`, `from_to`, `created_at`, `updated_at`, `venue`, `partnerid`, `answers`, `reasons`) VALUES
+(102, 204, 0, '2025-03-31', '12:00PM - 4:00PM', '2025-07-19 10:52:49', '2025-07-19 10:52:49', 'Place 2', NULL, NULL, NULL),
+(106, 0, 0, '2025-03-31', '12:00PM - 4:00PM', '2025-07-19 11:22:12', '2025-07-19 11:22:12', 'Place 2', NULL, NULL, NULL),
+(107, 0, 0, '2025-03-31', '12:00PM - 4:00PM', '2025-07-19 11:25:37', '2025-07-19 11:25:37', 'Place 2', NULL, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `ext_pro_couple_apc`
 --
 
@@ -222,7 +276,7 @@ CREATE TABLE `ext_pro_couple_apc` (
   `concerns` tinytext NOT NULL,
   `detailed_desc` tinytext NOT NULL,
   `clarifications` tinytext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -237,14 +291,14 @@ CREATE TABLE `header_menu` (
   `menidx` varchar(30) NOT NULL,
   `usrlvl` varchar(30) NOT NULL,
   `mengrp` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `header_menu`
 --
 
 INSERT INTO `header_menu` (`recid`, `menprog`, `mencap`, `menidx`, `usrlvl`, `mengrp`) VALUES
-(1, 'http://localhost/couples-connect_wp/index.php', 'Home', '1', 'ALL', 'LOGIN');
+(1, 'http://localhost/couplesconnect_wp/index.php', 'Home', '1', 'ALL', 'LOGIN');
 
 -- --------------------------------------------------------
 
@@ -264,19 +318,19 @@ CREATE TABLE `menus` (
   `is_removed` varchar(100) NOT NULL,
   `is_disabled` varchar(100) NOT NULL,
   `has_crud` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `menus`
 --
 
 INSERT INTO `menus` (`recid`, `mencap`, `menprogram`, `menlogo`, `menidx`, `mennum`, `mensub`, `mengrp`, `is_removed`, `is_disabled`, `has_crud`) VALUES
-(1, 'Home', 'main.php', 'fas fa-home', '1.00', '0.00', '', '1', '1', '', ''),
-(2, 'CC Users', 'mf_cc_users2.php', 'fab fa-adversal', '2.00', '0.00', '', '1', '', '', 'Y'),
-(3, 'Utilities', '', 'fas fa-cogs', '3.00', '1.00', 'UTL', '3', '', '', ''),
-(4, 'Users', 'utl_users.php', 'fas fa-users-cog', 'x', '1.00', '', 'UTL', '', '', ''),
-(5, 'Password', 'utl_password.php', 'fas fa-key', 'x', '2.00', '', 'UTL', '', '', 'N'),
-(6, 'User Activity Log', 'utl_useractivitylog.php', 'fas fa-file-contract', 'x', '1.00', '', 'UTL', '', '', 'N'),
+(1, 'Home', 'main.php', 'fas fa-home', '1.00', 0.00, '', '1', '1', '', ''),
+(2, 'CC Users', 'mf_cc_users2.php', 'fab fa-adversal', '2.00', 0.00, '', '1', '', '', 'Y'),
+(3, 'Utilities', '', 'fas fa-cogs', '3.00', 1.00, 'UTL', '3', '', '', ''),
+(4, 'Users', 'utl_users.php', 'fas fa-users-cog', 'x', 1.00, '', 'UTL', '', '', ''),
+(5, 'Password', 'utl_password.php', 'fas fa-key', 'x', 2.00, '', 'UTL', '', '', 'N'),
+(6, 'User Activity Log', 'utl_useractivitylog.php', 'fas fa-file-contract', 'x', 1.00, '', 'UTL', '', '', 'N'),
 (7, 'Patient File', 'mf_patientfile.php', 'fas fa-hospital-user', '.99', NULL, '', '1', '', '', 'N'),
 (8, 'Family History', 'mf_family_history.php', 'fas fa-users', '1.1', NULL, '', '1', '1', '', 'Y'),
 (9, 'Medical Conditions', 'mf_patient_history.php', 'fas fa-user-alt', '1.01', NULL, '', '1', '', '', 'Y');
@@ -292,7 +346,7 @@ CREATE TABLE `mf_appointment_info` (
   `appointment_info_id` varchar(100) NOT NULL,
   `userid` varchar(20) NOT NULL,
   `sched_type` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_appointment_info`
@@ -327,7 +381,7 @@ CREATE TABLE `mf_cc_menu` (
   `menidx` varchar(30) NOT NULL,
   `mensub` varchar(30) NOT NULL,
   `usr_access` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_cc_menu`
@@ -342,7 +396,8 @@ INSERT INTO `mf_cc_menu` (`recid`, `mencap`, `menprog`, `menlogo`, `menidx`, `me
 (6, 'Counseling', 'cc_counseling.php', 'counseling.png', '2', '', 'CNR'),
 (7, 'Couples Records', 'cc_couplesrecord.php', 'couples_record.png', '3', '', 'CNR'),
 (8, 'Mei Forms Approval', 'cc_meiformapproval.php', 'meiformapproval.png', '', '', 'HED'),
-(9, 'Add Questions', 'add_questions.php', 'meiformapproval.png', '', '', 'DSK, HED');
+(9, 'Add Questions', 'add_questions.php', 'meiformapproval.png', '', '', 'DSK, HED'),
+(10, 'Inquiry', 'inquiry.php', 'meiformapproval.png', '1', '', 'DSK');
 
 -- --------------------------------------------------------
 
@@ -354,7 +409,7 @@ CREATE TABLE `mf_concerns` (
   `recid` int(11) NOT NULL,
   `concern_id` varchar(100) NOT NULL,
   `concerns` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_concerns`
@@ -376,209 +431,209 @@ CREATE TABLE `mf_country` (
   `recid` int(11) NOT NULL,
   `country_name` varchar(100) NOT NULL,
   `sortid` decimal(10,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_country`
 --
 
 INSERT INTO `mf_country` (`recid`, `country_name`, `sortid`) VALUES
-(116, 'Afghanistan', '1.00'),
-(117, 'Albania', '2.00'),
-(118, 'Algeria', '3.00'),
-(119, 'Andorra', '4.00'),
-(120, 'Angola', '5.00'),
-(121, 'Antigua and Barbuda', '6.00'),
-(122, 'Argentina', '7.00'),
-(123, 'Armenia', '8.00'),
-(124, 'Australia', '9.00'),
-(125, 'Austria', '10.00'),
-(126, 'Azerbaijan', '11.00'),
-(127, 'Bahamas', '12.00'),
-(128, 'Bahrain', '13.00'),
-(129, 'Bangladesh', '14.00'),
-(130, 'Barbados', '15.00'),
-(131, 'Belarus', '16.00'),
-(132, 'Belgium', '17.00'),
-(133, 'Belize', '18.00'),
-(134, 'Benin', '19.00'),
-(135, 'Bhutan', '20.00'),
-(136, 'Bolivia', '21.00'),
-(137, 'Bosnia and Herzegovina', '22.00'),
-(138, 'Botswana', '23.00'),
-(139, 'Brazil', '24.00'),
-(140, 'Brunei', '25.00'),
-(141, 'Bulgaria', '26.00'),
-(142, 'Burkina Faso', '27.00'),
-(143, 'Burundi', '28.00'),
-(144, 'Cabo Verde', '29.00'),
-(145, 'Cambodia', '30.00'),
-(146, 'Cameroon', '31.00'),
-(147, 'Canada', '32.00'),
-(148, 'Central African Republic', '33.00'),
-(149, 'Chad', '34.00'),
-(150, 'Chile', '35.00'),
-(151, 'China', '36.00'),
-(152, 'Colombia', '37.00'),
-(153, 'Comoros', '38.00'),
-(154, 'Congo, Democratic Republic of the', '39.00'),
-(155, 'Congo, Republic of the', '40.00'),
-(156, 'Costa Rica', '41.00'),
-(157, 'Croatia', '42.00'),
-(158, 'Cuba', '43.00'),
-(159, 'Cyprus', '44.00'),
-(160, 'Czech Republic', '45.00'),
-(161, 'Denmark', '46.00'),
-(162, 'Djibouti', '47.00'),
-(163, 'Dominica', '48.00'),
-(164, 'Dominican Republic', '49.00'),
-(165, 'Ecuador', '50.00'),
-(166, 'Egypt', '51.00'),
-(167, 'El Salvador', '52.00'),
-(168, 'Equatorial Guinea', '53.00'),
-(169, 'Eritrea', '54.00'),
-(170, 'Estonia', '55.00'),
-(171, 'Eswatini', '56.00'),
-(172, 'Ethiopia', '57.00'),
-(173, 'Fiji', '58.00'),
-(174, 'Finland', '59.00'),
-(175, 'France', '60.00'),
-(176, 'Gabon', '61.00'),
-(177, 'Gambia', '62.00'),
-(178, 'Georgia', '63.00'),
-(179, 'Germany', '64.00'),
-(180, 'Ghana', '65.00'),
-(181, 'Greece', '66.00'),
-(182, 'Grenada', '67.00'),
-(183, 'Guatemala', '68.00'),
-(184, 'Guinea', '69.00'),
-(185, 'Guinea-Bissau', '70.00'),
-(186, 'Guyana', '71.00'),
-(187, 'Haiti', '72.00'),
-(188, 'Honduras', '73.00'),
-(189, 'Hungary', '74.00'),
-(190, 'Iceland', '75.00'),
-(191, 'India', '76.00'),
-(192, 'Indonesia', '77.00'),
-(193, 'Iran', '78.00'),
-(194, 'Iraq', '79.00'),
-(195, 'Ireland', '80.00'),
-(196, 'Israel', '81.00'),
-(197, 'Italy', '82.00'),
-(198, 'Jamaica', '83.00'),
-(199, 'Japan', '84.00'),
-(200, 'Jordan', '85.00'),
-(201, 'Kazakhstan', '86.00'),
-(202, 'Kenya', '87.00'),
-(203, 'Kiribati', '88.00'),
-(204, 'Korea, North', '89.00'),
-(205, 'Korea, South', '90.00'),
-(206, 'Kosovo', '91.00'),
-(207, 'Kuwait', '92.00'),
-(208, 'Kyrgyzstan', '93.00'),
-(209, 'Laos', '94.00'),
-(210, 'Latvia', '95.00'),
-(211, 'Lebanon', '96.00'),
-(212, 'Lesotho', '97.00'),
-(213, 'Liberia', '98.00'),
-(214, 'Libya', '99.00'),
-(215, 'Liechtenstein', '100.00'),
-(216, 'Lithuania', '101.00'),
-(217, 'Luxembourg', '102.00'),
-(218, 'Madagascar', '103.00'),
-(219, 'Malawi', '104.00'),
-(220, 'Malaysia', '105.00'),
-(221, 'Maldives', '106.00'),
-(222, 'Mali', '107.00'),
-(223, 'Malta', '108.00'),
-(224, 'Marshall Islands', '109.00'),
-(225, 'Mauritania', '110.00'),
-(226, 'Mauritius', '111.00'),
-(227, 'Mexico', '112.00'),
-(228, 'Micronesia', '113.00'),
-(229, 'Moldova', '114.00'),
-(230, 'Monaco', '115.00'),
-(231, 'Mongolia', '116.00'),
-(232, 'Montenegro', '117.00'),
-(233, 'Morocco', '118.00'),
-(234, 'Mozambique', '119.00'),
-(235, 'Myanmar', '120.00'),
-(236, 'Namibia', '121.00'),
-(237, 'Nauru', '122.00'),
-(238, 'Nepal', '123.00'),
-(239, 'Netherlands', '124.00'),
-(240, 'New Zealand', '125.00'),
-(241, 'Nicaragua', '126.00'),
-(242, 'Niger', '127.00'),
-(243, 'Nigeria', '128.00'),
-(244, 'North Macedonia', '129.00'),
-(245, 'Norway', '130.00'),
-(246, 'Oman', '131.00'),
-(247, 'Pakistan', '132.00'),
-(248, 'Palau', '133.00'),
-(249, 'Palestine', '134.00'),
-(250, 'Panama', '135.00'),
-(251, 'Papua New Guinea', '136.00'),
-(252, 'Paraguay', '137.00'),
-(253, 'Peru', '138.00'),
-(254, 'Philippines', '0.99'),
-(255, 'Poland', '140.00'),
-(256, 'Portugal', '141.00'),
-(257, 'Qatar', '142.00'),
-(258, 'Romania', '143.00'),
-(259, 'Russia', '144.00'),
-(260, 'Rwanda', '145.00'),
-(261, 'Saint Kitts and Nevis', '146.00'),
-(262, 'Saint Lucia', '147.00'),
-(263, 'Saint Vincent and the Grenadines', '148.00'),
-(264, 'Samoa', '149.00'),
-(265, 'San Marino', '150.00'),
-(266, 'Sao Tome and Principe', '151.00'),
-(267, 'Saudi Arabia', '152.00'),
-(268, 'Senegal', '153.00'),
-(269, 'Serbia', '154.00'),
-(270, 'Seychelles', '155.00'),
-(271, 'Sierra Leone', '156.00'),
-(272, 'Singapore', '157.00'),
-(273, 'Slovakia', '158.00'),
-(274, 'Slovenia', '159.00'),
-(275, 'Solomon Islands', '160.00'),
-(276, 'Somalia', '161.00'),
-(277, 'South Africa', '162.00'),
-(278, 'South Sudan', '163.00'),
-(279, 'Spain', '164.00'),
-(280, 'Sri Lanka', '165.00'),
-(281, 'Sudan', '166.00'),
-(282, 'Suriname', '167.00'),
-(283, 'Sweden', '168.00'),
-(284, 'Switzerland', '169.00'),
-(285, 'Syria', '170.00'),
-(286, 'Taiwan', '171.00'),
-(287, 'Tajikistan', '172.00'),
-(288, 'Tanzania', '173.00'),
-(289, 'Thailand', '174.00'),
-(290, 'Timor-Leste', '175.00'),
-(291, 'Togo', '176.00'),
-(292, 'Tonga', '177.00'),
-(293, 'Trinidad and Tobago', '178.00'),
-(294, 'Tunisia', '179.00'),
-(295, 'Turkey', '180.00'),
-(296, 'Turkmenistan', '181.00'),
-(297, 'Tuvalu', '182.00'),
-(298, 'Uganda', '183.00'),
-(299, 'Ukraine', '184.00'),
-(300, 'United Arab Emirates', '185.00'),
-(301, 'United Kingdom', '186.00'),
-(302, 'United States', '187.00'),
-(303, 'Uruguay', '188.00'),
-(304, 'Uzbekistan', '189.00'),
-(305, 'Vanuatu', '190.00'),
-(306, 'Vatican City', '191.00'),
-(307, 'Venezuela', '192.00'),
-(308, 'Vietnam', '193.00'),
-(309, 'Yemen', '194.00'),
-(310, 'Zambia', '195.00'),
-(311, 'Zimbabwe', '196.00');
+(116, 'Afghanistan', 1.00),
+(117, 'Albania', 2.00),
+(118, 'Algeria', 3.00),
+(119, 'Andorra', 4.00),
+(120, 'Angola', 5.00),
+(121, 'Antigua and Barbuda', 6.00),
+(122, 'Argentina', 7.00),
+(123, 'Armenia', 8.00),
+(124, 'Australia', 9.00),
+(125, 'Austria', 10.00),
+(126, 'Azerbaijan', 11.00),
+(127, 'Bahamas', 12.00),
+(128, 'Bahrain', 13.00),
+(129, 'Bangladesh', 14.00),
+(130, 'Barbados', 15.00),
+(131, 'Belarus', 16.00),
+(132, 'Belgium', 17.00),
+(133, 'Belize', 18.00),
+(134, 'Benin', 19.00),
+(135, 'Bhutan', 20.00),
+(136, 'Bolivia', 21.00),
+(137, 'Bosnia and Herzegovina', 22.00),
+(138, 'Botswana', 23.00),
+(139, 'Brazil', 24.00),
+(140, 'Brunei', 25.00),
+(141, 'Bulgaria', 26.00),
+(142, 'Burkina Faso', 27.00),
+(143, 'Burundi', 28.00),
+(144, 'Cabo Verde', 29.00),
+(145, 'Cambodia', 30.00),
+(146, 'Cameroon', 31.00),
+(147, 'Canada', 32.00),
+(148, 'Central African Republic', 33.00),
+(149, 'Chad', 34.00),
+(150, 'Chile', 35.00),
+(151, 'China', 36.00),
+(152, 'Colombia', 37.00),
+(153, 'Comoros', 38.00),
+(154, 'Congo, Democratic Republic of the', 39.00),
+(155, 'Congo, Republic of the', 40.00),
+(156, 'Costa Rica', 41.00),
+(157, 'Croatia', 42.00),
+(158, 'Cuba', 43.00),
+(159, 'Cyprus', 44.00),
+(160, 'Czech Republic', 45.00),
+(161, 'Denmark', 46.00),
+(162, 'Djibouti', 47.00),
+(163, 'Dominica', 48.00),
+(164, 'Dominican Republic', 49.00),
+(165, 'Ecuador', 50.00),
+(166, 'Egypt', 51.00),
+(167, 'El Salvador', 52.00),
+(168, 'Equatorial Guinea', 53.00),
+(169, 'Eritrea', 54.00),
+(170, 'Estonia', 55.00),
+(171, 'Eswatini', 56.00),
+(172, 'Ethiopia', 57.00),
+(173, 'Fiji', 58.00),
+(174, 'Finland', 59.00),
+(175, 'France', 60.00),
+(176, 'Gabon', 61.00),
+(177, 'Gambia', 62.00),
+(178, 'Georgia', 63.00),
+(179, 'Germany', 64.00),
+(180, 'Ghana', 65.00),
+(181, 'Greece', 66.00),
+(182, 'Grenada', 67.00),
+(183, 'Guatemala', 68.00),
+(184, 'Guinea', 69.00),
+(185, 'Guinea-Bissau', 70.00),
+(186, 'Guyana', 71.00),
+(187, 'Haiti', 72.00),
+(188, 'Honduras', 73.00),
+(189, 'Hungary', 74.00),
+(190, 'Iceland', 75.00),
+(191, 'India', 76.00),
+(192, 'Indonesia', 77.00),
+(193, 'Iran', 78.00),
+(194, 'Iraq', 79.00),
+(195, 'Ireland', 80.00),
+(196, 'Israel', 81.00),
+(197, 'Italy', 82.00),
+(198, 'Jamaica', 83.00),
+(199, 'Japan', 84.00),
+(200, 'Jordan', 85.00),
+(201, 'Kazakhstan', 86.00),
+(202, 'Kenya', 87.00),
+(203, 'Kiribati', 88.00),
+(204, 'Korea, North', 89.00),
+(205, 'Korea, South', 90.00),
+(206, 'Kosovo', 91.00),
+(207, 'Kuwait', 92.00),
+(208, 'Kyrgyzstan', 93.00),
+(209, 'Laos', 94.00),
+(210, 'Latvia', 95.00),
+(211, 'Lebanon', 96.00),
+(212, 'Lesotho', 97.00),
+(213, 'Liberia', 98.00),
+(214, 'Libya', 99.00),
+(215, 'Liechtenstein', 100.00),
+(216, 'Lithuania', 101.00),
+(217, 'Luxembourg', 102.00),
+(218, 'Madagascar', 103.00),
+(219, 'Malawi', 104.00),
+(220, 'Malaysia', 105.00),
+(221, 'Maldives', 106.00),
+(222, 'Mali', 107.00),
+(223, 'Malta', 108.00),
+(224, 'Marshall Islands', 109.00),
+(225, 'Mauritania', 110.00),
+(226, 'Mauritius', 111.00),
+(227, 'Mexico', 112.00),
+(228, 'Micronesia', 113.00),
+(229, 'Moldova', 114.00),
+(230, 'Monaco', 115.00),
+(231, 'Mongolia', 116.00),
+(232, 'Montenegro', 117.00),
+(233, 'Morocco', 118.00),
+(234, 'Mozambique', 119.00),
+(235, 'Myanmar', 120.00),
+(236, 'Namibia', 121.00),
+(237, 'Nauru', 122.00),
+(238, 'Nepal', 123.00),
+(239, 'Netherlands', 124.00),
+(240, 'New Zealand', 125.00),
+(241, 'Nicaragua', 126.00),
+(242, 'Niger', 127.00),
+(243, 'Nigeria', 128.00),
+(244, 'North Macedonia', 129.00),
+(245, 'Norway', 130.00),
+(246, 'Oman', 131.00),
+(247, 'Pakistan', 132.00),
+(248, 'Palau', 133.00),
+(249, 'Palestine', 134.00),
+(250, 'Panama', 135.00),
+(251, 'Papua New Guinea', 136.00),
+(252, 'Paraguay', 137.00),
+(253, 'Peru', 138.00),
+(254, 'Philippines', 0.99),
+(255, 'Poland', 140.00),
+(256, 'Portugal', 141.00),
+(257, 'Qatar', 142.00),
+(258, 'Romania', 143.00),
+(259, 'Russia', 144.00),
+(260, 'Rwanda', 145.00),
+(261, 'Saint Kitts and Nevis', 146.00),
+(262, 'Saint Lucia', 147.00),
+(263, 'Saint Vincent and the Grenadines', 148.00),
+(264, 'Samoa', 149.00),
+(265, 'San Marino', 150.00),
+(266, 'Sao Tome and Principe', 151.00),
+(267, 'Saudi Arabia', 152.00),
+(268, 'Senegal', 153.00),
+(269, 'Serbia', 154.00),
+(270, 'Seychelles', 155.00),
+(271, 'Sierra Leone', 156.00),
+(272, 'Singapore', 157.00),
+(273, 'Slovakia', 158.00),
+(274, 'Slovenia', 159.00),
+(275, 'Solomon Islands', 160.00),
+(276, 'Somalia', 161.00),
+(277, 'South Africa', 162.00),
+(278, 'South Sudan', 163.00),
+(279, 'Spain', 164.00),
+(280, 'Sri Lanka', 165.00),
+(281, 'Sudan', 166.00),
+(282, 'Suriname', 167.00),
+(283, 'Sweden', 168.00),
+(284, 'Switzerland', 169.00),
+(285, 'Syria', 170.00),
+(286, 'Taiwan', 171.00),
+(287, 'Tajikistan', 172.00),
+(288, 'Tanzania', 173.00),
+(289, 'Thailand', 174.00),
+(290, 'Timor-Leste', 175.00),
+(291, 'Togo', 176.00),
+(292, 'Tonga', 177.00),
+(293, 'Trinidad and Tobago', 178.00),
+(294, 'Tunisia', 179.00),
+(295, 'Turkey', 180.00),
+(296, 'Turkmenistan', 181.00),
+(297, 'Tuvalu', 182.00),
+(298, 'Uganda', 183.00),
+(299, 'Ukraine', 184.00),
+(300, 'United Arab Emirates', 185.00),
+(301, 'United Kingdom', 186.00),
+(302, 'United States', 187.00),
+(303, 'Uruguay', 188.00),
+(304, 'Uzbekistan', 189.00),
+(305, 'Vanuatu', 190.00),
+(306, 'Vatican City', 191.00),
+(307, 'Venezuela', 192.00),
+(308, 'Vietnam', 193.00),
+(309, 'Yemen', 194.00),
+(310, 'Zambia', 195.00),
+(311, 'Zimbabwe', 196.00);
 
 -- --------------------------------------------------------
 
@@ -591,7 +646,7 @@ CREATE TABLE `mf_meiform` (
   `meiformid` varchar(100) NOT NULL,
   `sortid` int(10) NOT NULL,
   `questions` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_meiform`
@@ -619,7 +674,7 @@ CREATE TABLE `mf_premariage_concerns` (
   `recid` int(11) NOT NULL,
   `desc` varchar(100) NOT NULL,
   `sort_id` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_premariage_concerns`
@@ -660,77 +715,96 @@ CREATE TABLE `mf_prog_users` (
   `justification` text NOT NULL,
   `remarks` varchar(255) NOT NULL DEFAULT 'Subject for approval.',
   `chk_by` varchar(100) NOT NULL,
-  `print_status` int(11) NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `print_status` int(11) NOT NULL DEFAULT 0,
+  `partner1_fname` varchar(255) DEFAULT NULL,
+  `partner1_mname` varchar(100) DEFAULT NULL,
+  `partner1_lname` varchar(100) DEFAULT NULL,
+  `partner1_sex` varchar(10) DEFAULT NULL,
+  `partner1_bday` date DEFAULT NULL,
+  `partner1_country` varchar(100) DEFAULT NULL,
+  `partner1_municipality` varchar(100) DEFAULT NULL,
+  `partner1_occupation` varchar(100) DEFAULT NULL,
+  `partner1_cellphone` varchar(20) DEFAULT NULL,
+  `partner2_fname` varchar(100) DEFAULT NULL,
+  `partner2_mname` varchar(100) DEFAULT NULL,
+  `partner2_lname` varchar(100) DEFAULT NULL,
+  `partner2_sex` varchar(10) DEFAULT NULL,
+  `partner2_bday` date DEFAULT NULL,
+  `partner2_country` varchar(100) DEFAULT NULL,
+  `partner2_municipality` varchar(100) DEFAULT NULL,
+  `partner2_occupation` varchar(100) DEFAULT NULL,
+  `partner2_cellphone` varchar(20) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_prog_users`
 --
 
-INSERT INTO `mf_prog_users` (`recid`, `username`, `userid`, `email`, `secondary_email`, `usertype`, `password`, `act_status`, `cert_status`, `cert_desc`, `date_requested`, `date_requested_desc`, `pmoc_online`, `doc_link`, `crm_link`, `justification`, `remarks`, `chk_by`, `print_status`) VALUES
-(17, 'deskstaff@gmail.com', 'USR-00001', 'test@gmail.com', '', 'DSK', '123', 'PMC', '', '', '0000-00-00', '', '', '', '', '', 'Subject for approval.', '', 1),
-(18, 'couple1@gmail.com', 'USR-00002', '', '', 'USR', '123', 'NCT', '', '', '2024-10-12', '', '', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(19, 'couple2@gmail.com', 'USR-00003', 'couple2@gmail.com', 'couple2_second@gmail.com', 'USR', '123', '', '', '', '2022-04-13', '', '', 'residencyfile.pdf', 'justificationfile.pdf', 'The reason why I want to apply for online PMOC is because I am uable to go to the office in cabuyao and apply there personally. I am currently residing in Visayas. I also consider going there during only weekends and not the weekdays but it is really confusing for me to commute to cabuyao just for the online counseling that is why it is a bit confusing for me.', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(22, 'brotha@gmail.com', 'USR-00005', 'brotha@gmail.com', '', 'USR', '1234', 'CRT', 'PRP', 'Preparing', '2024-04-11', 'April 11, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(23, 'mari@gmail.com', 'USR-00006', 'mari@gmail.com', '', 'USR', '123', 'DEC', '', '', '2024-03-16', '', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(24, 'Marko@gmail.com', 'USR-00007', 'Marko@gmail.com', 'delafuerte@gmail.com', 'USR', 'xx', 'CRT', 'RCV', 'Received', '2024-04-11', 'April 11, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(25, 'johnny@gmail.com', 'USR-00008', 'johnny@gmail.com', '', 'DSK', '123', '', '', '', '2024-03-16', '', 'JUST DOESNT HIT', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(27, 'motha@gmail.com', 'USR-00009', 'motha@gmail.com', '', 'USR', '67', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'Y', '', '', 'sdfdfffsdff', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(28, 'lennardlee100@gmail.com', 'USR-00010', 'lennardlee100@gmail.com', '', 'USR', '123', 'CRT', 'PUP', 'For Pickup', '2024-04-11', 'April 11, 2024', 'Y', 'uploads/344921063_253307063937716_1671525311257754', 'uploads/201939.avif', 'lebum        ', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(29, '123@gmail.com', 'USR-00011', '123@gmail.com', '', 'USR', '111', 'DEC', '', '', '2024-04-11', 'April 11, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(30, 'bruh@gmail.com', 'USR-00012', 'bruh@gmail.com', '', 'USR', '123', 'CRT', 'PRP', 'Preparing', '2024-04-11', 'April 11, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(31, '1234@gmail.com', 'USR-00013', '1234@gmail.com', '', 'USR', '111', 'APR', '', '', '2024-04-13', 'April 13, 2024', 'Y', 'uploads/423472452_929274195466944_4082494152046077', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(32, 'johnny2@gmail.com', 'USR-00014', 'johnny2@gmail.com', '', 'USR', 'xx', 'APR', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(33, 'jor@gmail.com', 'USR-00015', 'jor@gmail.com', '', 'USR', '11', 'APR', '', '', '2024-04-27', 'April 27, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(34, 'marky@gmail.com', 'USR-00016', 'marky@gmail.com', '', 'USR', '111', 'APR', '', '', '2024-05-27', 'May 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(35, 'yu@gmail.com', 'USR-00017', 'yu@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(36, 'cnr@gmail.com', 'USR-00018', 'cnr@gmail.com', '', 'CNR', '123', '', '', '', '2024-03-16', '', '', '', '', '', 'Subject for approval.', '', 1),
-(37, 'cnr2@gmail.com', 'USR-00019', 'cnr2@gmail.com', '', 'CNR', '123', '', '', '', '2024-03-16', '', '', '', '', '', 'Subject for approval.', '', 1),
-(38, 'head1@gmail.com', 'USR-00020', 'head1@gmail.com', '', 'HED', '123', '', '', '', '2024-03-25', '', '', '', '', '', 'Subject for approval.', '', 1),
-(39, 'joenel3@gmail.com', 'USR-00021', 'joenel3@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(40, 'test1@gmail.com', 'USR-00022', 'test1@gmail.com', '', 'USR', '123', 'CRT', 'PRP', 'Preparing', '2024-04-12', 'April 12, 2024', 'N', 'uploads/434142151_1120827459118053_756724852019588', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 0),
-(41, 'lennard_lee@dlsu.edu.ph', 'USR-00023', 'lennard_lee@dlsu.edu.ph', '', 'USR', '123', 'PCT', '', '', '2024-04-12', 'April 12, 2024', 'Y', '', '', 'JOENEL', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(42, 'brb@gmail.com', 'USR-00024', 'brb@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(43, 'are@gmail.com', 'USR-00025', 'are@gmail.com', '', 'USR', '123', '', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(44, 'are2@gmail.com', 'USR-00026', 'are2@gmail.com', '', 'USR', '1', 'NCT', '', '', '2024-04-17', 'April 17, 2024', 'Y', 'uploads/434142151_1120827459118053_756724852019588', 'uploads/431681041_1788772974869851_747359344553442', 'IF you went to the moon then it would be over', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(45, '2@gmail.com', 'USR-00027', '2@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-23', 'April 23, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(46, 'y@gmail.com', 'USR-00028', 'y@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-28', 'April 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(47, '3@gmail.com', 'USR-00029', '3@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-18', 'April 18, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(48, '4@gmail.com', 'USR-00030', '4@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-18', 'April 18, 2024', 'N', 'uploads/314767425_10160179054267158_59458798754800', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(49, 'register@gmail.com', 'USR-00031', 'register@gmail.com', '', 'USR', '123', 'NCT', '', '', '2024-04-23', 'April 23, 2024', 'Y', 'uploads/doc.pdf', 'uploads/imao-MRW5405.jpg', 'JUSTIFICATION', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(51, 't@gmail.com', 'USR-00032', 't@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(52, 'jrue@gmail.com', 'USR-00033', 'jrue@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(53, 'r@gmail.com', 'USR-00034', 'r@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(54, '333@gmail.com', 'USR-00035', '333@gmail.com', 'marky@gmail.com', 'USR', '333', 'PCT', '', '', '2024-04-28', 'April 28, 2024', 'Y', 'uploads/imao-MRW5405.jpg', 'uploads/download (1).jpg', ' I CHOSE TO APPLY TO PMC BECAUE BECAUSE BECUASE', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(55, 'yuyu@gmail.com', 'USR-00036', 'yuyu@gmail.com', '', 'USR', '1', 'DEC', '', '', '2024-04-28', 'April 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(56, 'e@gmail.com', 'USR-00037', 'e@gmail.com', '', 'USR', '123', 'NCT', '', '', '2024-05-03', 'May 03, 2024', 'Y', 'uploads/ABM12-B Sched TERM 3.jpg', 'uploads/434142151_1120827459118053_756724852019588', 'SDADSDDADSDD', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(57, 'BRUH2@gmail.com', 'USR-00038', 'BRUH2@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-05-06', 'May 06, 2024', 'Y', 'uploads/lhyfpzbifpo21.png', 'uploads/imao-MRW5405.jpg', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(58, 'broseph@gmail.com', 'USR-00039', 'broseph@gmail.com', '', 'USR', '123', 'DEC', '', '', '2024-05-27', 'May 27, 2024', 'N', 'uploads/photo-1574005280900-3ff489fa1f70.jpg', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(59, 'wt@gmail.com', 'USR-00040', 'wt@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-05-27', 'May 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(60, 'g@gmail.com', 'USR-00041', 'g@gmail.com', '', 'USR', '1', 'APR', '', '', '2024-05-28', 'May 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(61, 'tt@gmail.com', 'USR-00042', 'tt@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(62, 'g2@gmail.com', 'USR-00043', 'g2@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-05-28', 'May 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(63, 'r2@gmail.com', 'USR-00044', 'r2@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(64, 'h@gmail.com', 'USR-00045', 'h@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-05-29', 'May 29, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(65, 'b@gmail.com', 'USR-00046', 'b@gmail.com', '', 'USR', '1', 'APR', '', '', '2024-05-29', 'May 29, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(66, '222@gmail.com', 'USR-00047', '222@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(67, 's@gmail.com', 'USR-00048', 's@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(68, 'f@gmail.com', 'USR-00049', 'f@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-06-24', 'June 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(69, 'q@gmail.com', 'USR-00050', 'q@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(70, 'broseph2@gmail.com', 'USR-00051', 'broseph2@gmail.com', '', 'USR', '1', 'PMO', '', '', '2024-07-15', 'July 15, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(71, 'u@gmail.com', 'USR-00052', 'u@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-07-17', 'July 17, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(72, '23@gmail.com', 'USR-00053', '23@gmail.com', '', 'CNR', '1', 'PCT', '', '', '2025-02-17', 'February 17, 2025', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1),
-(73, 'joen@gmail.com', 'USR-00054', '', '', 'CNR', '123', '', '', '', '0000-00-00', '', '', '', '', '', 'Subject for approval.', '', 1),
-(74, 'jdulatre22@gmail.com', 'USR-00055', 'jdulatre22@gmail.com', 'jdulatre22@gmail.com', 'USR', 'jdulatre22@gmail.com', 'APR', '', '', '2025-02-16', 'February 16, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Subject for approval.', 'johnny@gmail.com', 1),
-(75, '123456@gmail.com', 'USR-00056', '123456@gmail.com', '123456@gmail.com', 'USR', '123', 'PMO', 'PRP', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', 'No valid info.', 'Invalid info provided.', '', 1),
-(76, 'rexluciano@yahoo.com', 'USR-00057', 'rexluciano@yahoo.com', 'rexluciano36@gmail.com', 'USR', '123', 'PMC', '', '', '2025-02-17', 'February 17, 2025', 'Y', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', 'I Want to apply for PMOC.', 'Subject for approval.', 'johnny@gmail.com', 1),
-(77, 'www@gmail.com', 'USR-00058', 'www@gmail.com', 'www@gmail.com', 'USR', '123', 'APR', '', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Invalid.', 'johnny@gmail.com', 0),
-(78, 'ttt@gmail.com', 'USR-00059', 'ttt@gmail.com', 'ttt@gmail.com', 'USR', '123', 'PMC', '', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Subject for approval.', 'johnny@gmail.com', 0),
-(79, 'testuser@gmail.com', 'USR-00060', 'testuser@gmail.com', '', 'USR', '1234', 'PCT', '', '', '2025-02-26', 'February 26, 2025', 'N', '', '', '', '', 'deskstaff@gmail.com', 1),
-(80, 'testuser2@gmail.com', 'USR-00061', 'testuser2@gmail.com', '', 'USR', '1234', 'DEC', '', '', '2025-02-26', 'February 26, 2025', 'N', '', '', '', 'Not a Resident Incomplete', 'deskstaff@gmail.com', 0),
-(81, 'frankocean@gmail.com', 'USR-00062', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0),
-(82, 'frankocean@gmail.com', 'USR-00063', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0),
-(83, 'frankocean@gmail.com', 'USR-00064', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0);
+INSERT INTO `mf_prog_users` (`recid`, `username`, `userid`, `email`, `secondary_email`, `usertype`, `password`, `act_status`, `cert_status`, `cert_desc`, `date_requested`, `date_requested_desc`, `pmoc_online`, `doc_link`, `crm_link`, `justification`, `remarks`, `chk_by`, `print_status`, `partner1_fname`, `partner1_mname`, `partner1_lname`, `partner1_sex`, `partner1_bday`, `partner1_country`, `partner1_municipality`, `partner1_occupation`, `partner1_cellphone`, `partner2_fname`, `partner2_mname`, `partner2_lname`, `partner2_sex`, `partner2_bday`, `partner2_country`, `partner2_municipality`, `partner2_occupation`, `partner2_cellphone`) VALUES
+(17, 'deskstaff@gmail.com', 'USR-00001', 'test@gmail.com', '', 'DSK', '123', 'PMC', '', '', '0000-00-00', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(18, 'couple1@gmail.com', 'USR-00002', '', '', 'USR', '123', 'NCT', '', '', '2024-10-12', '', '', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(19, 'couple2@gmail.com', 'USR-00003', 'couple2@gmail.com', 'couple2_second@gmail.com', 'USR', '123', '', '', '', '2022-04-13', '', '', 'residencyfile.pdf', 'justificationfile.pdf', 'The reason why I want to apply for online PMOC is because I am uable to go to the office in cabuyao and apply there personally. I am currently residing in Visayas. I also consider going there during only weekends and not the weekdays but it is really confusing for me to commute to cabuyao just for the online counseling that is why it is a bit confusing for me.', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(22, 'brotha@gmail.com', 'USR-00005', 'brotha@gmail.com', '', 'USR', '1234', 'CRT', 'PRP', 'Preparing', '2024-04-11', 'April 11, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(23, 'mari@gmail.com', 'USR-00006', 'mari@gmail.com', '', 'USR', '123', 'DEC', '', '', '2024-03-16', '', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(24, 'Marko@gmail.com', 'USR-00007', 'Marko@gmail.com', 'delafuerte@gmail.com', 'USR', 'xx', 'CRT', 'RCV', 'Received', '2024-04-11', 'April 11, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(25, 'johnny@gmail.com', 'USR-00008', 'johnny@gmail.com', '', 'DSK', '123', '', '', '', '2024-03-16', '', 'JUST DOESNT HIT', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(27, 'motha@gmail.com', 'USR-00009', 'motha@gmail.com', '', 'USR', '67', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'Y', '', '', 'sdfdfffsdff', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(28, 'lennardlee100@gmail.com', 'USR-00010', 'lennardlee100@gmail.com', '', 'USR', '123', 'CRT', 'PUP', 'For Pickup', '2024-04-11', 'April 11, 2024', 'Y', 'uploads/344921063_253307063937716_1671525311257754', 'uploads/201939.avif', 'lebum        ', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(29, '123@gmail.com', 'USR-00011', '123@gmail.com', '', 'USR', '111', 'DEC', '', '', '2024-04-11', 'April 11, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(30, 'bruh@gmail.com', 'USR-00012', 'bruh@gmail.com', '', 'USR', '123', 'CRT', 'PRP', 'Preparing', '2024-04-11', 'April 11, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(31, '1234@gmail.com', 'USR-00013', '1234@gmail.com', '', 'USR', '111', 'APR', '', '', '2024-04-13', 'April 13, 2024', 'Y', 'uploads/423472452_929274195466944_4082494152046077', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(32, 'johnny2@gmail.com', 'USR-00014', 'johnny2@gmail.com', '', 'USR', 'xx', 'APR', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(33, 'jor@gmail.com', 'USR-00015', 'jor@gmail.com', '', 'USR', '11', 'APR', '', '', '2024-04-27', 'April 27, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(34, 'marky@gmail.com', 'USR-00016', 'marky@gmail.com', '', 'USR', '111', 'APR', '', '', '2024-05-27', 'May 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(35, 'yu@gmail.com', 'USR-00017', 'yu@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(36, 'cnr@gmail.com', 'USR-00018', 'cnr@gmail.com', '', 'CNR', '123', '', '', '', '2024-03-16', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(37, 'cnr2@gmail.com', 'USR-00019', 'cnr2@gmail.com', '', 'CNR', '123', '', '', '', '2024-03-16', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(38, 'head1@gmail.com', 'USR-00020', 'head1@gmail.com', '', 'HED', '123', '', '', '', '2024-03-25', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(39, 'joenel3@gmail.com', 'USR-00021', 'joenel3@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(40, 'test1@gmail.com', 'USR-00022', 'test1@gmail.com', '', 'USR', '123', 'CRT', 'PRP', 'Preparing', '2024-04-12', 'April 12, 2024', 'N', 'uploads/434142151_1120827459118053_756724852019588', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(41, 'lennard_lee@dlsu.edu.ph', 'USR-00023', 'lennard_lee@dlsu.edu.ph', '', 'USR', '123', 'PCT', '', '', '2024-04-12', 'April 12, 2024', 'Y', '', '', 'JOENEL', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(42, 'brb@gmail.com', 'USR-00024', 'brb@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(43, 'are@gmail.com', 'USR-00025', 'are@gmail.com', '', 'USR', '123', '', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44, 'are2@gmail.com', 'USR-00026', 'are2@gmail.com', '', 'USR', '1', 'NCT', '', '', '2024-04-17', 'April 17, 2024', 'Y', 'uploads/434142151_1120827459118053_756724852019588', 'uploads/431681041_1788772974869851_747359344553442', 'IF you went to the moon then it would be over', 'Subject for approval.', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, '2@gmail.com', 'USR-00027', '2@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-23', 'April 23, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(46, 'y@gmail.com', 'USR-00028', 'y@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-28', 'April 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(47, '3@gmail.com', 'USR-00029', '3@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-18', 'April 18, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(48, '4@gmail.com', 'USR-00030', '4@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-18', 'April 18, 2024', 'N', 'uploads/314767425_10160179054267158_59458798754800', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(49, 'register@gmail.com', 'USR-00031', 'register@gmail.com', '', 'USR', '123', 'NCT', '', '', '2024-04-23', 'April 23, 2024', 'Y', 'uploads/doc.pdf', 'uploads/imao-MRW5405.jpg', 'JUSTIFICATION', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, 't@gmail.com', 'USR-00032', 't@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(52, 'jrue@gmail.com', 'USR-00033', 'jrue@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(53, 'r@gmail.com', 'USR-00034', 'r@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(54, '333@gmail.com', 'USR-00035', '333@gmail.com', 'marky@gmail.com', 'USR', '333', 'PCT', '', '', '2024-04-28', 'April 28, 2024', 'Y', 'uploads/imao-MRW5405.jpg', 'uploads/download (1).jpg', ' I CHOSE TO APPLY TO PMC BECAUE BECAUSE BECUASE', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(55, 'yuyu@gmail.com', 'USR-00036', 'yuyu@gmail.com', '', 'USR', '1', 'DEC', '', '', '2024-04-28', 'April 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(56, 'e@gmail.com', 'USR-00037', 'e@gmail.com', '', 'USR', '123', 'NCT', '', '', '2024-05-03', 'May 03, 2024', 'Y', 'uploads/ABM12-B Sched TERM 3.jpg', 'uploads/434142151_1120827459118053_756724852019588', 'SDADSDDADSDD', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(57, 'BRUH2@gmail.com', 'USR-00038', 'BRUH2@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-05-06', 'May 06, 2024', 'Y', 'uploads/lhyfpzbifpo21.png', 'uploads/imao-MRW5405.jpg', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(58, 'broseph@gmail.com', 'USR-00039', 'broseph@gmail.com', '', 'USR', '123', 'DEC', '', '', '2024-05-27', 'May 27, 2024', 'N', 'uploads/photo-1574005280900-3ff489fa1f70.jpg', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, 'wt@gmail.com', 'USR-00040', 'wt@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-05-27', 'May 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, 'g@gmail.com', 'USR-00041', 'g@gmail.com', '', 'USR', '1', 'APR', '', '', '2024-05-28', 'May 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, 'tt@gmail.com', 'USR-00042', 'tt@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, 'g2@gmail.com', 'USR-00043', 'g2@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-05-28', 'May 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, 'r2@gmail.com', 'USR-00044', 'r2@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 'h@gmail.com', 'USR-00045', 'h@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-05-29', 'May 29, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 'b@gmail.com', 'USR-00046', 'b@gmail.com', '', 'USR', '1', 'APR', '', '', '2024-05-29', 'May 29, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(66, '222@gmail.com', 'USR-00047', '222@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(67, 's@gmail.com', 'USR-00048', 's@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(68, 'f@gmail.com', 'USR-00049', 'f@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-06-24', 'June 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(69, 'q@gmail.com', 'USR-00050', 'q@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(70, 'broseph2@gmail.com', 'USR-00051', 'broseph2@gmail.com', '', 'USR', '1', 'PMO', '', '', '2024-07-15', 'July 15, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(71, 'u@gmail.com', 'USR-00052', 'u@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-07-17', 'July 17, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(72, '23@gmail.com', 'USR-00053', '23@gmail.com', '', 'CNR', '1', 'PCT', '', '', '2025-02-17', 'February 17, 2025', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(73, 'joen@gmail.com', 'USR-00054', '', '', 'CNR', '123', '', '', '', '0000-00-00', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(74, 'jdulatre22@gmail.com', 'USR-00055', 'jdulatre22@gmail.com', 'jdulatre22@gmail.com', 'USR', 'jdulatre22@gmail.com', 'APR', '', '', '2025-02-16', 'February 16, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Subject for approval.', 'johnny@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(75, '123456@gmail.com', 'USR-00056', '123456@gmail.com', '123456@gmail.com', 'USR', '123', 'PMO', 'PRP', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', 'No valid info.', 'Invalid info provided.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(76, 'rexluciano@yahoo.com', 'USR-00057', 'rexluciano@yahoo.com', 'rexluciano36@gmail.com', 'USR', '123', 'PMC', '', '', '2025-02-17', 'February 17, 2025', 'Y', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', 'I Want to apply for PMOC.', 'Subject for approval.', 'johnny@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(77, 'www@gmail.com', 'USR-00058', 'www@gmail.com', 'www@gmail.com', 'USR', '123', 'APR', '', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Invalid.', 'johnny@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(78, 'ttt@gmail.com', 'USR-00059', 'ttt@gmail.com', 'ttt@gmail.com', 'USR', '123', 'PMC', '', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Subject for approval.', 'johnny@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(79, 'testuser@gmail.com', 'USR-00060', 'testuser@gmail.com', '', 'USR', '1234', 'PCT', '', '', '2025-02-26', 'February 26, 2025', 'N', '', '', '', '', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(80, 'testuser2@gmail.com', 'USR-00061', 'testuser2@gmail.com', '', 'USR', '1234', 'DEC', '', '', '2025-02-26', 'February 26, 2025', 'N', '', '', '', 'Not a Resident Incomplete', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(81, 'frankocean@gmail.com', 'USR-00062', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(82, 'frankocean@gmail.com', 'USR-00063', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(83, 'frankocean@gmail.com', 'USR-00064', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(86, 'reyeshannahjoy82@gmail.com', 'USR-00065', 'reyeshannahjoy82@gmail.com', 'reyeshannahjoy82@gmail.com', 'USR', '123', 'POST', '', 'Pending verification', '2025-07-17', 'July 17, 2025', 'N', 'uploads/USR-00065_doc_1750421620.jpg', '', '', '', 'deskstaff@gmail.com', 1, 'Hannah', 'Dizon', 'Joy Reyes', 'F', '0000-00-00', 'Philippines', 'Guimba', 'NA', '09707744466', 'Asdewrer', 'gdbgeebt', 'Cgrgrd', 'M', '0000-00-00', 'Philippines', 'Guimba', 'Architect', '09123456789');
 
 -- --------------------------------------------------------
 
@@ -744,10 +818,10 @@ CREATE TABLE `mf_sample_prog` (
   `advisorname` varchar(100) DEFAULT NULL,
   `is_vaccinated` int(11) DEFAULT NULL,
   `employee_birthday` date DEFAULT NULL,
-  `salary` decimal(20,2) DEFAULT '0.00',
+  `salary` decimal(20,2) DEFAULT 0.00,
   `address` varchar(100) DEFAULT NULL,
   `position` varchar(100) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -760,7 +834,7 @@ CREATE TABLE `mf_time_manage` (
   `service_cde` varchar(100) NOT NULL,
   `date` date NOT NULL,
   `time_mng_id` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
 
@@ -775,7 +849,7 @@ CREATE TABLE `mf_venue` (
   `venue_link` varchar(200) NOT NULL,
   `is_online` varchar(100) NOT NULL,
   `userid` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_venue`
@@ -809,8 +883,8 @@ CREATE TABLE `pro_cert_table` (
   `date_claimed_desc` varchar(100) NOT NULL,
   `status` varchar(100) NOT NULL,
   `status_desc` varchar(100) NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `pro_cert_table`
@@ -823,7 +897,10 @@ INSERT INTO `pro_cert_table` (`recid`, `userid`, `reason`, `control_number`, `da
 (35, 'USR-00060', 'Test Request', '12261784', '2025-02-26', 'February 26, 2025', 'PRP', 'Preparing', '2025-02-26 14:26:05'),
 (36, 'USR-00060', 'Test Request', '12261784', '2025-02-26', 'February 26, 2025', 'PRP', 'Preparing', '2025-02-26 14:26:14'),
 (37, 'USR-00060', 'No reason provided.', '12261784', '2025-02-26', 'February 26, 2025', 'APRV', 'Preparing', '2025-02-26 14:41:20'),
-(38, 'USR-00060', 'Test Print', '12261784', '2025-02-26', 'February 26, 2025', 'PRP', 'Preparing', '2025-02-26 14:40:33');
+(38, 'USR-00060', 'Test Print', '12261784', '2025-02-26', 'February 26, 2025', 'PRP', 'Preparing', '2025-02-26 14:40:33'),
+(39, 'USR-00065', 'Future purposes', '12261784', '2025-06-28', 'June 28, 2025', 'PRP', 'Preparing', '2025-06-28 13:57:43'),
+(40, 'USR-00065', 'fwrfwfre', '12261784', '2025-07-15', 'July 15, 2025', 'PRP', 'Preparing', '2025-07-15 11:16:23'),
+(41, 'USR-00065', 'No reason provided.', '12261784', '2025-07-19', 'July 19, 2025', 'APRV', 'Preparing', '2025-07-19 12:17:02');
 
 -- --------------------------------------------------------
 
@@ -840,7 +917,7 @@ CREATE TABLE `pro_counselorbooking` (
   `date` date NOT NULL,
   `date_desc` varchar(100) NOT NULL,
   `prepared_by` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `pro_counselorbooking`
@@ -863,7 +940,7 @@ CREATE TABLE `pro_meiform` (
   `userid` varchar(20) NOT NULL,
   `status` varchar(100) NOT NULL,
   `counselorid` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `pro_meiform`
@@ -883,7 +960,8 @@ INSERT INTO `pro_meiform` (`recid`, `usermeiformid`, `userid`, `status`, `counse
 (189, 'UMF-00011', 'USR-00051', 'PMO', 'USR-00018'),
 (190, 'UMF-00012', 'USR-00059', 'PMO', 'USR-00018'),
 (191, 'UMF-00013', 'USR-00060', 'PMO', 'USR-00018'),
-(192, 'UMF-00014', 'USR-00064', 'PMO', 'USR-00018');
+(202, 'UMF-00014', 'USR-00065', 'PMO', 'USR-00018'),
+(209, 'UMF-00015', 'USR-00065', 'POST', 'USR-00018');
 
 -- --------------------------------------------------------
 
@@ -894,9 +972,9 @@ INSERT INTO `pro_meiform` (`recid`, `usermeiformid`, `userid`, `status`, `counse
 CREATE TABLE `tbl_questions` (
   `questions_id` int(11) NOT NULL,
   `questions` varchar(255) NOT NULL,
-  `date_created` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `date_created` timestamp NOT NULL DEFAULT current_timestamp(),
   `answers` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `tbl_questions`
@@ -923,14 +1001,14 @@ CREATE TABLE `useractivitylogfile` (
   `empcode` varchar(50) DEFAULT NULL,
   `fullname` varchar(100) DEFAULT NULL,
   `remarks` varchar(150) DEFAULT NULL,
-  `linenum` int(11) DEFAULT '0',
+  `linenum` int(11) DEFAULT 0,
   `parameter` varchar(50) DEFAULT NULL,
   `trncde` varchar(3) DEFAULT NULL,
   `trndsc` varchar(50) DEFAULT NULL,
   `recid` bigint(20) UNSIGNED NOT NULL,
   `compname` varchar(30) DEFAULT NULL,
   `usrnam` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Dumping data for table `useractivitylogfile`
@@ -948,9 +1026,47 @@ INSERT INTO `useractivitylogfile` (`usrcde`, `usrname`, `usrdte`, `usrtim`, `trn
 ('admin', 'admin', '2024-08-15', '07:24:44', '2024-08-15 07:24:44', '', 'Added Record', 'admin', 'admin_fullname', 'Added Record In \'USERS\', Email: \'joen@gmail.com\' , Record ID: ', 0, '', '', '', 9, '', 'admin'),
 ('admin', 'admin', '2024-08-15', '08:08:40', '2024-08-15 08:08:40', '', 'Login', 'admin', 'admin_fullname', 'Successfull login', 0, '', '', '', 10, '', 'admin');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_messages`
+--
+
+CREATE TABLE `user_messages` (
+  `id` int(11) NOT NULL,
+  `user_id` varchar(100) NOT NULL,
+  `message` text NOT NULL,
+  `sender` enum('user','bot','staff') NOT NULL,
+  `session_id` varchar(255) DEFAULT NULL,
+  `usertype` varchar(10) DEFAULT NULL,
+  `is_answered` tinyint(1) DEFAULT 0,
+  `answered_by` int(11) DEFAULT NULL,
+  `staff_response` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `answered_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_messages`
+--
+
+INSERT INTO `user_messages` (`id`, `user_id`, `message`, `sender`, `session_id`, `usertype`, `is_answered`, `answered_by`, `staff_response`, `created_at`, `answered_at`) VALUES
+(8, 'USR-00065', 'How to pay bills?', 'user', 'chat_687baf0d034fb6.46785239', 'USR', 1, 0, 'Go to payment and follow instructions.', '2025-07-19 14:48:12', '2025-07-19 15:10:54'),
+(9, 'USR-00065', 'Where?', 'user', 'chat_687baf0d034fb6.46785239', 'USR', 1, 0, 'Payment section', '2025-07-19 15:10:48', '2025-07-19 15:11:20'),
+(10, 'USR-00065', 'Where to?', 'user', 'chat_687baf0d034fb6.46785239', 'USR', 1, 0, 'Go to payment section', '2025-07-19 15:11:15', '2025-07-19 15:13:46'),
+(11, 'USR-00065', 'how to pay bills?', 'user', 'chat_687bb601a10172.61691361', 'USR', 1, 0, 'go to payment section', '2025-07-19 15:13:30', '2025-07-19 15:31:11');
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `chat_sessions`
+--
+ALTER TABLE `chat_sessions`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `session_id` (`session_id`),
+  ADD KEY `idx_user_session` (`user_id`,`session_id`);
 
 --
 -- Indexes for table `ext_appointment_info`
@@ -966,6 +1082,14 @@ ALTER TABLE `ext_appointment_info`
 ALTER TABLE `ext_couples_accountinfo`
   ADD PRIMARY KEY (`recid`),
   ADD KEY `userid` (`userid`);
+
+--
+-- Indexes for table `ext_mf_meiform`
+--
+ALTER TABLE `ext_mf_meiform`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `userid` (`userid`),
+  ADD KEY `usermeiformid` (`meiformid`);
 
 --
 -- Indexes for table `ext_pro_couple_apc`
@@ -1073,6 +1197,7 @@ ALTER TABLE `pro_counselorbooking`
 --
 ALTER TABLE `pro_meiform`
   ADD PRIMARY KEY (`recid`),
+  ADD UNIQUE KEY `usermeiformid_2` (`usermeiformid`),
   ADD KEY `usermeiformid` (`usermeiformid`),
   ADD KEY `userid` (`userid`);
 
@@ -1089,8 +1214,23 @@ ALTER TABLE `useractivitylogfile`
   ADD PRIMARY KEY (`recid`);
 
 --
+-- Indexes for table `user_messages`
+--
+ALTER TABLE `user_messages`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_user_id` (`user_id`),
+  ADD KEY `idx_session` (`session_id`),
+  ADD KEY `idx_unanswered` (`is_answered`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
+
+--
+-- AUTO_INCREMENT for table `chat_sessions`
+--
+ALTER TABLE `chat_sessions`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT for table `ext_appointment_info`
@@ -1103,6 +1243,12 @@ ALTER TABLE `ext_appointment_info`
 --
 ALTER TABLE `ext_couples_accountinfo`
   MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
+
+--
+-- AUTO_INCREMENT for table `ext_mf_meiform`
+--
+ALTER TABLE `ext_mf_meiform`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
 
 --
 -- AUTO_INCREMENT for table `ext_pro_couple_apc`
@@ -1132,7 +1278,7 @@ ALTER TABLE `mf_appointment_info`
 -- AUTO_INCREMENT for table `mf_cc_menu`
 --
 ALTER TABLE `mf_cc_menu`
-  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `mf_concerns`
@@ -1162,7 +1308,7 @@ ALTER TABLE `mf_premariage_concerns`
 -- AUTO_INCREMENT for table `mf_prog_users`
 --
 ALTER TABLE `mf_prog_users`
-  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=84;
+  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
 
 --
 -- AUTO_INCREMENT for table `mf_sample_prog`
@@ -1186,7 +1332,7 @@ ALTER TABLE `mf_venue`
 -- AUTO_INCREMENT for table `pro_cert_table`
 --
 ALTER TABLE `pro_cert_table`
-  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT for table `pro_counselorbooking`
@@ -1198,7 +1344,7 @@ ALTER TABLE `pro_counselorbooking`
 -- AUTO_INCREMENT for table `pro_meiform`
 --
 ALTER TABLE `pro_meiform`
-  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=193;
+  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
 
 --
 -- AUTO_INCREMENT for table `tbl_questions`
@@ -1211,6 +1357,12 @@ ALTER TABLE `tbl_questions`
 --
 ALTER TABLE `useractivitylogfile`
   MODIFY `recid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `user_messages`
+--
+ALTER TABLE `user_messages`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Constraints for dumped tables
