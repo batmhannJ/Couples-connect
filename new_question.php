@@ -52,25 +52,25 @@ if ($_SESSION['usertype'] == 'DSK') {
     </div>
 </div>
 
-<form name='myforms' id="myforms" method="post" target="_self" style='height:100%'>
-    <table style="width:100%;height:100%">
-        <tr>
-            <td style='width:30%'>
-                <div class="row h-100 justify-content-center align-items-center">
-                    <div style='width:437px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))'>
-                        <div class="m-3 pt-2 text-center login_form_header">
-                            <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Options</p>
-                            <img src="images/Rectangle 11934.png" style='width:100%'>
-                        </div>
+<form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
+    <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 24px; height: calc(100vh - 40px);">
+        
+        <!-- Left Sidebar -->
+        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 24px 20px; height: fit-content; max-height: calc(100vh - 80px); border: 1px solid rgba(255, 255, 255, 0.2); overflow-y: auto;">
+            <div style="text-align: center; margin-bottom: 20px;">
+                <h2 style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0 0 12px 0;">Options</h2>
+                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 100%;"></div>
+            </div>
 
-                        <?php
-                        require 'cc_mf_menu.php';
-                        ?>
+            <div style="display: flex; flex-direction: column; gap: 8px;">
+                <?php
+                require 'cc_mf_menu.php';
+                ?>
+            </div>
+        </div>
 
-
-                    </div>
-                </div>
-            </td>
+        <!-- Main Content -->
+        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.2); height: calc(100vh - 80px); overflow: hidden;">
 
             <?php
             if (isset($_POST['crf_true'])) {
@@ -110,49 +110,161 @@ if ($_SESSION['usertype'] == 'DSK') {
             }
             ?>
 
-            <td style='width:70%'>
-                <div class="row h-100 justify-content-center align-items-center">
-                    <div style='width:1025px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));display:flex;flex-direction:column'>
-                        <div class="m-3 pt-2">
-                            <br />
-                            <br style='display:block;margin:16px 0;content:""' />
-                            <img src="images/Rectangle 11934.png" style='width:100%;height:4px'>
-                            <h2>Question Form</h2>
+            <!-- Header -->
+            <div style="padding: 20px 32px 16px 32px; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.05); flex-shrink: 0;">
+                <h1 style="font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0 0 10px 0;">Question Form</h1>
+                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 200px; margin: 0 auto;"></div>
+            </div>
 
-                            <div class="card-body">
-                                <?php if (isset($_POST['crf_true'])): ?>
-                                    <div class="alert alert-<?= $bg ?> alert-dismissible fade show" role="alert">
+            <!-- Form Content -->
+            <div style="flex: 1; padding: 24px 32px; overflow-y: auto; min-height: 0;">
+                <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; border: 1px solid rgba(0, 0, 0, 0.05); height: 100%; display: flex; flex-direction: column;">
+                    <div style="flex: 1; padding: 24px; overflow-y: auto;">
+                        
+                        <!-- Alert Messages -->
+                        <?php if (isset($_POST['crf_true'])): ?>
+                            <div style="padding: 16px 20px; border-radius: 12px; margin-bottom: 24px; border: 1px solid; <?= $bg == 'success' ? 'background: rgba(34, 197, 94, 0.1); border-color: rgba(34, 197, 94, 0.3); color: #15803d;' : 'background: rgba(239, 68, 68, 0.1); border-color: rgba(239, 68, 68, 0.3); color: #dc2626;' ?>">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div>
                                         <strong><?= $status ?></strong> <?= $msg ?>
-                                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                                     </div>
-                                <?php endif; ?>
-
-                                <form action="" method="post">
-
-                                    <?php
-
-                                    $value = "";
-                                    $ans = "";
-                                    if (isset($_GET['edit'])) {
-                                        $select_edit = "SELECT * FROM tbl_questions where questions_id=" . $_GET['edit'];
-                                        $stmt    = $link->prepare($select_edit);
-                                        $stmt->execute();
-                                        if ($rs = $stmt->fetch()) {
-                                            $value = $rs['questions'];
-                                            $ans = $rs['answers'];
-                                        }
-                                    }
-                                    ?>
-                                    <h4>Question</h4>
-                                    <textarea name="question" class="form-control" rows="1" placeholder="Type Here..."><?= $value ?></textarea>
-                                    <h4>Answer</h4>
-                                    <textarea name="answer" class="form-control" rows="10" placeholder="Type Here..."><?= $ans ?></textarea>
-                                    <input type="hidden" value="crf_true" name="crf_true">
+                                    <button type="button" style="background: none; border: none; font-size: 18px; cursor: pointer; color: inherit; opacity: 0.7;" onclick="this.parentElement.parentElement.style.display='none';">&times;</button>
+                                </div>
                             </div>
-                            <div style="float: right; margin-right:15px">
-                                <button type="submit" class="btn btn-primary"> <?= isset($_GET['edit']) ? "Update" : "Submit"; ?> </button>
+                        <?php endif; ?>
+
+                        <!-- Question Form -->
+                        <form action="" method="post">
+                            <?php
+                            $value = "";
+                            $ans = "";
+                            if (isset($_GET['edit'])) {
+                                $select_edit = "SELECT * FROM tbl_questions where questions_id=" . $_GET['edit'];
+                                $stmt    = $link->prepare($select_edit);
+                                $stmt->execute();
+                                if ($rs = $stmt->fetch()) {
+                                    $value = $rs['questions'];
+                                    $ans = $rs['answers'];
+                                }
+                            }
+                            ?>
+
+                            <div style="margin-bottom: 24px;">
+                                <label style="font-weight: 700; font-size: 18px; color: #4f46e5; display: block; margin-bottom: 12px;">Question</label>
+                                <textarea name="question" style="width: 100%; min-height: 60px; padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.1); background: rgba(243, 244, 246, 0.8); font-size: 16px; color: #374151; resize: vertical; font-family: inherit;" placeholder="Type Here..." rows="2"><?= $value ?></textarea>
+                            </div>
+
+                            <div style="margin-bottom: 32px;">
+                                <label style="font-weight: 700; font-size: 18px; color: #4f46e5; display: block; margin-bottom: 12px;">Answer</label>
+                                <textarea name="answer" style="width: 100%; min-height: 300px; padding: 16px 20px; border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.1); background: rgba(243, 244, 246, 0.8); font-size: 16px; color: #374151; resize: vertical; font-family: inherit;" placeholder="Type Here..." rows="12"><?= $ans ?></textarea>
+                            </div>
+
+                            <input type="hidden" value="crf_true" name="crf_true">
+                            
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 24px;">
+                                <a href="add_questions.php" style="display: inline-flex; align-items: center; gap: 8px; background: linear-gradient(135deg, #e02626ff 0%, #c53f3fff 100%); color: white; text-decoration: none; padding: 14px 24px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(224, 38, 38, 0.3); border: none; font-family: inherit;" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(224, 38, 38, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(224, 38, 38, 0.3)';">
+                                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path d="M19 12H5M12 19l-7-7 7-7"/>
+                                    </svg>
+                                    Back
+                                </a>
+                                <button type="submit" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; padding: 14px 32px; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);" onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 6px 20px rgba(79, 70, 229, 0.4)';" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 4px 15px rgba(79, 70, 229, 0.3)';">
+                                    <?= isset($_GET['edit']) ? "Update" : "Submit"; ?>
+                                </button>
+                            </div>
+                        </form>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Responsive Design -->
+    <style>
+        @media (max-width: 1200px) {
+            form > div {
+                grid-template-columns: 1fr !important;
+                gap: 16px !important;
+            }
+            
+            form > div > div:first-child {
+                order: 2;
+                height: auto !important;
+                max-height: none !important;
+            }
+            
+            form > div > div:last-child {
+                order: 1;
+                height: auto !important;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            form {
+                padding: 12px !important;
+            }
+            
+            h1 {
+                font-size: 22px !important;
+            }
+            
+            h2 {
+                font-size: 20px !important;
+            }
+            
+            form > div > div:last-child > div:last-child > div > div {
+                padding: 16px !important;
+            }
+            
+            textarea {
+                min-height: 50px !important;
+            }
+            
+            textarea[name="answer"] {
+                min-height: 200px !important;
+            }
+            
+            div[style*="justify-content: space-between"] {
+                flex-direction: column !important;
+                gap: 12px !important;
+            }
+            
+            div[style*="justify-content: space-between"] a,
+            div[style*="justify-content: space-between"] button {
+                width: 100% !important;
+                justify-content: center !important;
+            }
+        }
+        
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb {
+            background: rgba(79, 70, 229, 0.3);
+            border-radius: 4px;
+        }
+        
+        ::-webkit-scrollbar-thumb:hover {
+            background: rgba(79, 70, 229, 0.5);
+        }
+        
+        /* Focus states for form elements */
+        textarea:focus {
+            outline: none;
+            border-color: rgba(79, 70, 229, 0.5);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+    </style>
+    
 </form>
-<a href="add_questions.php" class="btn btn-danger text-white">Back</a>
 </div>
 </div>
 </div>
