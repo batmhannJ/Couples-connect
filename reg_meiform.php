@@ -2,290 +2,565 @@
 require "includes/cc_header.php";
 ?>
 
-    <div class="container-fluid">
-        <div class='row bg-white' style="height:99px">
-            <div class="col-3 pe-0 d-flex align-items-center">
-                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+     <div style="width: 100%; font-family: Inter, sans-serif;">
+    <div style="width: 100%; background-color: white; height: 80px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; position: relative;">
+        
+        <!-- Logo Section -->
+        <div style="flex: 0 0 auto; display: flex; align-items: center;">
+            <img src="images/350 x 88.png" style="height: 60px; width: auto;">
+        </div>
+
+        <!-- Desktop Navigation -->
+        <div id="desktop-nav" style="display: flex; flex-direction: row; justify-content: center; font-family: Inter; font-size: 18px; align-items: center; gap: 30px;">
+            <div>
+                <a href="http://localhost/couples-connect/login_cc.php" 
+                   style="color: black; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 8px 12px; border-radius: 6px;"
+                   onmouseover="this.style.color='#23408E'; this.style.backgroundColor='#f8f9fa'"
+                   onmouseout="this.style.color='black'; this.style.backgroundColor='transparent'">HOME</a>
             </div>
 
-            <div class="col-4 offset-5" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
-                <div style="flex:0.8">
-                    <a href="http://localhost/couplesconnectprog/login_cc.php"  class="has_hover" style='color:black;text-decoration:none'>HOME</a>
-                </div>
+            <div>
+                <a href="http://localhost/couples-connect/about-us/" 
+                   style="color: black; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 8px 12px; border-radius: 6px;"
+                   onmouseover="this.style.color='#23408E'; this.style.backgroundColor='#f8f9fa'"
+                   onmouseout="this.style.color='black'; this.style.backgroundColor='transparent'">ABOUT US</a>
+            </div>
 
-                <div style="flex:1.1">
-                    
-                    <a href="http://localhost/couplesconnect_wp/about-us/"  class="has_hover" style='color:black;text-decoration:none'>ABOUT US</a>
+            <div>
+                <a href="http://localhost/couples-connect/contact-us/" 
+                   style="color: black; text-decoration: none; font-weight: 500; transition: all 0.3s ease; padding: 8px 12px; border-radius: 6px;"
+                   onmouseover="this.style.color='#23408E'; this.style.backgroundColor='#f8f9fa'"
+                   onmouseout="this.style.color='black'; this.style.backgroundColor='transparent'">CONTACTS</a>
+            </div>
 
-                </div>
+            <div style="height: 20px; width: 1px; background-color: #ddd; margin: 0 5px;"></div>
 
-                <div style="flex:1.1">
-                    <a href="http://localhost/couplesconnect_wp/contact-us/"  class="has_hover" style='color:black;text-decoration:none'>CONTACTS</a>
-                </div>
-
-                <div style="flex:1">
-                    <a href="http://localhost/couplesconnectprog/login_cc.php" class="has_hover"  style='color:black;text-decoration:none'>| LOGIN</a>
-                </div>
-            </div> 
+            <div>
+                <a href="http://localhost/couples-connect/login_cc.php" 
+                   style="color: #23408E; text-decoration: none; font-weight: 600; padding: 10px 16px; border: 2px solid #23408E; border-radius: 8px; transition: all 0.3s ease;"
+                   onmouseover="this.style.backgroundColor='#23408E'; this.style.color='white'"
+                   onmouseout="this.style.backgroundColor='transparent'; this.style.color='#23408E'">LOGIN</a>
+            </div>
         </div>
+
+        <!-- Mobile Menu Button -->
+        <button id="mobile-btn" onclick="toggleMenu()" 
+                style="display: none; background: none; border: none; font-size: 24px; cursor: pointer; padding: 8px; border-radius: 6px; color: #333;">
+            <span id="menu-icon">☰</span>
+        </button>
     </div>
 
-    <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
-        <table style="width:100%;height:calc(100% - 100px);	filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))">
-            <tr style='height:100%;display:flex'>
-                <td style='display:flex;justify-content:center;align-items:center;height:100%;flex:1'>
-                    <div class="row justify-content-center align-items-center" style='width:80%;margin-top:10px'>
-                        <div style='width:100%;background-color:white;border-radius:30px;height:560px'>
-                            <div class="mx-3 px-3 pt-4 text-left login_form_header">
-                                <p style="margin-bottom:0;font-weight:bold;font-size:28px;font-family:inter">Partner 1</p>
-                            <p style="line-height:0.9;margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:21px;color:#9B9B9B">Personal Information</p>
-                                <img src="images/Rectangle 11942.png" style='width:80%'/>
-                            </div>
+    <!-- Mobile Menu -->
+    <div id="mobile-menu" style="display: none; background-color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: absolute; top: 80px; left: 0; right: 0; z-index: 1000; padding: 20px;">
+        <div style="display: flex; flex-direction: column; gap: 15px;">
+            <a href="http://localhost/couples-connect/login_cc.php" 
+               style="color: black; text-decoration: none; font-weight: 500; padding: 12px 16px; border-radius: 8px; transition: background-color 0.3s ease; font-family: Inter;"
+               onmouseover="this.style.backgroundColor='#f8f9fa'"
+               onmouseout="this.style.backgroundColor='transparent'">HOME</a>
 
-                            <div class="mx-3 px-3 form-group">
-                                <label class='form-label'style="color:black;font-size:17px">First Name:<span style='color:red'>*</span></label>
-                                <input type='text' name='first_name' id='first_name' placeholder='Enter your first name' style="height:45px;border:1px solid black;" class="form-control rounded input_sub;" autocomplete='off'>
-                            </div>
+            <a href="http://localhost/couples-connect/about-us/" 
+               style="color: black; text-decoration: none; font-weight: 500; padding: 12px 16px; border-radius: 8px; transition: background-color 0.3s ease; font-family: Inter;"
+               onmouseover="this.style.backgroundColor='#f8f9fa'"
+               onmouseout="this.style.backgroundColor='transparent'">ABOUT US</a>
 
-                            <div class="row mx-3 pe-3 ps-1  form-group" style='padding-top:6px'>
+            <a href="http://localhost/couples-connect/contact-us/" 
+               style="color: black; text-decoration: none; font-weight: 500; padding: 12px 16px; border-radius: 8px; transition: background-color 0.3s ease; font-family: Inter;"
+               onmouseover="this.style.backgroundColor='#f8f9fa'"
+               onmouseout="this.style.backgroundColor='transparent'">CONTACTS</a>
 
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Middle Name:<span style='color:red'>*</span></label>
-                                    <input type='text' name="middle_name" id='middle_name' placeholder='Enter your middle name' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
+            <a href="http://localhost/couples-connect/login_cc.php" 
+               style="color: white; text-decoration: none; font-weight: 600; padding: 12px 16px; background: linear-gradient(90deg, rgb(35, 64, 142) 35%, rgb(60, 148, 198) 100%); border-radius: 8px; text-align: center; margin-top: 10px; transition: all 0.3s ease; font-family: Inter;"
+               onmouseover="this.style.background='linear-gradient(90deg, rgb(30, 58, 122) 35%, rgb(50, 128, 178) 100%)'"
+               onmouseout="this.style.background='linear-gradient(90deg, rgb(35, 64, 142) 35%, rgb(60, 148, 198) 100%)'">LOGIN</a>
+        </div>
+    </div>
+</div>
 
-                                <div class="col-5">
-                                    <label class='form-label' style="color:black;font-size:17px">Last Name:<span style='color:red'>*</span></label>
-                                    <input type='text' name="last_name" id='last_name' placeholder='Enter your last name' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
-                                
-                            </div>
+<style>
+    /* Desktop - show desktop nav, hide mobile button */
+    @media (min-width: 768px) {
+        #desktop-nav {
+            display: flex !important;
+        }
+        #mobile-btn {
+            display: none !important;
+        }
+    }
 
-                            <div class="row mx-3 pe-3 ps-1  form-group" style='padding-top:6px'>
+    /* Mobile - hide desktop nav, show mobile button */
+    @media (max-width: 767px) {
+        #desktop-nav {
+            display: none !important;
+        }
+        #mobile-btn {
+            display: block !important;
+        }
+        
+        /* Adjust logo size on mobile */
+        img[src*="350 x 88.png"] {
+            height: 45px !important;
+        }
+        
+        /* Adjust container height on mobile */
+        div[style*="height: 80px"] {
+            height: 70px !important;
+        }
+        
+        #mobile-menu {
+            top: 70px !important;
+        }
+    }
 
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Sex/Gender:<span style='color:red'>*</span></label>
-                                    <!-- <input type='text' name="sex" id='sex' placeholder=' your sex/gender'  class="form-control "> -->
-                                    <select style="height:45px;border:1px solid black;" class='form-control roundedinput_sub' name='sex' id='sex' placeholder='Select Your Gender'>
-                                        <option value="M">Male</option>
-                                        <option value="F">Female</option>
-                                        <option value="O">Others</option>
-                                    </select>
-                                </div>
+    /* Extra small screens */
+    @media (max-width: 480px) {
+        img[src*="350 x 88.png"] {
+            height: 40px !important;
+        }
+        
+        div[style*="height: 80px"], div[style*="height: 70px"] {
+            height: 65px !important;
+        }
+        
+        #mobile-menu {
+            top: 65px !important;
+            padding: 15px !important;
+        }
+    }
+</style>
 
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Birthday:<span style='color:red'>*</span></label>
-                                    <input type='text' name="bday" class='form-control date_picker' id='bday' placeholder='Enter brithday' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
+<script>
+    let menuOpen = false;
 
-                            </div>
+    function toggleMenu() {
+        const menu = document.getElementById('mobile-menu');
+        const icon = document.getElementById('menu-icon');
+        
+        menuOpen = !menuOpen;
+        
+        if (menuOpen) {
+            menu.style.display = 'block';
+            icon.innerHTML = '✕';
+        } else {
+            menu.style.display = 'none';
+            icon.innerHTML = '☰';
+        }
+    }
 
-                            <div class="row mx-3 pe-3 ps-1  form-group" style='padding-top:6px'>
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById('mobile-menu');
+        const btn = document.getElementById('mobile-btn');
+        
+        if (menuOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
+            toggleMenu();
+        }
+    });
 
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Country:(You were born in)<span style='color:red'>*</span></label>
-                                    <select name="country" id="country" class='form-control roundedinput_sub' style='height:45px;border:1px solid black;'>
-                                        <?php
-                                        
-                                            $select_db="SELECT * FROM mf_country ORDER BY sortid";
-                                            $stmt	= $link->prepare($select_db);
-                                            $stmt->execute();
-                                            while($rs = $stmt->fetch()){
-                                                echo "<option>".$rs['country_name']."</option>";
-                                            }
+    // Close menu on window resize to desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768 && menuOpen) {
+            toggleMenu();
+        }
+    });
+</script>
 
-                                        ?>
-                                        
-                                    </select>
-                                </div>
+     <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%);
+            min-height: 100vh;
+            font-family: Inter, sans-serif;
+        }
+        
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column !important;
+                padding: 20px !important;
+                gap: 20px !important;
+            }
+            .partner-section {
+                width: 100% !important;
+                padding: 0 !important;
+            }
+            .partner-card {
+                max-width: 100% !important;
+                margin: 0 !important;
+                padding: 20px 15px !important;
+                border-radius: 15px !important;
+            }
+            .partner-title {
+                font-size: 22px !important;
+            }
+            .form-row {
+                flex-direction: column !important;
+                gap: 15px !important;
+            }
+            .form-row > div {
+                width: 100% !important;
+            }
+            footer > div {
+                padding: 0 15px !important;
+            }
+            footer > div > div {
+                flex-direction: column !important;
+                text-align: center !important;
+                gap: 15px !important;
+            }
+            footer > div > div > div:first-child {
+                min-width: auto !important;
+                justify-content: center !important;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .partner-card {
+                padding: 18px 12px !important;
+            }
+            .partner-title {
+                font-size: 20px !important;
+            }
+            footer img[src*="logo"] {
+                height: 50px !important;
+            }
+            footer .office-name {
+                font-size: 12px !important;
+            }
+        }
 
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Current Municipality: <span style='color:red'>*</span></label>
-                                    <input type='text' name="municipality" id='municipality' placeholder='Enter Municipality' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
+        @media (min-width: 769px) and (max-width: 1024px) {
+            .partner-section {
+                width: 50% !important;
+            }
+        }
 
-                            </div>
+        .form-control {
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
 
-                            <div class="row mx-3 pe-3 ps-1  form-group" style='padding-top:6px'>
+        .form-control:focus {
+            border-color: #23408E !important;
+            box-shadow: 0 0 0 2px rgba(35, 64, 142, 0.1) !important;
+        }
 
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Occupation:<span style='color:red'>*</span></label>
-                                    <input type='text' name="occupation" id='occupation' placeholder='Enter your occupation' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
+        .btn-continue {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
 
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Cellphone Number:<span style='color:red'>*</span> </label>
-                                    <input type='text' name="cellphone_number" id='cellphone_number' placeholder='Enter your cellphone number' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
-                            </div>
+        .btn-continue:hover {
+            transform: translateY(-1px);
+            box-shadow: 0px 6px 20px rgba(35, 64, 142, 0.4) !important;
+        }
+    </style>
+</head>
+<body>
 
+    <form name='myforms' id="myforms" method="post" target="_self" style="min-height: 100vh; display: flex; flex-direction: column;">
+        
+        <!-- Main Content Container -->
+        <div class="main-container" style="flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px; gap: 30px;">
+            
+            <!-- Partner 1 Section -->
+            <div class="partner-section" style="width: 50%; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                <div class="partner-card" style="width: 100%; max-width: 550px; background-color: white; border-radius: 18px; padding: 30px; box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.15);">
+                    
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <p class="partner-title" style="font-weight: bold; font-size: 28px; font-family: Inter; margin: 0; color: #333;">Partner 1</p>
+                        <p style="font-size: 16px; font-family: Inter; margin: 3px 0 0 0; color: #9B9B9B;">Personal Information</p>
+                        <div style="width: 80%; height: 3px; background: linear-gradient(90deg, #23408E 0%, #3C94C6 100%); margin: 15px auto; border-radius: 2px;"></div>
+                    </div>
+
+                    <!-- First Name -->
+                    <div style="margin-bottom: 15px;">
+                        <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">First Name: <span style="color: red;">*</span></label>
+                        <input type='text' name='first_name' id='first_name' placeholder='Enter your first name' 
+                               class="form-control"
+                               style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                               autocomplete='off'>
+                    </div>
+
+                    <!-- Middle Name and Last Name Row -->
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Middle Name: <span style="color: red;">*</span></label>
+                            <input type='text' name="middle_name" id='middle_name' placeholder='Enter your middle name' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Last Name: <span style="color: red;">*</span></label>
+                            <input type='text' name="last_name" id='last_name' placeholder='Enter your last name' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
                         </div>
                     </div>
-                </td>
 
-                <td style='display:flex;justify-content:center;align-items:center;height:100%;flex:1'>
-                    <div class="row justify-content-center align-items-center" style='width:80%;margin-top:10px'>
-                        <div style='width:100%;background-color:white;border-radius:30px;height:560px'>
-                            <div class="mx-3 px-3 pt-4 text-left login_form_header">
-                                <p style="margin-bottom:0;font-weight:bold;font-size:28px;font-family:inter">Partner 2</p>
-                                <p style="line-height:0.9;margin-bottom:0;font-weight:bold;font-family:inter;font-size:21px;color:#9B9B9B">Personal Information</p>
-                                <img src="images/Rectangle 11942.png" style='width:80%'/>
-                            </div>
-
-                            <div class="mx-3 px-3 form-group">
-                                <label class='form-label'style="color:black;font-size:17px">First Name:<span style='color:red'>*</span></label>
-                                <input type='text' name='first_name2' id='first_name2' placeholder='Enter your first name' style="height:45px;border:1px solid black;" class="form-control rounded input_sub;" autocomplete='off'>
-                            </div>
-
-                            <div class="row mx-3 pe-3 ps-1  form-group" style='padding-top:6px'>
-
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Middle Name:<span style='color:red'>*</span></label>
-                                    <input type='text' name="middle_name2" id='middle_name2' placeholder='Enter your middle name' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
-
-                                <div class="col-5">
-                                    <label class='form-label' style="color:black;font-size:17px">Last Name: <span style='color:red'>*</span></label>
-                                    <input type='text' name="last_name2" id='last_name2' placeholder='Enter your last name' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
-                                
-                            </div>
-
-                            <div class="row mx-3 pe-3 ps-1  form-group" style='padding-top:6px'>
-
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Sex/Gender:<span style='color:red'>*</span></label>
-                                    <select style="height:45px;border:1px solid black;" class='form-control roundedinput_sub' name='sex2' id='sex2' placeholder='Select Your Gender'>
-                                        <option value="M">Male</option>
-                                        <option value="F">Female</option>
-                                        <option value="O">Others</option>
-                                    </select>
-                                </div>
-
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Birthday:<span style='color:red'>*</span> </label>
-                                    <input type='text' name="bday2" id='bday2' class='form-control date_picker' placeholder='Enter your birthday' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
-
-                            </div>
-
-                            <div class="row mx-3 pe-3 ps-1  form-group" style='padding-top:6px'>
-
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Country:(You were born in)<span style='color:red'>*</span></label>
-                                    <select name="country2" id="country2" class='form-control roundedinput_sub' style='height:45px;border:1px solid black;'>
-                                        <?php
-                                        
-                                            $select_db="SELECT * FROM mf_country ORDER BY sortid";
-                                            $stmt	= $link->prepare($select_db);
-                                            $stmt->execute();
-                                            while($rs = $stmt->fetch()){
-                                                echo "<option>".$rs['country_name']."</option>";
-                                            }
-
-                                        ?>
-                                        
-                                    </select>
-                                </div>
-
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Current Municipality:<span style='color:red'>*</span> </label>
-                                    <input type='text' name="municipality2" id='municipality2' placeholder='Enter Municipality' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
-
-                            </div>
-
-                            <div class="row mx-3 pe-3 ps-1  form-group" style='padding-top:6px'>
-
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Occupation:<span style='color:red'>*</span></label>
-                                    <input type='text' name="occupation2" id='occupation2' placeholder='Enter your occupation' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
-
-                                <div class="col-6">
-                                    <label class='form-label' style="color:black;font-size:17px">Cellphone Number:<span style='color:red'>*</span> </label>
-                                    <input type='text' name="cellphone_number2" id='cellphone_number2' placeholder='Enter your cellphone number' style="height:45px;border:1px solid black;" class="form-control roundedinput_sub" autocomplete='off'>
-                                </div>
-                            </div>
-
+                    <!-- Sex/Gender and Birthday Row -->
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Sex/Gender: <span style="color: red;">*</span></label>
+                            <select name='sex' id='sex' class="form-control"
+                                    style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box; background-color: white;">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                                <option value="O">Others</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Birthday: <span style="color: red;">*</span></label>
+                            <input type='date' name="bday" id='bday' 
+                                   class="form-control date_picker"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
                         </div>
                     </div>
-                </td>
 
-            </tr>
-            <tr>
-                <td colspan='2' style='height:15%'>
-                    <div class="form-group d-flex align-items-center justify-content-center" style='height:100%'>
-                        <button onclick="onContinue()" type="button" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:300px;height:50px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Continue</button>
+                    <!-- Country and Municipality Row -->
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Country: (You were born in) <span style="color: red;">*</span></label>
+                            <select name="country" id="country" class="form-control"
+                                    style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box; background-color: white;">
+                                <option value="">Select Country</option>
+                                <option value="Philippines">Philippines</option>
+                                <option value="United States">United States</option>
+                                <option value="Canada">Canada</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Australia">Australia</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Current Municipality: <span style="color: red;">*</span></label>
+                            <input type='text' name="municipality" id='municipality' placeholder='Enter Municipality' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
                     </div>
-                </td>
-            </tr>
 
-        </table>
-
-        <div class="modal fade  xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Couples Connect Says:</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <!-- Occupation and Cellphone Row -->
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Occupation: <span style="color: red;">*</span></label>
+                            <input type='text' name="occupation" id='occupation' placeholder='Enter your occupation' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Cellphone Number: <span style="color: red;">*</span></label>
+                            <input type='text' name="cellphone_number" id='cellphone_number' placeholder='Enter your cellphone number' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <p class="error_msg">Please fill up all required fields.</p>
-                    </div>
-     
                 </div>
             </div>
-        </div>        
-
-
-
-        <footer style='height:100px;background-color:#23408E' class='footer'>
-            <div class="container-fluid"  style='height:100px'>
-
-                <div class="row"  style='height:100px'>
-                    <div class="col-4">
-                        <div class="row ms-3"  style='height:100px'>
-                            <div class="col-2 d-flex align-items-center">
-                                <img src="images/op office logo.png" style="height:77px;width:auto">
-                            </div>
-
-                            <div class="col-10 d-flex align-items-center">
-                                <div class="container" style='font-family:inter;color:white'>
-                                    <div class="col-12" style='font-size:15px;font-weight:bold'>
-                                        City Population Office of Cabuyao
-                                    </div>
-
-                                    <div class="col-12" style='font-size:9px'>
-                                        Brgy Dos. Cabuyao Retail Plaza, Cabuyao, Philippines
-                                    </div>
-
-                                    <div class="col-12" style='font-size:9px'>
-                                        cpocabuyao@gmail.com
-                                    </div>
-
-                                </div>
-          
-                            </div>
-                        </div>       
+            
+            <!-- Partner 2 Section -->
+            <div class="partner-section" style="width: 50%; display: flex; align-items: center; justify-content: center; padding: 10px;">
+                <div class="partner-card" style="width: 100%; max-width: 550px; background-color: white; border-radius: 18px; padding: 30px; box-shadow: 0px 8px 32px rgba(0, 0, 0, 0.15);">
+                    
+                    <!-- Header -->
+                    <div style="text-align: center; margin-bottom: 25px;">
+                        <p class="partner-title" style="font-weight: bold; font-size: 28px; font-family: Inter; margin: 0; color: #333;">Partner 2</p>
+                        <p style="font-size: 16px; font-family: Inter; margin: 3px 0 0 0; color: #9B9B9B;">Personal Information</p>
+                        <div style="width: 80%; height: 3px; background: linear-gradient(90deg, #23408E 0%, #3C94C6 100%); margin: 15px auto; border-radius: 2px;"></div>
                     </div>
 
-                    <div class="col-8 d-flex align-items-center justify-content-end">
-                        <div>
-                            <img src="images/pajamas_question.png" style='width:63px;height:auto;'>
-                        </div>   
+                    <!-- First Name -->
+                    <div style="margin-bottom: 15px;">
+                        <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">First Name: <span style="color: red;">*</span></label>
+                        <input type='text' name='first_name2' id='first_name2' placeholder='Enter your first name' 
+                               class="form-control"
+                               style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                               autocomplete='off'>
+                    </div>
+
+                    <!-- Middle Name and Last Name Row -->
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Middle Name: <span style="color: red;">*</span></label>
+                            <input type='text' name="middle_name2" id='middle_name2' placeholder='Enter your middle name' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Last Name: <span style="color: red;">*</span></label>
+                            <input type='text' name="last_name2" id='last_name2' placeholder='Enter your last name' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
+                    </div>
+
+                    <!-- Sex/Gender and Birthday Row -->
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Sex/Gender: <span style="color: red;">*</span></label>
+                            <select name='sex2' id='sex2' class="form-control"
+                                    style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box; background-color: white;">
+                                <option value="M">Male</option>
+                                <option value="F">Female</option>
+                                <option value="O">Others</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Birthday: <span style="color: red;">*</span></label>
+                            <input type='date' name="bday2" id='bday2' 
+                                   class="form-control date_picker"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
+                    </div>
+
+                    <!-- Country and Municipality Row -->
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 15px;">
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Country: (You were born in) <span style="color: red;">*</span></label>
+                            <select name="country2" id="country2" class="form-control"
+                                    style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box; background-color: white;">
+                                <option value="">Select Country</option>
+                                <option value="Philippines">Philippines</option>
+                                <option value="United States">United States</option>
+                                <option value="Canada">Canada</option>
+                                <option value="United Kingdom">United Kingdom</option>
+                                <option value="Australia">Australia</option>
+                            </select>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Current Municipality: <span style="color: red;">*</span></label>
+                            <input type='text' name="municipality2" id='municipality2' placeholder='Enter Municipality' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
+                    </div>
+
+                    <!-- Occupation and Cellphone Row -->
+                    <div class="form-row" style="display: flex; gap: 10px; margin-bottom: 20px;">
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Occupation: <span style="color: red;">*</span></label>
+                            <input type='text' name="occupation2" id='occupation2' placeholder='Enter your occupation' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
+                        <div style="flex: 1;">
+                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Cellphone Number: <span style="color: red;">*</span></label>
+                            <input type='text' name="cellphone_number2" id='cellphone_number2' placeholder='Enter your cellphone number' 
+                                   class="form-control"
+                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
+                                   autocomplete='off'>
+                        </div>
                     </div>
                 </div>
+            </div>
+        </div>
 
+        <!-- Continue Button Section -->
+        <div style="text-align: center; padding: 20px 0 30px 0;">
+            <button type="button" onclick="onContinue()" class="btn-continue"
+                    style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%); color: white; width: 300px; height: 50px; font-size: 25px; font-family: Inter; font-weight: 700; border-radius: 10px; border: none; cursor: pointer; box-shadow: 0px 4px 11px rgba(0, 0, 0, 0.25);">
+                Continue
+            </button>
+        </div>
+
+        <!-- Modal -->
+        <div style="display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: hidden; background-color: rgba(0,0,0,0.5);" id="xerror_modal">
+            <div style="position: relative; width: auto; max-width: 500px; margin: 30px auto; display: flex; flex-direction: column; background-color: #fff; border-radius: 10px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); top: 50%; transform: translateY(-50%);">
+                <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px 20px; border-bottom: 1px solid #dee2e6; border-radius: 10px 10px 0 0;">
+                    <h5 style="margin: 0; font-size: 18px; font-weight: 600;">Couples Connect Says:</h5>
+                    <button type="button" style="background: none; border: none; font-size: 20px; cursor: pointer; color: #999;" onclick="document.getElementById('xerror_modal').style.display='none'">×</button>
+                </div>
+                <div style="padding: 20px;">
+                    <p class="error_msg" style="margin: 0;">Please fill up all required fields.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Footer -->
+        <footer style="background-color: #23408E; padding: 15px 0; margin-top: auto;">
+            <div style="max-width: 1200px; margin: 0 auto; padding: 0 20px;">
+                <div style="display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+                    
+                    <!-- Left Side - Office Info -->
+                    <div style="display: flex; align-items: center; gap: 15px; flex: 1; min-width: 300px;">
+                        <img src="images/op office logo.png" style="height: 60px; width: auto;">
+                        <div style="font-family: Inter; color: white;">
+                            <div class="office-name" style="font-size: 14px; font-weight: bold; margin-bottom: 4px;">
+                                City Population Office of Cabuyao
+                            </div>
+                            <div style="font-size: 11px; margin-bottom: 2px;">
+                                Brgy Dos. Cabuyao Retail Plaza, Cabuyao, Philippines
+                            </div>
+                            <div style="font-size: 11px;">
+                                cpocabuyao@gmail.com
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Side - Help Icon -->
+                    <div>
+                        <img src="images/pajamas_question.png" style="width: 50px; height: auto;">
+                    </div>
+                </div>
             </div>
         </footer>
-
-        <!-- HIDDEN VARS -->
-        <input type='hidden' id="reg_email_h" name="reg_email_h" value="<?php echo $_POST['reg_email']?>">
-        <input type='hidden' name="confirm_email_h" id='confirm_email_h' value="<?php echo $_POST['confirm_email'];?>">
-        <input type='hidden' name="reg_pwd_h" id='reg_pwd_h' value="<?php echo $_POST['reg_pwd']; ?>">
-        <input type='hidden' name="confirm_pwd_h" id='confirm_pwd_h' value="<?php echo $_POST['confirm_pwd'] ?>">
+        
+        <!-- Hidden Variables -->
+        <input type='hidden' id="reg_email_h" name="reg_email_h" value="">
+        <input type='hidden' name="confirm_email_h" id='confirm_email_h' value="">
+        <input type='hidden' name="reg_pwd_h" id='reg_pwd_h' value="">
+        <input type='hidden' name="confirm_pwd_h" id='confirm_pwd_h' value="">
+        
     </form>
+
+    <script>
+        // Keep the original onContinue function placeholder
+        function onContinue() {
+            // Add your form validation and submission logic here
+            console.log('Continue button clicked');
+            
+            // Example validation (you can modify this based on your needs)
+            var requiredFields = [
+                'first_name', 'middle_name', 'last_name', 'sex', 'bday', 'country', 'municipality', 'occupation', 'cellphone_number',
+                'first_name2', 'middle_name2', 'last_name2', 'sex2', 'bday2', 'country2', 'municipality2', 'occupation2', 'cellphone_number2'
+            ];
+            
+            var isValid = true;
+            var emptyFields = [];
+            
+            requiredFields.forEach(function(fieldId) {
+                var field = document.getElementById(fieldId);
+                if (!field || !field.value.trim()) {
+                    isValid = false;
+                    emptyFields.push(fieldId);
+                }
+            });
+            
+            if (!isValid) {
+                document.querySelector('.error_msg').innerHTML = 'Please fill up all required fields.';
+                document.getElementById('xerror_modal').style.display = 'block';
+                return;
+            }
+            
+            // If validation passes, submit the form or proceed to next step
+            alert('Form validation passed! Add your submission logic here.');
+        }
+    </script>
+
+</body>
+</html>
 
     <script>
 
