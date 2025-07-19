@@ -9,22 +9,25 @@ require_once('resources/connect4.php');
 
 $userId = isset($_POST['userId']) ? (int)$_POST['userId'] : 0;
 
-(int) $status = 1;
-
 try 
 { 
-	    $st = $link->prepare("UPDATE mf_prog_users SET print_status = '1' WHERE recid = ?");
-	    $st->bindParam(':print_status', $status, PDO::PARAM_INT);
-	    $st->bindParam(':recid', $userId, PDO::PARAM_INT);
-
-        $st->execute();
-
-        echo $st->rowCount();
+    // Option 1: Using positional parameters (recommended for your current setup)
+    $st = $link->prepare("UPDATE mf_prog_users SET print_status = ? WHERE recid = ?");
+    $st->execute([1, $userId]);
+    
+    echo json_encode([
+        'success' => true,
+        'rowCount' => $st->rowCount(),
+        'userId' => $userId
+    ]);
 
 } 
-	catch(Exception $e) 
+catch(Exception $e) 
 {
-    echo $e->getMessage();
+    echo json_encode([
+        'success' => false,
+        'error' => $e->getMessage()
+    ]);
 }
 
 ?>

@@ -305,7 +305,7 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                     } else if ($act_status === "PCT") {
                                         // When PCT but print_status is not 1, enable certification
                                         $req_now_disabled = "";
-                                        $pmc_book_disabled = "disabled";
+                                        $book_now_disbaled = "disabled";
                                     } else {
                                         echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
                                             echo "<img src='images/Group.png'>";
@@ -686,17 +686,25 @@ if($act_status === "PCT") {
                     userId: <?php echo $_SESSION['usr_recid']; ?>
                 },
                 type: "post",
-                url: "update_print_status.php", // This should update print_status to "1"
-                success: function(xdata) {
-                    window.print();
-                    location.reload(); // This will refresh the page to show updated status
+                url: "update_print_status.php",
+                dataType: "json", // Expect JSON response
+                success: function(response) {
+                    console.log("Response:", response);
+                    
+                    if (response.success && response.rowCount > 0) {
+                        window.print();
+                        location.reload();
+                    } else {
+                        alert("Update failed: " + (response.error || "No rows updated"));
+                    }
                 },
                 error: function(request, status, error) {
                     console.log("Error: " + error);
+                    console.log("Response:", request.responseText);
+                    alert("Error updating print status: " + error);
                 }
             });
         }
-
         function validateEmail(input) {
             var validRegex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
 

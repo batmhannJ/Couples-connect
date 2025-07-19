@@ -274,14 +274,15 @@ ul.checkout-bar:before {
                                                 WHERE mf_venue.venue != ''
                                                 GROUP BY mf_venue.venue_id";
 
-$stmt = $link->prepare($select_db_xid);
-$stmt->execute();
-                        
+                            $stmt = $link->prepare($select_db_xid);
+                            $stmt->execute();
+                        $xcounterx = 0;
+
                             while($row_xid = $stmt->fetch()){
     // Check if user has completed forms
     $select_db_checker = "SELECT * FROM pro_meiform 
-                         LEFT JOIN mf_prog_users ON pro_meiform.userid = mf_prog_users.userid 
-                         WHERE pro_meiform.userid=? AND pro_meiform.status='PMC'";
+                        LEFT JOIN mf_prog_users ON pro_meiform.userid = mf_prog_users.userid 
+                        WHERE pro_meiform.userid=? AND pro_meiform.status='POST'";
     $stmt_checker = $link->prepare($select_db_checker);
     $stmt_checker->execute(array($_SESSION['usr_id']));
     $row_checker = $stmt_checker->fetchAll();
@@ -307,11 +308,11 @@ $stmt->execute();
                             ext_appointment_info.recid,
                             mf_venue.venue,
                             mf_appointment_info.userid
-                     FROM ext_appointment_info 
-                     INNER JOIN mf_appointment_info ON ext_appointment_info.appointment_info_id = mf_appointment_info.appointment_info_id 
-                     INNER JOIN mf_venue ON ext_appointment_info.venue_id = mf_venue.venue_id  
-                     WHERE mf_venue.venue_id = ? 
-                     AND ext_appointment_info.clinic_date";
+                        FROM ext_appointment_info 
+                        INNER JOIN mf_appointment_info ON ext_appointment_info.appointment_info_id = mf_appointment_info.appointment_info_id 
+                        INNER JOIN mf_venue ON ext_appointment_info.venue_id = mf_venue.venue_id  
+                        WHERE mf_venue.venue_id = ? 
+                        AND ext_appointment_info.clinic_date";
         
         $stmt_2 = $link->prepare($select_2);
         $stmt_2->execute(array($row_xid['venue_id'])); // Use venue_id instead of venue name
@@ -343,100 +344,102 @@ $stmt->execute();
         echo "</td>";
 
         echo "<td class='text-center'>";
-        echo "<button type='button' disabled class='btn book-btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
+            echo "<button type='button' disabled class='btn book-btn' onclick='bookAppointment(this)' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";
         echo "</td>";
 
         echo "</tr>";
-    }else{
+    } else {
+        // FIXED: Check if user has POST status appointments before proceeding
+        $select_db_times2 = "SELECT pro_meiform.userid as 'userid', ext_mf_meiform.date as 'date', ext_mf_meiform.venue as 'venue', pro_meiform.counselorid as 'counselorid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.meiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."' AND pro_meiform.status='POST' LIMIT 1";
+        $stmt_times2 = $link->prepare($select_db_times2);
+        $stmt_times2->execute();
+        $row_times2 = $stmt_times2->fetch();
+        
+        echo "<tr>";
+            echo "<td style='padding-bottom:15px;padding-top:10px'>";
+                echo "<div class='container text-start' style='font-family:inter;font-weight:700;font-size:25px;color:black;padding-left:25px'>";    
 
-                                $select_db_times2 = "SELECT pro_meiform.userid as 'userid', ext_mf_meiform.date as 'date', ext_mf_meiform.venue as 'venue', pro_meiform.counselorid as 'counselorid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.meiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."' AND pro_meiform.status='PMC' LIMIT 1";
-                                $stmt_times2	= $link->prepare($select_db_times2);
-                                $stmt_times2->execute();
-                                $row_times2 = $stmt_times2->fetch();
-                                
-                                echo "<tr>";
-                                    echo "<td style='padding-bottom:15px;padding-top:10px'>";
-                                        echo "<div class='container text-start' style='font-family:inter;font-weight:700;font-size:25px;color:black;padding-left:25px'>";    
+                // FIXED: Check if $row_times2 is not false before accessing array elements
+                if($row_times2 && $row_xid['is_online'] == "Y" && ($row_times2['venue'] == $row_xid['venue'])){
+                    echo "<a target='_blank' style='color:blue!important;text-decoration:underline!important' href='".$row_xid["venue_link"]."'>".$row_xid["venue"]."</a>";   
+                } else {
+                    echo $row_xid["venue"];  
+                }
+                echo "</div>";   
+            echo "</td>";
 
-                                        if($row_xid['is_online'] == "Y" && ($row_times2['venue'] == $row_xid['venue'])){
-                                            echo "<a target='_blank' style='color:blue!important;text-decoration:underline!important' href='".$row_xid["venue_link"]."'>".$row_xid["venue"]."</a>";   
-                                        }else{
-                                            echo $row_xid["venue"];  
-                                        }
-                                        echo "</div>";   
-                                    echo "</td>";
-          
-                                    if($row_times2['venue'] == $row_xid['venue']){
+            // FIXED: Check if $row_times2 exists and has data before comparing venue
+            if($row_times2 && $row_times2['venue'] == $row_xid['venue']){
+
+                $givendate = $row_times2['date'];
+    
+                $dateObject = DateTime::createFromFormat('Y-m-d', $givendate);
+                $weekday = strtolower($dateObject->format('l'));
                     
-                                        $givendate = $row_times2['date'];
-                            
-                                        $dateObject = DateTime::createFromFormat('Y-m-d', $givendate);
-                                        $weekday = strtolower($dateObject->format('l'));
-                                            
-                                            $select_db_times = "SELECT ext_mf_meiform.date as 'date', ext_mf_meiform.from_to as 'from_to', pro_meiform.usermeiformid as 'usermeiformid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.meiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."'  AND pro_meiform.status='PMC' LIMIT 1";
-                                            $stmt_times	= $link->prepare($select_db_times);
-                                            $stmt_times->execute();
-                                            $selected_timeline = '';
-                                            while($row_times = $stmt_times->fetch()){
+                $select_db_times = "SELECT ext_mf_meiform.date as 'date', ext_mf_meiform.from_to as 'from_to', pro_meiform.usermeiformid as 'usermeiformid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.meiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."'  AND pro_meiform.status='POST' LIMIT 1";
+                $stmt_times = $link->prepare($select_db_times);
+                $stmt_times->execute();
+                $selected_timeline = '';
+                while($row_times = $stmt_times->fetch()){
 
-                                                $meiformuid = $row_times['usermeiformid'];
+                    $meiformuid = $row_times['usermeiformid'];
 
-                                                echo "<td>";
-                                                    echo "<select class='form-control w-75 ms-2 select_time' disabled>"; 
-                                                        echo "<option>"; 
-                                                            echo $row_times['date']; 
-                                                        echo "</option>"; 
-                                                    echo "</select>";
+                    echo "<td>";
+                        echo "<select class='form-control w-75 ms-2 select_time' disabled>"; 
+                            echo "<option>"; 
+                                echo $row_times['date']; 
+                            echo "</option>"; 
+                        echo "</select>";
 
-                                                echo "</td>";
+                    echo "</td>";
 
-                                                echo "<td>";
-                                                    echo "<select class='form-control w-75 ms-2 select_date' disabled>";
-                                                        echo "<option>"; 
-                                                            echo $row_times['from_to']; 
-                                                        echo "</option>"; 
-                                                    echo "</select>";
-                                                echo "</td>";
+                    echo "<td>";
+                        echo "<select class='form-control w-75 ms-2 select_date' disabled>";
+                            echo "<option>"; 
+                                echo $row_times['from_to']; 
+                            echo "</option>"; 
+                        echo "</select>";
+                    echo "</td>";
 
-                                                echo "<td class='text-center'>";
-                                                    echo $row_xid['slots_avail'];    
-                                                echo "</td>";
-                                                
-                                                echo "<td class='text-center'>";
-                                                    echo "<button type='button' onclick='ajaxNew(\"cancel_booking\",\"\",\"\",\"\",\"".$meiformuid."\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Cancel</button>";    
-                                                echo "</td>";
-
-                                                $xcounterx++;
-                                            }
-                                    }else{
-                                        echo "<td>";
-                                            echo "<select class='form-control w-75 ms-2'' disabled>";   
-                                                echo "<option disabled selected>"; 
-                                                    echo "Select a Date..."; 
-                                                echo "</option>"; 
-                                            echo "</select>";
-                                        echo "</td>";
+                    echo "<td class='text-center'>";
+                        echo $row_xid['slots_avail'];    
+                    echo "</td>";
                     
-                                        echo "<td class='text-center'>";
-                                            echo "<select class='form-control w-75 ms-2'' disabled>";   
-                                                echo "<option disabled selected>"; 
-                                                    echo "Select a Time..."; 
-                                                echo "</option>"; 
-                                            echo "</select>";
-                                        echo "</td>";
+                    echo "<td class='text-center'>";
+                        echo "<button type='button' onclick='ajaxNew(\"cancel_booking\",\"\",\"\",\"\",\"".$meiformuid."\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Cancel</button>";    
+                    echo "</td>";
 
-                                        echo "<td class='text-center'>";
-                                            echo $row_xid['slots_avail'];    
-                                        echo "</td>";
+                    $xcounterx++;
+                }
+            } else {
+                echo "<td>";
+                    echo "<select class='form-control w-75 ms-2'' disabled>";   
+                        echo "<option disabled selected>"; 
+                            echo "Select a Date..."; 
+                        echo "</option>"; 
+                    echo "</select>";
+                echo "</td>";
 
-                                        echo "<td class='text-center'>";
-                                            echo " <button type='button' disabled class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
-                                        echo "</td>";
-                                    }
-                        
-                                echo "</tr>";                       
-                               } 
-                            }                            
+                echo "<td class='text-center'>";
+                    echo "<select class='form-control w-75 ms-2'' disabled>";   
+                        echo "<option disabled selected>"; 
+                            echo "Select a Time..."; 
+                        echo "</option>"; 
+                    echo "</select>";
+                echo "</td>";
+
+                echo "<td class='text-center'>";
+                    echo $row_xid['slots_avail'];    
+                echo "</td>";
+
+                echo "<td class='text-center'>";
+                    echo "<button type='button' disabled class='btn book-btn' onclick='bookAppointment(this)' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";
+                echo "</td>";
+            }
+
+        echo "</tr>";                       
+    } 
+}                         
                             ?>
                         </table>
 
@@ -510,7 +513,7 @@ $stmt->execute();
         <input type="hidden" name="recid_hidden" id="recid_hidden">
         <input type="hidden" name="act_status_hidden" id="act_status_hidden" value="PMC">
 
-        <footer style='height:100px;background-color:#23408E' class='footer'>
+        <footer style="height:100px;background-color:#23408E">
             <div class="container-fluid"  style='height:100px'>
                 <div class="row"  style='height:100px'>
                     <div class="col-4">
@@ -546,20 +549,18 @@ $stmt->execute();
     </form>
 
 <script>
-console.log('DEBUG: JavaScript loaded');
-
-// Enhanced date selection handler
+// Fixed JavaScript for Post Marriage Booking
 $(document).on('change', '.select_date', function(e) {
     console.log('DEBUG: Date dropdown changed');
     
     var selectedOption = $(this).find('option:selected');
-    var xdate = selectedOption.val();
+    var xdate = selectedOption.data('xdate');
     var xrecid = selectedOption.data('xrecid');
     var xvenue = selectedOption.data('xvenue');
     var xtimefrom = selectedOption.data('xtimefrom');
     var xtimeto = selectedOption.data('xtimeto');
     var xslotsavail = selectedOption.data('xslotsavail');
-    var venueId = $(this).data('venue-id');
+    var xcounselorid = selectedOption.data('xcounselorid');
     
     console.log('DEBUG: Selected data:', {
         date: xdate,
@@ -568,13 +569,14 @@ $(document).on('change', '.select_date', function(e) {
         timeFrom: xtimefrom,
         timeTo: xtimeto,
         slots: xslotsavail,
-        venueId: venueId
+        counselorId: xcounselorid
     });
     
     // Store values in hidden fields
     $("#venue_hidden").val(xvenue);
     $("#date_hidden").val(xdate);
     $("#recid_hidden").val(xrecid);
+    $("#counselor_hidden").val(xcounselorid);
     
     var timeDropdown = $(this).closest('tr').find('.select_time');
     var slotsCell = $(this).closest('tr').find('.slots-cell');
@@ -594,9 +596,8 @@ $(document).on('change', '.select_date', function(e) {
         
         console.log('DEBUG: Time dropdown populated successfully');
     } else {
-        console.log('DEBUG: No time data found, making AJAX call');
-        // Fallback to AJAX if no time data in option
-        fetchTimesForDate(xdate, venueId, timeDropdown, slotsCell);
+        console.log('DEBUG: No time data found');
+        timeDropdown.html('<option disabled selected>No times available</option>');
     }
 });
 
@@ -608,7 +609,7 @@ $(document).on('change', '.select_time', function(e) {
     $("#timeline_hidden").val(selected_time);
     
     var bookButton = $(this).closest('tr').find('.book-btn');
-    if (selected_time && selected_time !== 'Select Time...') {
+    if (selected_time && selected_time !== 'Select Time...' && selected_time !== 'No times available') {
         bookButton.prop('disabled', false);
         console.log('DEBUG: Book button enabled');
     } else {
@@ -616,47 +617,6 @@ $(document).on('change', '.select_time', function(e) {
         console.log('DEBUG: Book button disabled');
     }
 });
-
-// Function to fetch times via AJAX
-function fetchTimesForDate(date, venueId, timeDropdown, slotsCell) {
-    console.log('DEBUG: Fetching times for date:', date, 'venue:', venueId);
-    
-    $.ajax({
-        url: 'post_marriage_ajax.php',
-        type: 'POST',
-        dataType: 'json',
-        data: {
-            event_action: 'get_times_for_date',
-            date: date,
-            venue_id: venueId
-        },
-        success: function(response) {
-            console.log('DEBUG: AJAX response:', response);
-            
-            if(response.success && response.times && response.times.length > 0) {
-                timeDropdown.html('<option disabled selected>Select Time...</option>');
-                
-                $.each(response.times, function(index, timeSlot) {
-                    timeDropdown.append('<option value="' + timeSlot.time_range + '">' + timeSlot.time_range + '</option>');
-                });
-                
-                timeDropdown.prop('disabled', false);
-                
-                if(response.slots_available) {
-                    slotsCell.text(response.slots_available);
-                }
-            } else {
-                console.log('DEBUG: No times found in AJAX response');
-                timeDropdown.html('<option disabled selected>No times available</option>');
-            }
-        },
-        error: function(xhr, status, error) {
-            console.error('DEBUG: AJAX error:', error);
-            console.error('DEBUG: Response text:', xhr.responseText);
-            timeDropdown.html('<option disabled selected>Error loading times</option>');
-        }
-    });
-}
 
 $(document).ready(function() {
     console.log('DEBUG: Document ready');
@@ -671,7 +631,6 @@ $(document).ready(function() {
 function bookAppointment(button) {
     console.log('DEBUG: Book now button clicked');
     
-    var row = $(button).closest('tr');
     var venue = $("#venue_hidden").val();
     var date = $("#date_hidden").val();
     var timeline = $("#timeline_hidden").val();
@@ -686,15 +645,35 @@ function bookAppointment(button) {
         recid: recid
     });
     
-    if (!venue || !date || !timeline || !counselor || !recid) {
-        alert('Please select both date and time before booking.');
+    // Improved validation
+    if (!venue || venue === '') {
+        alert('Please select a venue.');
         return;
     }
+    if (!date || date === '') {
+        alert('Please select a date.');
+        return;
+    }
+    if (!timeline || timeline === '' || timeline === 'Select Time...') {
+        alert('Please select a time.');
+        return;
+    }
+    if (!counselor || counselor === '') {
+        alert('Counselor information is missing. Please try selecting the date again.');
+        return;
+    }
+    if (!recid || recid === '') {
+        alert('Appointment record ID is missing. Please try selecting the date again.');
+        return;
+    }
+
+    // Disable button to prevent double-clicking
+    $(button).prop('disabled', true).text('Booking...');
     
     $.ajax({
-        url: 'post_marriage_ajax.php', // Make sure this matches your AJAX handler file
+        url: 'post_marriage_ajax.php',
         type: 'POST',
-        dataType: 'json',
+        dataType: 'text', // Changed to text first to debug
         data: {
             event_action: 'book_now',
             date: date,
@@ -704,29 +683,111 @@ function bookAppointment(button) {
             venue_hidden: venue
         },
         success: function(response) {
-            console.log('DEBUG: Booking response:', response);
+            console.log('DEBUG: Raw response:', response);
             
-            if (response.success) {
-                alert('Booking successful!');
-                // Reload the page or update the table
-                if (response.html) {
-                    $('#table_data').html(response.html);
-                } else {
+            try {
+                // Try to parse JSON
+                var jsonResponse = JSON.parse(response);
+                console.log('DEBUG: Parsed JSON response:', jsonResponse);
+                
+                if (jsonResponse.success) {
+                    alert('Booking successful!');
                     location.reload();
+                } else {
+                    alert('Booking failed: ' + (jsonResponse.message || 'Unknown error'));
+                    $(button).prop('disabled', false).text('Book now');
                 }
-            } else {
-                alert('Booking failed: ' + (response.message || 'Unknown error'));
+            } catch (parseError) {
+                console.error('DEBUG: JSON parse error:', parseError);
+                console.log('DEBUG: Response that failed to parse:', response);
+                alert('Server error: Invalid response format');
+                $(button).prop('disabled', false).text('Book now');
             }
         },
         error: function(xhr, status, error) {
             console.error('DEBUG: Booking AJAX error:', error);
+            console.error('DEBUG: Status:', status);
             console.error('DEBUG: Response text:', xhr.responseText);
-            alert('Error occurred while booking. Please try again.');
+            console.error('DEBUG: Status code:', xhr.status);
+            
+            alert('Error occurred while booking. Please try again. (Status: ' + xhr.status + ')');
+            $(button).prop('disabled', false).text('Book now');
         }
     });
 }
-</script>
 
+function ajaxNew(action, param1, param2, param3, meiformid) {
+    console.log('DEBUG: Cancel booking called with meiformid:', meiformid);
+    
+    if (action === 'cancel_booking') {
+        if (confirm('Are you sure you want to cancel this booking?')) {
+            $.ajax({
+                url: 'post_marriage_ajax.php',
+                type: 'POST',
+                dataType: 'text', // Changed to text first to debug
+                data: {
+                    event_action: 'cancel_booking',
+                    meiformid_post: meiformid
+                },
+                success: function(response) {
+                    console.log('DEBUG: Raw cancel response:', response);
+                    
+                    try {
+                        var jsonResponse = JSON.parse(response);
+                        console.log('DEBUG: Parsed cancel response:', jsonResponse);
+                        
+                        if (jsonResponse.success) {
+                            alert('Booking cancelled successfully!');
+                            location.reload();
+                        } else {
+                            alert('Cancellation failed: ' + (jsonResponse.message || 'Unknown error'));
+                        }
+                    } catch (parseError) {
+                        console.error('DEBUG: JSON parse error:', parseError);
+                        console.log('DEBUG: Response that failed to parse:', response);
+                        alert('Server error: Invalid response format');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('DEBUG: Cancel AJAX error:', error);
+                    console.error('DEBUG: Response text:', xhr.responseText);
+                    alert('Error occurred while cancelling. Please try again.');
+                }
+            });
+        }
+    }
+}
+
+// Add feedback functions
+function openFeedback() {
+    $('#modal_feedback').modal('show');
+}
+
+function ajaxSubmit() {
+    var subject = $('#feedback_subject').val();
+    var remarks = $('#feedback_remarks').val();
+    
+    if (!subject.trim()) {
+        alert('Please enter a subject.');
+        return;
+    }
+    
+    if (!remarks.trim()) {
+        alert('Please enter your feedback.');
+        return;
+    }
+    
+    // You can implement the feedback submission AJAX call here
+    alert('Feedback submitted successfully!');
+    $('#modal_feedback').modal('hide');
+    $('#feedback_subject').val('');
+    $('#feedback_remarks').val('');
+}
+
+function proceed_func() {
+    $('#proceed_modal').modal('hide');
+}
+</script>
 <?php 
 require "includes/cc_footer.php";
 ?>
