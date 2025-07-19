@@ -171,6 +171,40 @@ require "includes/cc_header.php";
 </script>
 
      <style>
+        input[type="date"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    cursor: pointer;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator {
+    position: absolute;
+    right: 8px;
+    cursor: pointer;
+    filter: invert(0.5);
+    width: 20px;
+    height: 20px;
+}
+
+input[type="date"]:focus {
+    border-color: #23408E !important;
+    box-shadow: 0 0 0 2px rgba(35, 64, 142, 0.1) !important;
+    outline: none;
+}
+
+/* Ensure date inputs are clickable */
+input[type="date"]::-webkit-inner-spin-button,
+input[type="date"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox specific fixes */
+input[type="date"]::-moz-focus-inner {
+    border: 0;
+}
         * {
             margin: 0;
             padding: 0;
@@ -320,12 +354,13 @@ require "includes/cc_header.php";
                             </select>
                         </div>
                         <div style="flex: 1;">
-                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Birthday: <span style="color: red;">*</span></label>
-                            <input type='date' name="bday" id='bday' 
-                                   class="form-control date_picker"
-                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
-                                   autocomplete='off'>
-                        </div>
+    <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Birthday: <span style="color: red;">*</span></label>
+    <input type='date' name="bday" id='bday' 
+           class="form-control"
+           style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box; background-color: white; color: #333;" 
+           autocomplete='off'
+           max="<?php echo date('Y-m-d'); ?>">
+</div>
                     </div>
 
                     <!-- Country and Municipality Row -->
@@ -421,12 +456,13 @@ require "includes/cc_header.php";
                             </select>
                         </div>
                         <div style="flex: 1;">
-                            <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Birthday: <span style="color: red;">*</span></label>
-                            <input type='date' name="bday2" id='bday2' 
-                                   class="form-control date_picker"
-                                   style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box;" 
-                                   autocomplete='off'>
-                        </div>
+    <label style="color: black; font-size: 17px; font-weight: 500; margin-bottom: 6px; display: block;">Birthday: <span style="color: red;">*</span></label>
+    <input type='date' name="bday2" id='bday2' 
+           class="form-control"
+           style="height: 45px; border: 1px solid #ddd; border-radius: 8px; width: 100%; padding: 0 12px; font-size: 14px; box-sizing: border-box; background-color: white; color: #333;" 
+           autocomplete='off'
+           max="<?php echo date('Y-m-d'); ?>">
+</div>
                     </div>
 
                     <!-- Country and Municipality Row -->
@@ -532,6 +568,38 @@ require "includes/cc_header.php";
     </form>
 
     <script>
+        document.addEventListener('DOMContentLoaded', function() {
+    // Get both birthday inputs
+    const bday1 = document.getElementById('bday');
+    const bday2 = document.getElementById('bday2');
+    
+    // Set max date to today
+    const today = new Date().toISOString().split('T')[0];
+    bday1.max = today;
+    bday2.max = today;
+    
+    // Add event listeners to ensure the inputs work
+    bday1.addEventListener('focus', function() {
+        this.showPicker();
+    });
+    
+    bday2.addEventListener('focus', function() {
+        this.showPicker();
+    });
+    
+    // Alternative click handler for better browser support
+    bday1.addEventListener('click', function() {
+        if (this.showPicker) {
+            this.showPicker();
+        }
+    });
+    
+    bday2.addEventListener('click', function() {
+        if (this.showPicker) {
+            this.showPicker();
+        }
+    });
+});
         // Keep the original onContinue function placeholder
         function onContinue() {
             // Add your form validation and submission logic here

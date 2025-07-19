@@ -4,255 +4,129 @@ require "includes/cc_header.php";
     <style>
         .overflowYScroll{
             overflow-y:scroll;
-        } 
+        }
     </style>
 
     <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" />
     <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 
-<!-- header.php -->
-<div style="width: 100%; font-family: Inter, sans-serif;">
-    <div style="width: 100%; background-color: white; height: 80px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; position: relative;">
+    <div class="container-fluid">
+        <div class='row bg-white' style="height:99px">
+            <div class="col-3 pe-0 d-flex align-items-center">
+                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+            </div>
 
-        <!-- Logo Section -->
-        <div style="flex: 0 0 auto; display: flex; align-items: center;">
-            <img src="images/350 x 88.png" style="height: 60px; width: auto;">
-        </div>
+            <div class="col-4 offset-5" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
+                <div style="flex:0.8">
+                    <a href="http://localhost/couples-connect/index.php"  class="has_hover" style='color:black;text-decoration:none'>HOME</a>
+                </div>
 
-        <!-- Navigation Links -->
-        <div id="desktop-nav" style="display: flex; flex-direction: row; justify-content: center; font-family: Inter; font-size: 18px; align-items: center; gap: 30px;">
-            <a href="http://localhost/couples-connect/login_cc.php" class="nav-link-custom">HOME</a>
-            <a href="http://localhost/couples-connect/about-us/" class="nav-link-custom">ABOUT US</a>
-            <a href="http://localhost/couples-connect/contact-us/" class="nav-link-custom">CONTACTS</a>
-            <div style="height: 20px; width: 1px; background-color: #ddd; margin: 0 5px;"></div>
-            <a href="http://localhost/couples-connect/login_cc.php" class="login-btn">LOGOUT</a>
-        </div>
+                <div style="flex:1.1">
+                    
+                    <a href="http://localhost/couples-connect_wp/about-us/"  class="has_hover" style='color:black;text-decoration:none'>ABOUT US</a>
 
-        <!-- Mobile Menu Button -->
-        <button id="mobile-btn" onclick="toggleMenu()" 
-                style="display: none; background: none; border: none; font-size: 24px; cursor: pointer; padding: 8px; border-radius: 6px; color: #333;">
-            <span id="menu-icon">☰</span>
-        </button>
-    </div>
+                </div>
 
-    <!-- Mobile Menu -->
-    <div id="mobile-menu" style="display: none; background-color: white; box-shadow: 0 4px 12px rgba(0,0,0,0.15); position: absolute; top: 80px; left: 0; right: 0; z-index: 1000; padding: 20px;">
-        <div style="display: flex; flex-direction: column; gap: 15px;">
-            <a href="http://localhost/couples-connect/login_cc.php" class="nav-link-mobile">HOME</a>
-            <a href="http://localhost/couples-connect/about-us/" class="nav-link-mobile">ABOUT US</a>
-            <a href="http://localhost/couples-connect/contact-us/" class="nav-link-mobile">CONTACTS</a>
-            <a href="http://localhost/couples-connect/login_cc.php" class="login-btn-mobile">LOGIN</a>
+                <div style="flex:1.1">
+                    <a href="http://localhost/couples-connect_wp/contact-us/"  class="has_hover" style='color:black;text-decoration:none'>CONTACTS</a>
+                </div>
+
+                <div style="flex:1">
+                    <a href="http://localhost/couples-connect/index.php" class="has_hover" style='color:black;text-decoration:none'>| index.php</a>
+                </div>
+
+            </div> 
         </div>
     </div>
-</div>
-
-<style>
-    .nav-link-custom {
-        color: black;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 8px 12px;
-        border-radius: 6px;
-        transition: all 0.3s ease;
-    }
-
-    .nav-link-custom:hover {
-        color: #23408E;
-        background-color: #f8f9fa;
-    }
-
-    .login-btn {
-        color: #23408E;
-        text-decoration: none;
-        font-weight: 600;
-        padding: 10px 16px;
-        border: 2px solid #23408E;
-        border-radius: 8px;
-        transition: all 0.3s ease;
-    }
-
-    .login-btn:hover {
-        background-color: #23408E;
-        color: white;
-    }
-
-    .nav-link-mobile {
-        color: black;
-        text-decoration: none;
-        font-weight: 500;
-        padding: 12px 16px;
-        border-radius: 8px;
-        transition: background-color 0.3s ease;
-        font-family: Inter;
-    }
-
-    .nav-link-mobile:hover {
-        background-color: #f8f9fa;
-    }
-
-    .login-btn-mobile {
-        color: white;
-        text-decoration: none;
-        font-weight: 600;
-        padding: 12px 16px;
-        background: linear-gradient(90deg, rgb(35, 64, 142) 35%, rgb(60, 148, 198) 100%);
-        border-radius: 8px;
-        text-align: center;
-        transition: all 0.3s ease;
-        font-family: Inter;
-    }
-
-    .login-btn-mobile:hover {
-        background: linear-gradient(90deg, rgb(30, 58, 122) 35%, rgb(50, 128, 178) 100%);
-    }
-
-    @media (min-width: 768px) {
-        #desktop-nav {
-            display: flex !important;
-        }
-        #mobile-btn {
-            display: none !important;
-        }
-    }
-
-    @media (max-width: 767px) {
-        #desktop-nav {
-            display: none !important;
-        }
-        #mobile-btn {
-            display: block !important;
-        }
-
-        img[src*="350 x 88.png"] {
-            height: 45px !important;
-        }
-
-        div[style*="height: 80px"] {
-            height: 70px !important;
-        }
-
-        #mobile-menu {
-            top: 70px !important;
-        }
-    }
-
-    @media (max-width: 480px) {
-        img[src*="350 x 88.png"] {
-            height: 40px !important;
-        }
-
-        div[style*="height: 80px"], div[style*="height: 70px"] {
-            height: 65px !important;
-        }
-
-        #mobile-menu {
-            top: 65px !important;
-            padding: 15px !important;
-        }
-    }
-</style>
-
-<script>
-    let menuOpen = false;
-
-    function toggleMenu() {
-        const menu = document.getElementById('mobile-menu');
-        const icon = document.getElementById('menu-icon');
-
-        menuOpen = !menuOpen;
-
-        if (menuOpen) {
-            menu.style.display = 'block';
-            icon.innerHTML = '✕';
-        } else {
-            menu.style.display = 'none';
-            icon.innerHTML = '☰';
-        }
-    }
-
-    document.addEventListener('click', function (e) {
-        const menu = document.getElementById('mobile-menu');
-        const btn = document.getElementById('mobile-btn');
-
-        if (menuOpen && !menu.contains(e.target) && !btn.contains(e.target)) {
-            toggleMenu();
-        }
-    });
-
-    window.addEventListener('resize', function () {
-        if (window.innerWidth >= 768 && menuOpen) {
-            toggleMenu();
-        }
-    });
-</script>
-
     
-<div style="display: flex; justify-content: center; align-items: flex-start; padding: 40px 12px; background-color: #f9fafb; font-family: 'Inter', sans-serif;">
-  <form name="myforms" id="myforms" method="post" target="_self" style="width: 100%; max-width: 880px;">
-    <table class="main-table" style="width: 100%; filter: drop-shadow(0px 2px 10px rgba(0, 0, 0, 0.06));">
-      <tr>
-        <td>
-          <div style="background-color: #ffffff; border-radius: 16px; padding: 24px; border: 1px solid #e5e7eb; box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);">
+    <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
+        <table style="width:100%;height:calc(100% - 100px);	filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))">
+            <tr>
+                <td>
+                    <div class="row justify-content-center align-items-center">
+                        <div class='confirm_main_div' style='width:1400px;height:500px;background-color:white;border-radius:30px'>
+                            <div class="mx-5 px-3 pt-4 text-left login_form_header">
+                                <p style="margin-bottom:0;font-weight:bold;font-family:inter;font-size:33px">Confirmation</p>
+                                <p style="line-height:0.9;margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:21px;color:#9B9B9B">Personal Information</p>
+                                <img src="images/Rectangle 11942.png"/>
+                            </div>
 
-            <!-- Header -->
-            <div style="margin-bottom: 20px;">
-              <p style="font-size: 22px; font-weight: 600; color: #1f2937; margin: 0;">Confirmation</p>
-              <p style="font-size: 15px; font-weight: 500; color: #6b7280; margin: 4px 0 12px;">Personal Information</p>
-              <img src="images/Rectangle 11942.png" style="width: 100%; margin: 12px 0; border-radius: 6px;" />
+                            <div class="mx-5 px-3 pt-3 form-group">
+                                <label class='form-label'style="color:black;font-size:21px;font-family:inter">Please attach proof that one partner is from/ is a resident of Cabuyao City (i.e. Government ID, Birth Certificate, other government documents, letter of recommendation)</label>
+                                <div class="container mt-3 mx-0 px-0">
+                                    <input type="file"  name="file_1" id="file_1" class="form-control">
+                                </div>
+                            </div>
+                            <div class="mx-5 px-3 pt-2">
+                                <img src="images/Rectangle 11942.png" style="width:100%"/>
+                            </div>
+
+                            <div class="mt-3 mx-5 px-3 form-group" style="color:black;font-size:21px;font-family:inter">
+                                <label class='form-label'>(Available only for special cases i.e. partner living overseas, partner is pregnant, persons with disabilities)</label>
+                                <div class="row">
+                                    <div class="col-sm-12">
+                                        <div class="input-group input-group-sm" style='height:100%'>
+                                            <div style='height:100%;display:flex;align-items:center'>
+                                                <input type="checkbox" name="chk_pmoc" id="chk_pmoc" style="width:30px;height:auto" value="0" />
+                                            </div>
+    
+                                            <label class="checkbox-inline mt-2" aria-describedby="ProcessingConsultantYN" id="lbProcessingConsultant" for="ProcessingConsultantYN">Do you wish to apply for Online PMOC? </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mx-5 mb-5 px-3 pmoc_tab" style='display:none'>
+
+                                <div class="pt-4 text-left index.php_form_header">
+                                    <p style="margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:33px">PMOC Application</p>
+                                    <p style="line-height:0.9;margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:21px;color:#9B9B9B">Personal Information</p>
+                                    <img src="images/Rectangle 11942.png" style='width:100%'/>
+                                </div>
+
+                                <label class='form-label' style="color:black;font-size:21px;font-family:inter">
+                                    Justification
+                                </label>
+
+                                <textarea class="form-control" rows="3" name="justification" id="justification"></textarea>
+                                
+                                <label class='form-label mt-3' style="color:black;font-size:21px;font-family:inter">
+                                    Please attach evidence (Official government documents or medical certificate:)
+                                </label>
+
+                                <div class="container mx-0 px-0">
+                                    <input type="file" name="file_2" id="file_2" class="form-control">
+                                </div>
+                        </div>
+
+                        </div>
+                    </div>
+
+                                
+
+                    <div class="pt-4 mt-1 form-group d-flex align-items-center justify-content-center">
+                        <button onclick="submit_user()" type="button" class="btn" style="background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:300px;height:50px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
+                    </div>
+                </td>
+            </tr>
+
+        
+        </table>
+
+        <div class="modal fade  xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-content" style='border-radius:15px'>
+                    <div class="modal-header">
+                        <h5 class="modal-title error_msg_title" style="font-size:38px;font-family:inter;font-weight:bold">Confirmation!</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p class="error_msg" style='font-family:inter;font-size:24px;font-weight:300'>Modal body text goes here.</p>
+                    </div>
+     
+                </div>
             </div>
-
-            <!-- File Upload -->
-            <div style="margin-bottom: 20px;">
-              <label style="font-size: 14px; font-weight: 500; color: #374151; display: block; margin-bottom: 6px;">
-                Please attach proof that one partner is from/ is a resident of Cabuyao City
-              </label>
-              <input type="file" name="file_1" id="file_1" style="padding: 8px 10px; font-size: 14px; width: 100%; border: 1px solid #d1d5db; border-radius: 6px;">
-            </div>
-
-            <!-- Image Divider -->
-            <div style="margin: 16px 0;">
-              <img src="images/Rectangle 11942.png" style="width: 100%; border-radius: 6px;" />
-            </div>
-
-            <!-- Checkbox -->
-            <div style="margin-bottom: 20px;">
-              <label style="font-size: 14px; font-weight: 500; color: #374151; display: block; margin-bottom: 6px;">
-                (Available only for special cases)
-              </label>
-              <div style="display: flex; align-items: center; gap: 10px;">
-                <input type="checkbox" name="chk_pmoc" id="chk_pmoc" value="0" style="width: 18px; height: 18px; accent-color: #2563eb;" />
-                <label for="chk_pmoc" style="font-size: 14px; color: #374151;">Do you wish to apply for Online PMOC?</label>
-              </div>
-            </div>
-
-            <!-- PMOC Section -->
-            <div class="pmoc_tab" style="display: none; margin-top: 20px;">
-              <div style="margin-bottom: 20px;">
-                <p style="font-size: 20px; font-weight: 600; color: #1f2937; margin: 0;">PMOC Application</p>
-                <p style="font-size: 15px; font-weight: 500; color: #6b7280; margin: 4px 0 12px;">Personal Information</p>
-                <img src="images/Rectangle 11942.png" style="width: 100%; margin-top: 12px; border-radius: 6px;" />
-              </div>
-
-              <label style="font-size: 14px; font-weight: 500; color: #374151; display: block; margin-bottom: 6px;">Justification</label>
-              <textarea name="justification" id="justification" rows="3" style="font-size: 14px; padding: 10px; resize: vertical; border: 1px solid #d1d5db; border-radius: 6px; width: 100%;"></textarea>
-
-              <label style="font-size: 14px; font-weight: 500; color: #374151; margin-top: 16px; margin-bottom: 6px; display: block;">Please attach evidence:</label>
-              <input type="file" name="file_2" id="file_2" style="padding: 8px 10px; font-size: 14px; width: 100%; border: 1px solid #d1d5db; border-radius: 6px;">
-            </div>
-
-            <!-- Submit Button -->
-            <div style="display: flex; justify-content: center; margin-top: 24px;">
-              <button onclick="submit_user()" type="button" style="background: linear-gradient(90deg, #233f8e 35%, #3c94c6 100%); color: white; width: 220px; height: 42px; font-size: 15px; font-weight: 600; border: none; border-radius: 6px; transition: 0.3s ease; box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.15); cursor: pointer;">
-                Submit
-              </button>
-            </div>
-
-          </div>
-        </td>
-      </tr>
-    </table>
-
-</div>
+        </div>
 
         <footer style='height:100px;background-color:#23408E' class='footer'>
             <div class="container-fluid"  style='height:100px'>
