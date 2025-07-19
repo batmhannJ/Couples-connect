@@ -165,7 +165,7 @@ function safe_date_format($date_string, $format = 'F d, Y') {
             <div style="width: 100%; background-color: white; height: 80px; box-shadow: 0 2px 8px rgba(0,0,0,0.1); display: flex; align-items: center; justify-content: space-between; padding: 0 20px; box-sizing: border-box; position: relative;">
                 
                 <!-- Logo Section -->
-                <div style="flex: 0 0 auto; display: flex; align-items: center;">
+                <div style="flex: 0 0 auto; display: flex; align-items: center; ">
                     <img src="images/350 x 88.png" style="height: 60px; width: auto;">
                 </div>
 
@@ -469,7 +469,7 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                 </div>
                             </div>
                         </div>
-                        <div style="width:50%">
+                        <div style="width:50%; padding-top:20px; margin-right:60px;">
                            <img src="images/Intro.png" style='width:100%' alt="">
                         </div>
                     </div>
@@ -481,7 +481,7 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                     <div class="container-fluid pt-2" style="width:100%">
                         <div class="row d-flex justify-content-center">
                             <div style='width:25%;display:flex;justify-content:center;flex-direction:column;align-items:center'>
-                                    <div class='text-center' style='font-size:22px;font-family:inter;font-weight:700'>SERVICES OFFERED</div>
+                                    <div class='text-center' style='font-size:22px;font-family:inter;font-weight:700; margin-top:30px;'>SERVICES OFFERED</div>
                                     <img style='display:block;width:80%' src="images/blue_line.png" alt="">
                             </div>
                         </div>
@@ -698,7 +698,7 @@ if($act_status === "PCT") {
         </div>  
     </div>
 
-        <footer style="background-color:#23408E; height: 100px;">
+        <footer style="background-color:#23408E; height: 100px; margin-top:120px;">
             <div class="container-fluid"  style='height:100px'>
                 <div class="row"  style='height:100px'>
                     <div class="col-4">
