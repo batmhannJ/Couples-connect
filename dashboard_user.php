@@ -19,6 +19,18 @@ $act_status = $row["act_status"];
 $prnt_status = $row["print_status"];
 $remarks = $row["remarks"];
 
+$select_user_info = "SELECT partner1_fname, partner1_mname, partner1_lname, email 
+                     FROM mf_prog_users WHERE recid = :recid LIMIT 1"; 
+$stmt_user_info = $link->prepare($select_user_info); 
+$stmt_user_info->bindParam(':recid', $_SESSION['usr_recid'], PDO::PARAM_INT); 
+$stmt_user_info->execute(); 
+$user_info = $stmt_user_info->fetch(PDO::FETCH_ASSOC);  
+
+$user_display_name = ''; 
+if ($user_info) {     
+    $user_display_name = trim($user_info['partner1_fname'] . ' ' . $user_info['partner1_mname'] . ' ' . $user_info['partner1_lname']);     
+    $user_email = $user_info['email']; 
+}
 ?>
 
 <?php
@@ -187,18 +199,57 @@ function safe_date_format($date_string, $format = 'F d, Y') {
 
                     <div style="height: 20px; width: 1px; background-color: #ddd; margin: 0 5px;"></div>
 
-                    <div>
-                        <span style="color: #23408E; text-decoration: none; font-weight: 600; padding: 8px 12px; border-radius: 6px;">
-                            <?php echo $header_name; ?>
-                        </span>
-                    </div>
-
-                    <div>
-                        <a href="http://localhost/couples-connect/logout_cc.php" 
-                           style="color: #23408E; text-decoration: none; font-weight: 600; padding: 10px 16px; border: 2px solid #23408E; border-radius: 8px; transition: all 0.3s ease;"
-                           onmouseover="this.style.backgroundColor='#23408E'; this.style.color='white'"
-                           onmouseout="this.style.backgroundColor='transparent'; this.style.color='#23408E'">LOGOUT</a>
-                    </div>
+                    <div style="position: relative;">
+    <div onclick="toggleUserDropdown()" style="cursor: pointer; display: flex; align-items: center; gap: 8px; padding: 8px 12px; border-radius: 6px; transition: background-color 0.3s ease;" 
+         onmouseover="this.style.backgroundColor='#f8f9fa'"
+         onmouseout="this.style.backgroundColor='transparent'">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="#23408E"/>
+            <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z" fill="#23408E"/>
+        </svg>
+        <span style="color: #23408E; font-weight: 600;"><?php echo $header_name; ?></span>
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M3 4.5L6 7.5L9 4.5" stroke="#23408E" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+    </div>
+    
+    <!-- User Dropdown -->
+    <div id="userDropdown" style="display: none; position: absolute; top: 100%; right: 0; background: white; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); min-width: 250px; z-index: 1001; padding: 16px; margin-top: 8px;">
+        <div style="text-align: center; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid #eee;">
+            <div style="width: 60px; height: 60px; background: linear-gradient(135deg, #23408E, #3C94C6); border-radius: 50%; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center;">
+                <svg width="30" height="30" viewBox="0 0 24 24" fill="white">
+                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"/>
+                    <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"/>
+                </svg>
+            </div>
+            <div style="font-weight: 600; color: #333; font-size: 16px;"><?php echo $user_display_name; ?></div>
+            <div style="color: #666; font-size: 14px;"><?php echo $user_email; ?></div>
+        </div>
+        
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+            <button onclick="editProfile()" style="background: none; border: none; padding: 12px; text-align: left; border-radius: 6px; cursor: pointer; transition: background-color 0.3s; display: flex; align-items: center; gap: 12px; font-family: Inter; font-size: 14px;"
+                    onmouseover="this.style.backgroundColor='#f8f9fa'"
+                    onmouseout="this.style.backgroundColor='transparent'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#666">
+                    <path d="M11 4H4C3.46957 4 2.96086 4.21071 2.58579 4.58579C2.21071 4.96086 2 5.46957 2 6V20C2 20.5304 2.21071 21.0391 2.58579 21.4142C2.96086 21.7893 3.46957 22 4 22H18C18.5304 22 19.0391 21.7893 19.4142 21.4142C19.7893 21.0391 20 20.5304 20 20V13"/>
+                    <path d="M18.5 2.49998C18.8978 2.10216 19.4374 1.87866 20 1.87866C20.5626 1.87866 21.1022 2.10216 21.5 2.49998C21.8978 2.89781 22.1213 3.43737 22.1213 3.99998C22.1213 4.56259 21.8978 5.10216 21.5 5.49998L12 15L8 16L9 12L18.5 2.49998Z"/>
+                </svg>
+                Edit Profile
+            </button>
+            
+            <button onclick="logout()" style="background: none; border: none; padding: 12px; text-align: left; border-radius: 6px; cursor: pointer; transition: background-color 0.3s; display: flex; align-items: center; gap: 12px; font-family: Inter; font-size: 14px; color: #dc3545;"
+                    onmouseover="this.style.backgroundColor='#fff5f5'"
+                    onmouseout="this.style.backgroundColor='transparent'">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="#dc3545">
+                    <path d="M9 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V5C3 4.46957 3.21071 3.96086 3.58579 3.58579C3.96086 3.21071 4.46957 3 5 3H9"/>
+                    <path d="M16 17L21 12L16 7"/>
+                    <path d="M21 12H9"/>
+                </svg>
+                Logout
+            </button>
+        </div>
+    </div>
+</div>
                 </div>
 
                 <!-- Mobile Menu Button -->
@@ -221,14 +272,28 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                        onmouseover="this.style.backgroundColor='#f8f9fa'"
                        onmouseout="this.style.backgroundColor='transparent'">FEEDBACK</a>
 
-                    <div style="color: #23408E; font-weight: 600; padding: 12px 16px; border-radius: 8px; font-family: Inter;">
-                        <?php echo $header_name; ?>
-                    </div>
-
-                    <a href="http://localhost/couples-connect/logout_cc.php" 
-                       style="color: white; text-decoration: none; font-weight: 600; padding: 12px 16px; background: linear-gradient(90deg, rgb(35, 64, 142) 35%, rgb(60, 148, 198) 100%); border-radius: 8px; text-align: center; margin-top: 10px; transition: all 0.3s ease; font-family: Inter;"
-                       onmouseover="this.style.background='linear-gradient(90deg, rgb(30, 58, 122) 35%, rgb(50, 128, 178) 100%)'"
-                       onmouseout="this.style.background='linear-gradient(90deg, rgb(35, 64, 142) 35%, rgb(60, 148, 198) 100%)'">LOGOUT</a>
+                    <div style="background: #f8f9fa; padding: 16px; border-radius: 8px; margin: 12px 0;">
+    <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 12px;">
+        <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #23408E, #3C94C6); border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="white">
+                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"/>
+                <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"/>
+            </svg>
+        </div>
+        <div>
+            <div style="font-weight: 600; color: #333; font-size: 14px;"><?php echo $user_display_name; ?></div>
+            <div style="color: #666; font-size: 12px;"><?php echo $header_name; ?></div>
+        </div>
+    </div>
+    
+    <button onclick="editProfile()" style="background: white; border: 1px solid #ddd; width: 100%; padding: 10px; border-radius: 6px; margin-bottom: 8px; cursor: pointer; font-family: Inter; font-size: 14px;">
+        Edit Profile
+    </button>
+    
+    <button onclick="logout()" style="background: #dc3545; border: none; width: 100%; padding: 10px; border-radius: 6px; color: white; cursor: pointer; font-family: Inter; font-size: 14px;">
+        Logout
+    </button>
+</div>
                 </div>
             </div>
         </div>
@@ -736,6 +801,29 @@ if($act_status === "PCT") {
     </form>
 
     <script>
+        function toggleUserDropdown() {
+            const dropdown = document.getElementById('userDropdown');
+            if (dropdown.style.display === 'none' || dropdown.style.display === '') {
+                dropdown.style.display = 'block';
+            } else {
+                dropdown.style.display = 'none';
+            }
+        }
+        function editProfile() {
+            window.location.href = 'edit_profile.php';
+        }
+
+        function logout() {
+            window.location.href = 'http://localhost/couples-connect/logout_cc.php';
+        }
+        document.addEventListener('click', function(event) {
+            const dropdown = document.getElementById('userDropdown');
+            const userMenu = event.target.closest('[onclick="toggleUserDropdown()"]');
+            
+            if (!userMenu && !dropdown.contains(event.target)) {
+                dropdown.style.display = 'none';
+            }
+        });
         function onPostMarriageBooking(){
             document.forms.myforms.method = "post";
             document.forms.myforms.target = "_self";
