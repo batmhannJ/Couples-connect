@@ -205,29 +205,26 @@ ul.checkout-bar:before {
                     <div class="container-fluid pt-4 d-flex justify-content-center" style="width:100%;">
                         <table id="table_data" name="table_data" style='background-color:white;border-radius:15px;width:92%'>
                             <?php
+                                if($act_status == "PMC"){
+                                    $xheader_top = "Post Marrage Counseling Schedules";
+                                }else if($act_status == "PMO" || $act_status == "APR"){
+                                    $xheader_top = "Pre-Marriage Orientation Schedules";
+                                }
 
-                      
-                            if($act_status == "PMC"){
-                                $xheader_top = "Post Marrage Counseling Schedules";
-                            }else if($act_status == "PMO" || $act_status == "APR"){
-                                $xheader_top = "Pre-Marriage Orientation Schedules";
-                            }
+                                echo "<tr>";
+                                    echo "<td colspan='5' style='height:100px'>";
 
-                            echo "<tr>";
-                                echo "<td colspan='5' style='height:100px'>";
+                                    echo '<div class="p-3"><div class="alert alert-primary alert-dismissible fade show " role="alert">
+                                            <strong>ATTENTION!</strong> Before booking a schedule for your PMOC, please ensure that you have completed the MEI (Medical Examination Information) form. This step is required to proceed with your booking.
+                                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                                            </div></div>';
 
-                                echo '<div class="p-3"><div class="alert alert-primary alert-dismissible fade show " role="alert">
-                                          <strong>ATTENTION!</strong> Before booking a schedule for your PMOC, please ensure that you have completed the MEI (Medical Examination Information) form. This step is required to proceed with your booking.
-                                          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                                        </div></div>';
-
-
-                                    echo "<div class='container d-flex text-center align-items-center' style='font-family:inter;font-weight:700;font-size:27px;flex-direction:column'>";    
-                                        echo $xheader_top;    
-                                        echo "<img src='images/Rectangle 11934.png' style='width:784px; height:6px;margin-top:10px'>";    
-                                    echo "</div>";    
-                                echo "</td>";    
-                            echo "</tr>";
+                                        echo "<div class='container d-flex text-center align-items-center' style='font-family:inter;font-weight:700;font-size:27px;flex-direction:column'>";    
+                                            echo $xheader_top;    
+                                            echo "<img src='images/Rectangle 11934.png' style='width:784px; height:6px;margin-top:10px'>";    
+                                        echo "</div>";    
+                                    echo "</td>";    
+                                echo "</tr>";
 
                                 echo "<tr>";
                                 echo "<td style='padding-top:15px;padding-left:20px'>";
@@ -248,22 +245,22 @@ ul.checkout-bar:before {
                                     echo "</div>";    
                                 echo "</td>";
 
-                            if($act_status == "PMC" || $act_status == "APR" || $act_status == "PMO"){
-                                echo "<td>";
-                                    echo "<div class='container text-center' style='font-family:inter;font-weight:700;font-size:25px;color:#797979''>";    
-                                        echo "Slots Available";    
-                                    echo "</div>";    
-                                echo "</td>";   
-                            }
+                                if($act_status == "PMC" || $act_status == "APR" || $act_status == "PMO"){
+                                    echo "<td>";
+                                        echo "<div class='container text-center' style='font-family:inter;font-weight:700;font-size:25px;color:#797979''>";    
+                                            echo "Slots Available";    
+                                        echo "</div>";    
+                                    echo "</td>";   
+                                }
 
-                            if($act_status == "APR"){
-                                $act_status2 = "PMO";
-                            }
+                                if($act_status == "APR"){
+                                    $act_status2 = "PMO";
+                                }
 
-                                echo "<td>";
-                                        echo "&nbsp;";    
-                                echo "</td>";           
-                            echo "</tr>";
+                                    echo "<td>";
+                                            echo "&nbsp;";    
+                                    echo "</td>";           
+                                echo "</tr>";
 
                             $select_db_xid = "SELECT mf_venue.venue_link as 'venue_link', mf_venue.is_online as 'is_online', mf_venue.venue as 'venue', mf_venue.venue_id as 'venue_id', mf_appointment_info.userid as 'userid',ext_appointment_info.slots_avail as 'slots_avail',
                             ext_appointment_info.recid as 'ext_recid'  FROM ext_appointment_info LEFT JOIN mf_appointment_info ON 
@@ -327,7 +324,6 @@ ul.checkout-bar:before {
                                             echo "</select>";
                                         echo "</td>";
 
-
                                         if($act_status2 == "PMC" || $act_status2 == "PMO") {
                                             echo "<td class='text-center slots-cell'>";
                                                 echo "Slot available";    
@@ -337,11 +333,8 @@ ul.checkout-bar:before {
                                         echo "<td class='text-center'>";
                                             echo " <button type='button' disabled class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
                                         echo "</td>";
-
-                            
                                 echo "</tr>";
-
-                               }else{
+                               } else {
 
                                 $select_db_times2 = "SELECT pro_meiform.userid as 'userid', ext_mf_meiform.date as 'date', ext_mf_meiform.venue as 'venue', pro_meiform.counselorid as 'counselorid'  FROM pro_meiform LEFT JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.meiformid WHERE pro_meiform.userid='".$_SESSION['usr_id']."' AND pro_meiform.status='".$act_status2."' LIMIT 1";
                                 $stmt_times2	= $link->prepare($select_db_times2);
@@ -382,7 +375,6 @@ ul.checkout-bar:before {
                                                             echo $row_times['date']; 
                                                         echo "</option>"; 
                                                     echo "</select>";
-
                                                 echo "</td>";
 
                                                 echo "<td>";
@@ -405,8 +397,7 @@ ul.checkout-bar:before {
                                         echo "</td>";
 
                                         $xcounterx++;
-                    
-                                    }else{
+                                    } else {
                                         echo "<td>";
                                             echo "<select class='form-control w-75 ms-2'' disabled>";   
                                                 echo "<option disabled selected>"; 
@@ -428,12 +419,10 @@ ul.checkout-bar:before {
                                                 echo "Select a Date...";    
                                             echo "</td>";
                                         }
-
                                         echo "<td class='text-center'>";
                                             echo " <button type='button' disabled class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
                                         echo "</td>";
                                     }
-                        
                                 echo "</tr>";                       
                                } 
                             }                            
@@ -443,12 +432,9 @@ ul.checkout-bar:before {
                     </div>
                 </td>
             </tr>
-
         </table>
 
-
         <input type="hidden" name="act_status_hidden" id="act_status_hidden" value="<?php echo $act_status;?>">
-
         <div class="modal fade  xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -474,11 +460,9 @@ ul.checkout-bar:before {
                     <div class="modal-body">
                         <p class="error_msg" style='font-family:inter;font-size:24px;font-weight:300'>Before applying for Pre-marriage Orientation, it's necessary for both partners to complete the Marriage Expectation Form. Partner 1 will start by answering the form, followed by Partner 2 once Partner 1 has finished.</p>
                     </div>
-
                     <div class="container-fluid d-flex justify-content-center pb-4">
                         <button type='button' onclick='proceed_func()' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Proceed</button>
                     </div>
-     
                 </div>
             </div>
         </div>        
@@ -491,14 +475,10 @@ ul.checkout-bar:before {
                         <h5 class="modal-title text-start" id="exampleModalToggleLabel2" style="font-size:33px;font-family:inter;font-weight:500">Marriage Expectation Form</h5>
                         <h7 class="modal-title text-left" id="exampleModalToggleLabel2" style="color:#9B9B9B">Fill Up Form</h7>
                     </div>
-                    
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-
                     <div class="partner1_modal" id="partner1_modal">
-
-                        
                         <div class="row"> 
                           <div class="checkout-wrap col-sm-12 col-xs-12">
                             <ul class="checkout-bar">
@@ -509,11 +489,9 @@ ul.checkout-bar:before {
                         </div>
                         
                         <div class="container-fluid">
-
                             <div class="container" style='font-family:inter;font-size:20px;'>
                                 <span style='font-size:32px;font-weight:400px;'><?php echo $partner1_name; ?></span>
                             </div>
-                            
                             <div class="container">
                                 <div style='width:100%'>
                                 Please answer this independently. By submitting this form you confirm the information provided on this form is accurate and is not influenced by your partner. Please be aware that submitting false or misleading information, including any attempt to misrepresent independent work, may be grounds for appointment rejection.
@@ -525,18 +503,15 @@ ul.checkout-bar:before {
                                 <td style='font-size:25px;font-family:inter;font-weight:500;color:#797979;width:70%;padding-left:20px;padding-top:10px'>
                                     Statement
                                 </td>
-
                                 <td style='font-size:25px;font-family:inter;font-weight:500;color:#797979' class='px-3'>
                                     Answer<span style='color:red'>*</span>
                                 </td>
-
                                 <td style='font-size:25px;font-family:inter;font-weight:500;color:#797979'>
                                     Reason/s
                                 </td>
                             </tr>
 
                             <?php
-
                                 $select_db_meiform = "SELECT * FROM mf_meiform";
                                 $stmt_meiform	= $link->prepare($select_db_meiform);
                                 $stmt_meiform->execute();
@@ -547,9 +522,7 @@ ul.checkout-bar:before {
                                         echo "<td style='width:70%;font-weight:500;font-family:inter;font-size:19px;padding-left:20px;padding-top:10px'>";
                                             echo "<div style='width:90%'>".$mei_form1_counter.". ".$row_meiform["questions"]."</div>";
                                         echo "</td>";
-
                                         echo "<td class='px-3'>";
-
                                         echo '
                                             <div style="display:flex; gap: 23px; width: 202px;font-weight: bold;">
                                                 <div class="form-check">
@@ -566,17 +539,13 @@ ul.checkout-bar:before {
                                                 </div>
                                             </div>
                                         ';
-
                                         echo "</td>";
 
                                         echo "<td>";
                                             echo "<input type='text' class='form-control' style='width:300px' name='form_1[".$mei_form1_counter."][input]' id='form_1[".$mei_form1_counter."][input]'>";
                                         echo "</td>";                                    
-
                                     echo "</tr>";
-
                                     $mei_form1_counter++;
-                                    
                                 }
                             ?>
                         </table>
@@ -625,7 +594,6 @@ ul.checkout-bar:before {
                                 $mei_form2_counter = 1;
                                 while($row_meiform2 = $stmt_meiform2->fetch()){
                                     echo "<tr style='margin-top:5px'>";
-
                                         echo "<td style='width:70%;font-weight:500;font-family:inter;font-size:19px;padding-left:20px;padding-top:10px'>";
                                             echo "<div style='width:90%'>".$mei_form2_counter.". ".$row_meiform2["questions"]."</div>";
                                         echo "</td>";
@@ -651,14 +619,11 @@ ul.checkout-bar:before {
                                         echo "<td>";
                                             echo "<input type='text' class='form-control'  style='width:300px' name='form_2[".$mei_form2_counter."][input]' id='form_2[".$mei_form2_counter."][input]'>";
                                         echo "</td>";                                    
-
                                     echo "</tr>";
-
                                     $mei_form2_counter++;
                                 }
                             ?>
                         </table>   
-                    
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-center" id="meiform_modal_footer">
@@ -743,17 +708,13 @@ ul.checkout-bar:before {
                                     <div class="col-12" style='font-size:15px;font-weight:bold'>
                                         City Population Office of Cabuyao
                                     </div>
-
                                     <div class="col-12" style='font-size:9px'>
                                         Brgy Dos. Cabuyao Retail Plaza, Cabuyao, Philippines
                                     </div>
-
                                     <div class="col-12" style='font-size:9px'>
                                         cpocabuyao@gmail.com
                                     </div>
-
                                 </div>
-          
                             </div>
                         </div>       
                     </div>
@@ -763,13 +724,11 @@ ul.checkout-bar:before {
                         </div>   
                     </div>
                 </div>
-
             </div>
         </footer>
     </form>
 
     <script>
-
         const handleRadioChange = (event) => {
             document.querySelectorAll('.choices').forEach(function(radio) {
                 radio.removeEventListener('change', handleRadioChange);
@@ -778,7 +737,6 @@ ul.checkout-bar:before {
         document.querySelectorAll('.choices').forEach(function(radio) {
             radio.addEventListener('change', handleRadioChange);
         });
-
         var act_status_check = $("#act_status_hidden").val();
         var current_meiformid_to_cancel = '';
 
@@ -788,18 +746,14 @@ ul.checkout-bar:before {
         }
 
         function checkDropdownsInModal(modalId) {
-
             var dropdowns = $('#' + modalId).find('select');
             var isEmpty = false;
-
             dropdowns.each(function() {
-    
                 if ($(this).val() === '' || $(this).val() === null) {
                 isEmpty = true;
-                return false; // break out of the each loop
+                return false;
                 }
             });
-
             return !isEmpty;
         }
 
@@ -812,12 +766,8 @@ ul.checkout-bar:before {
                 $("#partner1_modal").css({'display': 'none'});
                 $("#partner2_modal").css({'display': 'unset'});
                 $("#meiform_modal_footer").html(`
-
                     <button type='button' onclick='back_form()' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:150px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Back</button>
-
                     <button type='button' name='btn_modal' id='btn_modal' onclick='ajaxNew(\"submitAll\",\"\",\"\",\"\",\"\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:150px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Submit</button>
-
-
                 `);
             }else{
                 alert("Please submit all required fields");
@@ -832,10 +782,8 @@ ul.checkout-bar:before {
         }
 
         function ajaxSubmit(){
-
             var email_subject = $("#feedback_subject").val();
             var email_remarks = $("#feedback_remarks").val();
-
 
             jQuery.ajax({    
                 data:{
@@ -850,9 +798,7 @@ ul.checkout-bar:before {
                 },
                 error: function (request, status, error) {
                 }
-
             })
-
         }        
 
         $(document).on('change', '.select_date', function(e) {
@@ -862,186 +808,171 @@ ul.checkout-bar:before {
             var xrecid = selectedOption.data('xrecid');
             var xvenue = selectedOption.data('xvenue');
             
-            // Store values in hidden fields
             $("#venue_hidden").val(xvenue);
             $("#date_hidden").val(xdate);
             $("#counselor_hidden").val(xcounselorid);
             $("#recid_hidden").val(xrecid);
             
             var timeDropdown = $(this).closest('tr').find('.select_time');
-            
+
             ajaxNew("changeDate", xdate, xcounselorid, xrecid, '', $(this));
         });
 
         $(document).on('change', '.select_time', function(e) {
-    var selected_time = $(this).val();
-    var selectedOption = $(this).find('option:selected');
-    
-    $("#timeline_hidden").val(selected_time);
-    
-    // Enable the book button for this row
-    var bookButton = $(this).closest('tr').find('button[onclick*="book_func"]');
-    if (selected_time && selected_time !== '') {
-        bookButton.prop('disabled', false);
-        bookButton.attr('onclick', 'book_func()');
-    }
-});
+            var selected_time = $(this).val();
+            var selectedOption = $(this).find('option:selected');
+            
+            $("#timeline_hidden").val(selected_time);
+            
+            var bookButton = $(this).closest('tr').find('button[onclick*="book_func"]');
+            if (selected_time && selected_time !== '') {
+                bookButton.prop('disabled', false);
+                bookButton.attr('onclick', 'book_func()');
+            }
+        });
 
-$(document).on('click', 'button[onclick*="book_func"]', function(e) {
-    e.preventDefault();
-    book_func();
-});
-    function ajaxNew(xevent_action, xdate, xcounselorid, xrecid, xmeiformid, sourceElement) {
-        var act_status_hidden = $("#act_status_hidden").val();
-        var timeline_hidden_val = $("#timeline_hidden").val();
+        $(document).on('click', 'button[onclick*="book_func"]', function(e) {
+            e.preventDefault();
+            book_func();
+        });
+        function ajaxNew(xevent_action, xdate, xcounselorid, xrecid, xmeiformid, sourceElement) {
+            var act_status_hidden = $("#act_status_hidden").val();
+            var timeline_hidden_val = $("#timeline_hidden").val();
 
-        if(xevent_action == "submitAll" || xevent_action == "cancel_booking"){
-            var date_hidden_val = $("#date_hidden").val();
-            var counselor_hidden_val = $("#counselor_hidden").val();
-            var recid_hidden_val = $("#recid_hidden").val();
+            if(xevent_action == "submitAll" || xevent_action == "cancel_booking"){
+                var date_hidden_val = $("#date_hidden").val();
+                var counselor_hidden_val = $("#counselor_hidden").val();
+                var recid_hidden_val = $("#recid_hidden").val();
 
-            xdate = date_hidden_val;
-            xcounselorid = counselor_hidden_val;
-            xrecid = recid_hidden_val;
+                xdate = date_hidden_val;
+                xcounselorid = counselor_hidden_val;
+                xrecid = recid_hidden_val;
 
-            if(xevent_action == "submitAll" && act_status_check !== 'PMC'){
-                if(!checkDropdownsInModal('partner2_modal')){
-                    alert("Please submit all required fields");
-                    return;
+                if(xevent_action == "submitAll" && act_status_check !== 'PMC'){
+                    if(!checkDropdownsInModal('partner2_modal')){
+                        alert("Please submit all required fields");
+                        return;
+                    }
                 }
             }
-        }
 
-        var serializedData = $("#myforms *").serialize() + 
-            "&event_action=" + xevent_action + 
-            "&date=" + xdate + 
-            "&counselorid=" + xcounselorid + 
-            "&ext_recid=" + xrecid + 
-            "&timeline=" + timeline_hidden_val + 
-            "&meiformid_post=" + xmeiformid;
+            var serializedData = $("#myforms *").serialize() + 
+                "&event_action=" + xevent_action + 
+                "&date=" + xdate + 
+                "&counselorid=" + xcounselorid + 
+                "&ext_recid=" + xrecid + 
+                "&timeline=" + timeline_hidden_val + 
+                "&meiformid_post=" + xmeiformid;
 
-        $.ajax({                                      
-            url: 'booking_ajax.php',              
-            type: "post",
-            dataType: "json", // Make sure to expect JSON response
-            data: serializedData,               
-            success: function(xdata){
-                // Check for error status
-                if(xdata.status === false) {
-                    alert(xdata.msg);
-                    return;
-                }
-
-                if(xevent_action == "changeDate"){
-                    if(sourceElement) {
-                        var timeDropdown = sourceElement.closest('tr').find('.select_time');
-                        timeDropdown.html('');
-                        timeDropdown.append('<option disabled selected>Select Time...</option>');
-                        
-                        if(xdata.times && xdata.times.length > 0) {
-                            $.each(xdata.times, function(index, timeOption) {
-                                timeDropdown.append('<option value="' + timeOption.value + '">' + timeOption.text + '</option>');
-                            });
-                            timeDropdown.prop('disabled', false);
-                        }
-                        
-                        if(xdata.slots_available) {
-                            sourceElement.closest('tr').find('.slots-cell').text(xdata.slots_available);
-                        }
+            $.ajax({                                      
+                url: 'booking_ajax.php',              
+                type: "post",
+                dataType: "json", // Make sure to expect JSON response
+                data: serializedData,               
+                success: function(xdata){
+                    // Check for error status
+                    if(xdata.status === false) {
+                        alert(xdata.msg);
+                        return;
                     }
-                    
-                    $("#timeline_hidden").val(xdata["first_time"] || '');
-                }
 
-                if(xevent_action == 'cancel_booking'){
-                    // Update the table content after successful cancellation
+                    if(xevent_action == "changeDate"){
+                        if(sourceElement) {
+                            var timeDropdown = sourceElement.closest('tr').find('.select_time');
+                            timeDropdown.html('');
+                            timeDropdown.append('<option disabled selected>Select Time...</option>');
+                            
+                            if(xdata.times && xdata.times.length > 0) {
+                                $.each(xdata.times, function(index, timeOption) {
+                                    timeDropdown.append('<option value="' + timeOption.value + '">' + timeOption.text + '</option>');
+                                });
+                                timeDropdown.prop('disabled', false);
+                            }
+                            
+                            if(xdata.slots_available) {
+                                sourceElement.closest('tr').find('.slots-cell').text(xdata.slots_available);
+                            }
+                        }
+                        
+                        $("#timeline_hidden").val(xdata["first_time"] || '');
+                    }
+
+                    if(xevent_action == 'cancel_booking'){
+                        // Update the table content after successful cancellation
+                        if(xdata["html"]) {
+                            $("#table_data").html(xdata["html"]);
+                        }
+                        // Show success message
+                        alert("Booking cancelled successfully! You must wait 7 days before booking again.");
+                        
+                        // Hide the confirmation modal
+                        $("#cancel_confirmation_modal").modal("hide");
+                    }
+
                     if(xdata["html"]) {
                         $("#table_data").html(xdata["html"]);
                     }
-                    // Show success message
-                    alert("Booking cancelled successfully! You must wait 7 days before booking again.");
-                    
-                    // Hide the confirmation modal
-                    $("#cancel_confirmation_modal").modal("hide");
+
+                    if(xevent_action == 'submitAll'){
+                        // Reset modal
+                        $("#partner1_modal").css({'display': 'unset'});
+                        $("#partner2_modal").css({'display': 'none'});
+                        $("#meiform_modal_footer").html("<button type='button' name='btn_modal' id='btn_modal' onclick='proceed_partner2()' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Proceed to Partner 2</button>");
+
+                        // Clear form inputs
+                        $('#partner1_modal select, #partner2_modal select').each(function() {
+                            $(this).children('option:first').prop('selected', true);
+                        });
+                        $('#partner1_modal input[type="text"], #partner2_modal input[type="text"]').val('');
+
+                        $("#meiform_modal").modal("hide");
+                        alert("Booking submitted successfully!");
+                    }
+                },
+                error: function (request, status, error) {
+                    console.error("AJAX Error:", error);
+                    console.error("Response:", request.responseText);
+                    alert("An error occurred. Please try again.");
                 }
+            });
+        }
 
-                if(xdata["html"]) {
-                    $("#table_data").html(xdata["html"]);
-                }
+        function book_func(){
+            $("#proceed_modal").modal("show");
+        }
 
-                if(xevent_action == 'submitAll'){
-                    // Reset modal
-                    $("#partner1_modal").css({'display': 'unset'});
-                    $("#partner2_modal").css({'display': 'none'});
-                    $("#meiform_modal_footer").html("<button type='button' name='btn_modal' id='btn_modal' onclick='proceed_partner2()' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Proceed to Partner 2</button>");
+        function proceed_func(){
+            $("#proceed_modal").modal("hide");
+            $("#meiform_modal").modal("show");
+        }
 
-                    // Clear form inputs
-                    $('#partner1_modal select, #partner2_modal select').each(function() {
-                        $(this).children('option:first').prop('selected', true);
-                    });
-                    $('#partner1_modal input[type="text"], #partner2_modal input[type="text"]').val('');
-
-                    $("#meiform_modal").modal("hide");
-                    alert("Booking submitted successfully!");
-                }
-            },
-            error: function (request, status, error) {
-                console.error("AJAX Error:", error);
-                console.error("Response:", request.responseText);
-                alert("An error occurred. Please try again.");
+        $(document).ready(function () {
+        $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+            if (".nav-tabs") hasClass(".active"); {
+            $(".checkout-bar li").addClass("active");
             }
         });
-    }
+        });
 
-
-    function book_func(){
-        $("#proceed_modal").modal("show");
-    }
-
-    function proceed_func(){
-
-        $("#proceed_modal").modal("hide");
-        $("#meiform_modal").modal("show");
-    }
-
-    $(document).ready(function () {
-      $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
-        if (".nav-tabs") hasClass(".active"); {
-          $(".checkout-bar li").addClass("active");
-        }
-      });
-    });
-
-    $(document).ready(function () {
-            // ADD THESE EVENT HANDLERS HERE
-            // Handle confirm cancel button click
+        $(document).ready(function () {
             $("#confirm_cancel_btn").click(function() {
                 $("#cancel_confirmation_modal").modal("hide");
-                
-                // Show loading state
                 $(this).html("Canceling...").prop('disabled', true);
-                
-                // Proceed with cancellation
                 ajaxNew("cancel_booking", "", "", "", current_meiformid_to_cancel);
             });
             
-            // Reset button state when modal is hidden
             $("#cancel_confirmation_modal").on('hidden.bs.modal', function () {
                 $("#confirm_cancel_btn").html("Yes, Cancel").prop('disabled', false);
                 current_meiformid_to_cancel = '';
             });
 
-            // ... existing document ready code ...
             $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
                 if (".nav-tabs") hasClass(".active"); {
                   $(".checkout-bar li").addClass("active");
                 }
             });
         });
-
-
     </script>
-
 <?php 
 require "includes/cc_footer.php";
 ?>
