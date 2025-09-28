@@ -8,6 +8,28 @@ require_once('resources/lx2.pdodb.php');
 require_once("resources/stdfunc100.php");
 require_once('resources/connect4.php');
 
+function checkCancellationWaitingPeriod($link, $userId) {
+    $select_cancellation = "SELECT last_cancellation_date, 
+                           DATEDIFF(CURDATE(), last_cancellation_date) as days_since_cancellation 
+                           FROM mf_prog_users WHERE userid = ?";
+    $stmt_cancellation = $link->prepare($select_cancellation);
+    $stmt_cancellation->execute(array($userId));
+    $cancellation_data = $stmt_cancellation->fetch();
+    
+    if ($cancellation_data && $cancellation_data['last_cancellation_date']) {
+        $days_since_cancellation = $cancellation_data['days_since_cancellation'];
+        if ($days_since_cancellation < 7) {
+            $days_remaining = 7 - $days_since_cancellation;
+            return array(
+                'blocked' => true,
+                'days_remaining' => $days_remaining,
+                'can_book_date' => date('Y-m-d', strtotime($cancellation_data['last_cancellation_date'] . ' + 7 days'))
+            );
+        }
+    }
+    return array('blocked' => false);
+}
+
 session_start();
 
 $ret=array();
@@ -34,7 +56,39 @@ if($act_status == "APR"){
     $act_status2 = "PMO";
 }
 
+if($act_status == "PMC"){
+    $xheader_top = "Pre-Marriage Counseling Schedules";
+}else if($act_status == "PMO" || $act_status == "APR"){
+    $xheader_top = "Pre-Marriage Orientation Schedules";
+}
+
 if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDate" ||  $_POST['event_action'] == "cancel_booking"){
+    $cancellation_check = checkCancellationWaitingPeriod($link, $_SESSION['usr_id']);
+    
+    if($cancellation_check['blocked']) {
+        $ret['html'].= "<tr>";
+            $ret['html'].= "<td colspan='5' style='height:100px'>";
+                $ret['html'].= "<div class='container d-flex text-center align-items-center' style='font-family:inter;font-weight:700;font-size:27px;flex-direction:column'>";    
+                    $ret['html'].= $xheader_top;    
+                    $ret['html'].= "<img src='images/Rectangle 11934.png' style='width:784px; height:6px;margin-top:10px'>";    
+                $ret['html'].= "</div>";    
+            $ret['html'].= "</td>";    
+        $ret['html'].= "</tr>";
+        
+        $ret['html'].= "<tr>";
+            $ret['html'].= "<td colspan='5' style='padding:20px;text-align:center'>";
+                $ret['html'].= "<div class='alert alert-warning' style='font-size:18px;font-family:inter'>";
+                    $ret['html'].= "<strong>Booking Temporarily Restricted</strong><br>";
+                    $ret['html'].= "You recently cancelled a booking and must wait " . $cancellation_check['days_remaining'] . " more day(s) before booking again.<br>";
+                    $ret['html'].= "You can book again starting: <strong>" . date('F j, Y', strtotime($cancellation_check['can_book_date'])) . "</strong>";
+                $ret['html'].= "</div>";
+            $ret['html'].= "</td>";
+        $ret['html'].= "</tr>";
+        
+        header('Content-Type: application/json');
+        echo json_encode($ret);
+        exit;
+    }
     if(isset($_POST['event_action']) &&  $_POST['event_action'] == "cancel_booking"){
         $select_booking_details = "SELECT venue, date, from_to FROM ext_mf_meiform WHERE meiformid=? LIMIT 1";
         $stmt_booking = $link->prepare($select_booking_details);
@@ -71,6 +125,10 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                                 AND venue_id = (SELECT venue_id FROM mf_venue WHERE venue = ?)";
             $stmt_update_cancel = $link->prepare($update_slots_cancel);
             $stmt_update_cancel->execute(array($booking_details['date'], $booking_details['venue']));
+
+            $update_cancellation_date = "UPDATE mf_prog_users SET last_cancellation_date = CURDATE() WHERE userid = ?";
+            $stmt_cancellation = $link->prepare($update_cancellation_date);
+            $stmt_cancellation->execute(array($_SESSION['usr_id']));
         }
     }
                   
@@ -303,6 +361,16 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
     }
 
 }else if ($_POST['event_action'] == "submitAll") {
+
+    $cancellation_check = checkCancellationWaitingPeriod($link, $_SESSION['usr_id']);
+    
+    if($cancellation_check['blocked']) {
+        $ret['status'] = false;
+        $ret['msg'] = "You must wait " . $cancellation_check['days_remaining'] . " more day(s) before booking again due to a recent cancellation.";
+        header('Content-Type: application/json');
+        echo json_encode($ret);
+        exit;
+    }
 
     $select_db_slots = "SELECT slots_avail FROM ext_appointment_info WHERE recid = ? AND clinic_date = ? AND venue_id = (SELECT venue_id FROM mf_venue WHERE venue = ?)";
     $stmt_slots = $link->prepare($select_db_slots);
@@ -569,7 +637,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
 
 
                 $ret['html'].= "<td class='text-center'>";
-                    $ret['html'] .= " <button type='button' onclick='ajaxNew(\"cancel_booking\",\"\",\"\",\"\",\"".$meiformuid."\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Cancel</button>";
+$ret['html'] .= " <button type='button' onclick='showCancelConfirmation(\"".$meiformuid."\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Cancel</button>";
                 $ret['html'].= "</td>";
 
             }else{

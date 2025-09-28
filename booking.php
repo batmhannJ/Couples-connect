@@ -689,7 +689,39 @@ ul.checkout-bar:before {
                 </div>
                 </div>
             </div>
-        </div>           
+        </div>    
+        
+        <div class="modal fade cancel_confirmation_modal" data-bs-backdrop="static" id="cancel_confirmation_modal" tabindex="-1">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content" style='border-radius:15px'>
+                    <div class="modal-header">
+                        <h5 class="modal-title" style="font-size:28px;font-family:inter;font-weight:bold;color:#e60000">Cancel Booking</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div style='font-family:inter;font-size:18px;text-align:center;padding:20px'>
+                            <div style="margin-bottom:15px;">
+                                <strong>Are you sure you want to cancel your booking?</strong>
+                            </div>
+                            <div style="color:#666;margin-bottom:20px;">
+                                Please note that after canceling, you will need to wait <strong>7 days</strong> before you can book another appointment.
+                            </div>
+                            <div style="color:#e60000;font-weight:600;">
+                                This action cannot be undone.
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer d-flex justify-content-center">
+                        <button type='button' class='btn btn-secondary' data-bs-dismiss="modal" style='width:120px;height:40px;font-size:16px;font-family:inter;font-weight:600;border-radius:8px;margin-right:10px'>
+                            Keep Booking
+                        </button>
+                        <button type='button' id="confirm_cancel_btn" class='btn' style='background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:120px;height:40px;font-size:16px;font-family:inter;font-weight:600;border-radius:8px'>
+                            Yes, Cancel
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
 
         <input type="hidden" name="venue_hidden" id="venue_hidden">
         <input type="hidden" name="date_hidden" id="date_hidden">
@@ -748,6 +780,12 @@ ul.checkout-bar:before {
         });
 
         var act_status_check = $("#act_status_hidden").val();
+        var current_meiformid_to_cancel = '';
+
+        function showCancelConfirmation(meiformid) {
+            current_meiformid_to_cancel = meiformid;
+            $("#cancel_confirmation_modal").modal("show");
+        }
 
         function checkDropdownsInModal(modalId) {
 
@@ -854,97 +892,106 @@ $(document).on('click', 'button[onclick*="book_func"]', function(e) {
     book_func();
 });
     function ajaxNew(xevent_action, xdate, xcounselorid, xrecid, xmeiformid, sourceElement) {
-    var act_status_hidden = $("#act_status_hidden").val();
-    var timeline_hidden_val = $("#timeline_hidden").val();
+        var act_status_hidden = $("#act_status_hidden").val();
+        var timeline_hidden_val = $("#timeline_hidden").val();
 
-    if(xevent_action == "submitAll" || xevent_action == "cancel_booking"){
-        var date_hidden_val = $("#date_hidden").val();
-        var counselor_hidden_val = $("#counselor_hidden").val();
-        var recid_hidden_val = $("#recid_hidden").val();
+        if(xevent_action == "submitAll" || xevent_action == "cancel_booking"){
+            var date_hidden_val = $("#date_hidden").val();
+            var counselor_hidden_val = $("#counselor_hidden").val();
+            var recid_hidden_val = $("#recid_hidden").val();
 
-        xdate = date_hidden_val;
-        xcounselorid = counselor_hidden_val;
-        xrecid = recid_hidden_val;
+            xdate = date_hidden_val;
+            xcounselorid = counselor_hidden_val;
+            xrecid = recid_hidden_val;
 
-        if(xevent_action == "submitAll" && act_status_check !== 'PMC'){
-            if(!checkDropdownsInModal('partner2_modal')){
-                alert("Please submit all required fields");
-                return;
+            if(xevent_action == "submitAll" && act_status_check !== 'PMC'){
+                if(!checkDropdownsInModal('partner2_modal')){
+                    alert("Please submit all required fields");
+                    return;
+                }
             }
         }
-    }
 
-    var serializedData = $("#myforms *").serialize() + 
-        "&event_action=" + xevent_action + 
-        "&date=" + xdate + 
-        "&counselorid=" + xcounselorid + 
-        "&ext_recid=" + xrecid + 
-        "&timeline=" + timeline_hidden_val + 
-        "&meiformid_post=" + xmeiformid;
+        var serializedData = $("#myforms *").serialize() + 
+            "&event_action=" + xevent_action + 
+            "&date=" + xdate + 
+            "&counselorid=" + xcounselorid + 
+            "&ext_recid=" + xrecid + 
+            "&timeline=" + timeline_hidden_val + 
+            "&meiformid_post=" + xmeiformid;
 
-    $.ajax({                                      
-        url: 'booking_ajax.php',              
-        type: "post",
-        dataType: "json", // Make sure to expect JSON response
-        data: serializedData,               
-        success: function(xdata){
-            if(xevent_action == "changeDate"){
-                if(sourceElement) {
-                    var timeDropdown = sourceElement.closest('tr').find('.select_time');
-                    timeDropdown.html('');
-                    timeDropdown.append('<option disabled selected>Select Time...</option>');
-                    
-                    if(xdata.times && xdata.times.length > 0) {
-                        $.each(xdata.times, function(index, timeOption) {
-                            timeDropdown.append('<option value="' + timeOption.value + '">' + timeOption.text + '</option>');
-                        });
-                        timeDropdown.prop('disabled', false);
-                    }
-                    
-                    if(xdata.slots_available) {
-                        sourceElement.closest('tr').find('.slots-cell').text(xdata.slots_available);
-                    }
+        $.ajax({                                      
+            url: 'booking_ajax.php',              
+            type: "post",
+            dataType: "json", // Make sure to expect JSON response
+            data: serializedData,               
+            success: function(xdata){
+                // Check for error status
+                if(xdata.status === false) {
+                    alert(xdata.msg);
+                    return;
                 }
-                
-                $("#timeline_hidden").val(xdata["first_time"] || '');
-            }
 
-            if(xevent_action == 'cancel_booking'){
-                // Update the table content after successful cancellation
+                if(xevent_action == "changeDate"){
+                    if(sourceElement) {
+                        var timeDropdown = sourceElement.closest('tr').find('.select_time');
+                        timeDropdown.html('');
+                        timeDropdown.append('<option disabled selected>Select Time...</option>');
+                        
+                        if(xdata.times && xdata.times.length > 0) {
+                            $.each(xdata.times, function(index, timeOption) {
+                                timeDropdown.append('<option value="' + timeOption.value + '">' + timeOption.text + '</option>');
+                            });
+                            timeDropdown.prop('disabled', false);
+                        }
+                        
+                        if(xdata.slots_available) {
+                            sourceElement.closest('tr').find('.slots-cell').text(xdata.slots_available);
+                        }
+                    }
+                    
+                    $("#timeline_hidden").val(xdata["first_time"] || '');
+                }
+
+                if(xevent_action == 'cancel_booking'){
+                    // Update the table content after successful cancellation
+                    if(xdata["html"]) {
+                        $("#table_data").html(xdata["html"]);
+                    }
+                    // Show success message
+                    alert("Booking cancelled successfully! You must wait 7 days before booking again.");
+                    
+                    // Hide the confirmation modal
+                    $("#cancel_confirmation_modal").modal("hide");
+                }
+
                 if(xdata["html"]) {
                     $("#table_data").html(xdata["html"]);
                 }
-                // Optionally show a success message
-                if(xdata["msg"]) {
-                    alert("Booking cancelled successfully!");
+
+                if(xevent_action == 'submitAll'){
+                    // Reset modal
+                    $("#partner1_modal").css({'display': 'unset'});
+                    $("#partner2_modal").css({'display': 'none'});
+                    $("#meiform_modal_footer").html("<button type='button' name='btn_modal' id='btn_modal' onclick='proceed_partner2()' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Proceed to Partner 2</button>");
+
+                    // Clear form inputs
+                    $('#partner1_modal select, #partner2_modal select').each(function() {
+                        $(this).children('option:first').prop('selected', true);
+                    });
+                    $('#partner1_modal input[type="text"], #partner2_modal input[type="text"]').val('');
+
+                    $("#meiform_modal").modal("hide");
+                    alert("Booking submitted successfully!");
                 }
+            },
+            error: function (request, status, error) {
+                console.error("AJAX Error:", error);
+                console.error("Response:", request.responseText);
+                alert("An error occurred. Please try again.");
             }
-
-            if(xdata["html"]) {
-                $("#table_data").html(xdata["html"]);
-            }
-
-            if(xevent_action == 'submitAll'){
-                // Reset modal
-                $("#partner1_modal").css({'display': 'unset'});
-                $("#partner2_modal").css({'display': 'none'});
-                $("#meiform_modal_footer").html("<button type='button' name='btn_modal' id='btn_modal' onclick='proceed_partner2()' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Proceed to Partner 2</button>");
-
-                // Clear form inputs
-                $('#partner1_modal select, #partner2_modal select').each(function() {
-                    $(this).children('option:first').prop('selected', true);
-                });
-                $('#partner1_modal input[type="text"], #partner2_modal input[type="text"]').val('');
-
-                $("#meiform_modal").modal("hide");
-            }
-        },
-        error: function (request, status, error) {
-            console.error("AJAX Error:", error);
-            console.error("Response:", request.responseText);
-        }
-    });
-}
+        });
+    }
 
 
     function book_func(){
@@ -964,6 +1011,34 @@ $(document).on('click', 'button[onclick*="book_func"]', function(e) {
         }
       });
     });
+
+    $(document).ready(function () {
+            // ADD THESE EVENT HANDLERS HERE
+            // Handle confirm cancel button click
+            $("#confirm_cancel_btn").click(function() {
+                $("#cancel_confirmation_modal").modal("hide");
+                
+                // Show loading state
+                $(this).html("Canceling...").prop('disabled', true);
+                
+                // Proceed with cancellation
+                ajaxNew("cancel_booking", "", "", "", current_meiformid_to_cancel);
+            });
+            
+            // Reset button state when modal is hidden
+            $("#cancel_confirmation_modal").on('hidden.bs.modal', function () {
+                $("#confirm_cancel_btn").html("Yes, Cancel").prop('disabled', false);
+                current_meiformid_to_cancel = '';
+            });
+
+            // ... existing document ready code ...
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                if (".nav-tabs") hasClass(".active"); {
+                  $(".checkout-bar li").addClass("active");
+                }
+            });
+        });
+
 
     </script>
 
