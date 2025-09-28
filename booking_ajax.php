@@ -44,7 +44,6 @@ $ret['time_fromto']='';
 $ret['first_time'] = '';
 $ret["retEdit"] = array();
 
-
 $select_db="SELECT * FROM mf_prog_users WHERE recid=?";
 $stmt	= $link->prepare($select_db);
 $stmt->execute(array($_SESSION['usr_recid']));
@@ -174,7 +173,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
             $ret['html'].= "</td>"; 
         }
 
-       
         $ret['html'].= "<td>";
                 $ret['html'].= "&nbsp;";    
         $ret['html'].= "</td>";           
@@ -261,7 +259,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                 $ret['html'].= "<td class='text-center'>";
                     $ret['html'].= " <button type='button' disabled class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
                 $ret['html'].= "</td>";
-            }else if($_POST['event_action'] == 'changeDate' || $_POST['event_action'] == 'cancel_booking'){
+            } else if($_POST['event_action'] == 'changeDate' || $_POST['event_action'] == 'cancel_booking'){
 
                 if($_POST['event_action'] == 'changeDate'){
                     $select_db_times2 = "SELECT ext_appointment_info.recid as 'recid', ext_appointment_info.time_from as 'time_from', ext_appointment_info.time_to as 'time_to'  FROM ext_appointment_info LEFT JOIN mf_appointment_info ON
@@ -501,7 +499,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
             $ret['html'].= "</div>";    
         $ret['html'].= "</td>";
 
-
         if($act_status2=="PMO" || $act_status2=="APR"){
             $ret['html'].= "<td>";
                 $ret['html'].= "<div class='container text-center' style='font-family:inter;font-weight:700;font-size:25px;color:#797979''>";    
@@ -510,7 +507,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
             $ret['html'].= "</td>";   
         }
      
-
         $ret['html'].= "<td>";
                 $ret['html'].= "&nbsp;";    
         $ret['html'].= "</td>";           
@@ -566,10 +562,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                         $ret['html'].= "</option>"; 
                     }
 
-
                     while($row_xid2 = $stmt_2->fetch()){
-                    
-
                         $xselected = '';
                         
                         if(($_POST['date'] == $row_xid2["clinic_date"]) && ($_POST['ext_recid'] == $row_xid['ext_recid'])){
@@ -586,21 +579,16 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
 
                     }
 
-
                 $ret['html'].= "</select>";    
-            $ret['html'].= "</td>";
-
+                $ret['html'].= "</td>";
 
             if($_POST['ext_recid'] == $row_xid['ext_recid']){
-
                 $givendate = $_POST['date'];
-    
                 $dateObject = DateTime::createFromFormat('Y-m-d', $givendate);
                 $weekday = strtolower($dateObject->format('l'));
                 
                 $ret['html'].= "<td>";
                     $ret['html'].= "<select class='form-control w-75 ms-2 select_time' disabled>"; 
-                    
                     $select_db_times = "SELECT ext_appointment_info.time_from as 'time_from', ext_appointment_info.time_to as 'time_to'  FROM ext_appointment_info LEFT JOIN mf_appointment_info ON
                     ext_appointment_info.appointment_info_id = mf_appointment_info.appointment_info_id
                     WHERE ext_appointment_info.venue_id='".$row_xid['venue_id']."' ORDER BY time_from ASC";                    
@@ -608,25 +596,19 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                     $stmt_times->execute();
                     $selected_timeline = '';
 
-
                     while($row_times = $stmt_times->fetch()){
-
                         $timeline =  $row_times['time_from']." - ".$row_times['time_to'];
-
                         if($_POST['timeline'] == $timeline){
                             $selected_timeline = 'selected';
                         }
-
                         $ret['html'].= "<option disabled ".$selected_timeline.">"; 
                             $ret['html'].= $row_times['time_from']." - ".$row_times['time_to']; 
                         $ret['html'].= "</option>"; 
-
                         $selected_timeline = '';
-
                     }
         
                     $ret['html'].= "</select>";
-                $ret['html'].= "</td>";
+                    $ret['html'].= "</td>";
 
                 if($act_status2 == "PMO"){
                     $ret['html'].= "<td class='text-center'>";
@@ -634,13 +616,11 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                     $ret['html'].= "</td>";
                 }
    
-
-
                 $ret['html'].= "<td class='text-center'>";
-$ret['html'] .= " <button type='button' onclick='showCancelConfirmation(\"".$meiformuid."\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Cancel</button>";
+                $ret['html'] .= " <button type='button' onclick='showCancelConfirmation(\"".$meiformuid."\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Cancel</button>";
                 $ret['html'].= "</td>";
 
-            }else{
+            } else{
                 $ret['html'].= "<td>";
                     $ret['html'].= "<select class='form-control w-75 ms-2' disabled>";   
                         $ret['html'].= "<option disabled selected>"; 
@@ -655,24 +635,14 @@ $ret['html'] .= " <button type='button' onclick='showCancelConfirmation(\"".$mei
                     $ret['html'].= "</td>";
                 }
 
-
-
                 $ret['html'].= "<td class='text-center'>";
                     $ret['html'].= " <button type='button' disabled class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
                 $ret['html'].= "</td>";
             }
 
-        
         $ret['html'].= "</tr>";
-
     }
-
-
 }    
-
-
-
-
 
 header('Content-Type: application/json');
 echo json_encode($ret);
