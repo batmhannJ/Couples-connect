@@ -248,16 +248,17 @@ ul.checkout-bar:before {
                                     echo "</div>";    
                                 echo "</td>";
 
-                            if($act_status == "PMC" || $act_status == "APR"){
+                            if($act_status == "PMC" || $act_status == "APR" || $act_status == "PMO"){
                                 echo "<td>";
                                     echo "<div class='container text-center' style='font-family:inter;font-weight:700;font-size:25px;color:#797979''>";    
                                         echo "Slots Available";    
                                     echo "</div>";    
                                 echo "</td>";   
-
-                                $act_status2 = "PMO";
                             }
 
+                            if($act_status == "APR"){
+                                $act_status2 = "PMO";
+                            }
 
                                 echo "<td>";
                                         echo "&nbsp;";    
@@ -321,15 +322,15 @@ ul.checkout-bar:before {
                                         echo "<td>";
                                             echo "<select class='form-control w-75 ms-2''>";   
                                                 echo "<option disabled selected>"; 
-                                                    echo "Select a Time..."; 
+                                                    echo "Select a time"; 
                                                 echo "</option>"; 
                                             echo "</select>";
                                         echo "</td>";
 
 
-                                        if($act_status2 == "PMC") {
-                                            echo "<td class='text-center'>";
-                                                echo "Select a Time...";    
+                                        if($act_status2 == "PMC" || $act_status2 == "PMO") {
+                                            echo "<td class='text-center slots-cell'>";
+                                                echo "Slot available";    
                                             echo "</td>";
                                         }
                         
@@ -393,9 +394,9 @@ ul.checkout-bar:before {
                                                 echo "</td>";
                                             }
 
-                                        if($act_status2 == "PMC"){
+                                        if($act_status2 == "PMC" || $act_status2 == "PMO"){
                                             echo "<td class='text-center'>";
-                                                echo $row_xid['slots_avail'];    
+                                                echo $row_xid['slots_avail'] ? $row_xid['slots_avail'] : '0';    
                                             echo "</td>";
                                         }
                                         
@@ -906,6 +907,17 @@ $(document).on('click', 'button[onclick*="book_func"]', function(e) {
                 }
                 
                 $("#timeline_hidden").val(xdata["first_time"] || '');
+            }
+
+            if(xevent_action == 'cancel_booking'){
+                // Update the table content after successful cancellation
+                if(xdata["html"]) {
+                    $("#table_data").html(xdata["html"]);
+                }
+                // Optionally show a success message
+                if(xdata["msg"]) {
+                    alert("Booking cancelled successfully!");
+                }
             }
 
             if(xdata["html"]) {

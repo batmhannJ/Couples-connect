@@ -34,15 +34,16 @@ if($act_status == "APR"){
     $act_status2 = "PMO";
 }
 
-
-
 if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDate" ||  $_POST['event_action'] == "cancel_booking"){
-
     if(isset($_POST['event_action']) &&  $_POST['event_action'] == "cancel_booking"){
+        $select_booking_details = "SELECT venue, date, from_to FROM ext_mf_meiform WHERE meiformid=? LIMIT 1";
+        $stmt_booking = $link->prepare($select_booking_details);
+        $stmt_booking->execute(array($_POST['meiformid_post']));
+        $booking_details = $stmt_booking->fetch();
 
-        $select_db_select = "SELECT * FROM pro_meiform WHERE usermeiformid='".$_POST['meiformid_post']."' LIMIT 1";
-        $stmt_select	= $link->prepare($select_db_select);
-        $stmt_select->execute();
+        $select_db_select = "SELECT * FROM pro_meiform WHERE usermeiformid=? LIMIT 1";
+        $stmt_select = $link->prepare($select_db_select);
+        $stmt_select->execute(array($_POST['meiformid_post']));
         $row_select = $stmt_select->fetch();
 
         $act_remove = "";
@@ -56,17 +57,23 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
         $pro_users4["act_status"] = $act_remove;
         PDO_UpdateRecord($link,"mf_prog_users",$pro_users4,"userid = ?",array($_SESSION['usr_id']),false);  
 
-        $xqry_del = "DELETE FROM pro_meiform WHERE usermeiformid='".$_POST['meiformid_post']."'";
+        $xqry_del = "DELETE FROM pro_meiform WHERE usermeiformid=?";
         $xstmt_del = $link->prepare($xqry_del);
-        $xstmt_del->execute();
+        $xstmt_del->execute(array($_POST['meiformid_post']));
 
-        $xqry_del2 = "DELETE FROM ext_mf_meiform WHERE usermeiformid='".$_POST['meiformid_post']."'";
+        $xqry_del2 = "DELETE FROM ext_mf_meiform WHERE meiformid=?";
         $xstmt_del2 = $link->prepare($xqry_del2);
-        $xstmt_del2->execute();
+        $xstmt_del2->execute(array($_POST['meiformid_post']));
 
+        if($booking_details) {
+            $update_slots_cancel = "UPDATE ext_appointment_info SET slots_avail = slots_avail + 1 
+                                WHERE clinic_date = ? 
+                                AND venue_id = (SELECT venue_id FROM mf_venue WHERE venue = ?)";
+            $stmt_update_cancel = $link->prepare($update_slots_cancel);
+            $stmt_update_cancel->execute(array($booking_details['date'], $booking_details['venue']));
+        }
     }
-
-                         
+                  
     if($act_status == "PMC"){
         $xheader_top = "Pre-Marriage Counseling Schedules";
     }else if($act_status == "PMO" || $act_status == "APR"){
@@ -113,7 +120,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
         $ret['html'].= "<td>";
                 $ret['html'].= "&nbsp;";    
         $ret['html'].= "</td>";           
-    $ret['html'].= "</tr>";
+        $ret['html'].= "</tr>";
 
     $select_db_xid = "SELECT ext_appointment_info.clinic_date as 'clinic_date', mf_venue.venue as 'venue', mf_venue.venue_id as 'venue_id', mf_appointment_info.userid as 'userid',ext_appointment_info.slots_avail as 'slots_avail',
     ext_appointment_info.recid as 'ext_recid' FROM ext_appointment_info LEFT JOIN mf_appointment_info ON 
@@ -134,7 +141,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
     }
 
     while($row_xid = $stmt->fetch()){
-
         $ret['html'].= "<tr>";
             $ret['html'].= "<td style='padding-bottom:15px;padding-top:10px'>";
                 $ret['html'].= "<div class='container text-start' style='font-family:inter;font-weight:700;font-size:25px;color:black;padding-left:25px'>";    
@@ -166,7 +172,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                             $xselected = 'selected';
                         }
 
-             
                         $ret['html'].="<option ".$xselected." 
                         data-xslotsavail='".$row_xid['slots_avail']."' 
                         data-xdate='" . $row_xid2["clinic_date"] . "' 
@@ -175,11 +180,10 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                         data-xvenue='".$row_xid["venue"]."'
                         >" . $row_xid2["clinic_date"] . "</option>"; 
                    
-                
                     }            
 
                 $ret['html'].= "</select>";    
-            $ret['html'].= "</td>";
+                $ret['html'].= "</td>";
 
             if($_POST['event_action'] == 'first_load'){
                 $ret['html'].= "<td>";
@@ -201,7 +205,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                 $ret['html'].= "</td>";
             }else if($_POST['event_action'] == 'changeDate' || $_POST['event_action'] == 'cancel_booking'){
 
-
                 if($_POST['event_action'] == 'changeDate'){
                     $select_db_times2 = "SELECT ext_appointment_info.recid as 'recid', ext_appointment_info.time_from as 'time_from', ext_appointment_info.time_to as 'time_to'  FROM ext_appointment_info LEFT JOIN mf_appointment_info ON
                     ext_appointment_info.appointment_info_id = mf_appointment_info.appointment_info_id LEFT JOIN mf_venue ON ext_appointment_info.venue_id = mf_venue.venue_id
@@ -217,7 +220,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
 
                             $ret['first_time'] = $timeline2;
                         }
-
                         $xchecker++;
                     }
                 }
@@ -251,22 +253,19 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                             $ret['html'].= "</option>"; 
     
                             $selected_timeline = '';
-
                         }
+            
+                        $ret['html'].= "</select>";
+                        $ret['html'].= "</td>";
 
-                        $select_db_slots = " SELECT ext_appointment_info.slots_avail as 'slots_avail' FROM ext_appointment_info LEFT JOIN mf_venue ON ext_appointment_info.venue_id = mf_venue.venue_id WHERE ext_appointment_info.venue_id = '".$row_xid['venue_id']."' AND clinic_date='".$_POST['date_hidden']."' LIMIT 1";
+                        $select_db_slots = "SELECT ext_appointment_info.slots_avail as 'slots_avail' FROM ext_appointment_info LEFT JOIN mf_venue ON ext_appointment_info.venue_id = mf_venue.venue_id WHERE ext_appointment_info.venue_id = '".$row_xid['venue_id']."' AND clinic_date='".$_POST['date']."' LIMIT 1";
                         $stmt_slots	= $link->prepare($select_db_slots);
                         $stmt_slots->execute();
                         $row_slots = $stmt_slots->fetch();
 
-                        
-            
-                        $ret['html'].= "</select>";
-                    $ret['html'].= "</td>";
-
                     if($act_status2 == "PMO"){
-                        $ret['html'].= "<td class='text-center'>";
-                            $ret['html'].= $row_slots['slots_avail'];    
+                        $ret['html'].= "<td class='text-center slots-cell'>";
+                            $ret['html'].= $row_slots['slots_avail'] ? $row_slots['slots_avail'] : '0';    
                         $ret['html'].= "</td>";
 
                         $ret['html'].= "<td class='text-center'>";
@@ -277,7 +276,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                             $ret['html'].= " <button type='button' onclick='ajaxNew(\"submitAll\",\"\",\"\",\"\",\"\")' class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
                         $ret['html'].= "</td>";
                     }
-
 
                 }else{
                     $ret['html'].= "<td>";
@@ -295,7 +293,6 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
                         $ret['html'].= "</td>";
                     }
 
-
                     $ret['html'].= "<td class='text-center'>";
                         $ret['html'].= " <button type='button' disabled class='btn' style='background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:180px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))'>Book now</button>";    
                     $ret['html'].= "</td>";
@@ -305,106 +302,108 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
         $ret['html'].= "</tr>";
     }
 
-}else if($_POST['event_action'] == "submitAll"){
+}else if ($_POST['event_action'] == "submitAll") {
 
+    $select_db_slots = "SELECT slots_avail FROM ext_appointment_info WHERE recid = ? AND clinic_date = ? AND venue_id = (SELECT venue_id FROM mf_venue WHERE venue = ?)";
+    $stmt_slots = $link->prepare($select_db_slots);
+    $stmt_slots->execute(array($_POST['ext_recid'], $_POST['date_hidden'], $_POST['venue_hidden']));
+    $row_slots = $stmt_slots->fetch();
 
-    $select_db_meiformcount = "SELECT * FROM pro_meiform ORDER BY usermeiformid DESC LIMIT 1";
-    $stmt_meiformcount	= $link->prepare($select_db_meiformcount);
-    $stmt_meiformcount->execute();
-    $row_countAll = $stmt_meiformcount->fetchAll();
+    if ($row_slots && $row_slots['slots_avail'] > 0) {
+        $update_slots = "UPDATE ext_appointment_info SET slots_avail = slots_avail - 1 WHERE recid = ? AND clinic_date = ? AND venue_id = (SELECT venue_id FROM mf_venue WHERE venue = ?)";
+        $stmt_update_slots = $link->prepare($update_slots);
+        $stmt_update_slots->execute(array($_POST['ext_recid'], $_POST['date_hidden'], $_POST['venue_hidden']));
 
-    $select_db_meiformcount2 = "SELECT * FROM pro_meiform ORDER BY usermeiformid DESC LIMIT 1";
-    $stmt_meiformcount2	= $link->prepare($select_db_meiformcount2);
-    $stmt_meiformcount2->execute();
-    $row_countAll2 = $stmt_meiformcount2->fetch();
+        $select_db_meiformcount = "SELECT * FROM pro_meiform ORDER BY usermeiformid DESC LIMIT 1";
+        $stmt_meiformcount = $link->prepare($select_db_meiformcount);
+        $stmt_meiformcount->execute();
+        $row_countAll = $stmt_meiformcount->fetchAll();
 
-    $meiformuid = '';
+        $select_db_meiformcount2 = "SELECT * FROM pro_meiform ORDER BY usermeiformid DESC LIMIT 1";
+        $stmt_meiformcount2 = $link->prepare($select_db_meiformcount2);
+        $stmt_meiformcount2->execute();
+        $row_countAll2 = $stmt_meiformcount2->fetch();
 
-    if(count($row_countAll) == 0){
-        $meiformuid = "UMF-00001";
-    }else{
-        $meiformuid = lNexts($row_countAll2['usermeiformid']);
-    }
-
-    $pro_users = array();
-    $pro_users["usermeiformid"] = $meiformuid;
-    $pro_users["status"] = $act_status2;
-    $pro_users["userid"] = $_SESSION["usr_id"];
-    $pro_users["counselorid"] = $_POST["counselorid"];
-    PDO_InsertRecord($link,'pro_meiform',$pro_users,$debug=false);
-
-
-    $pro_users2 = array();
-    $pro_users2["act_status"] = $act_status2;
-    PDO_UpdateRecord($link,"mf_prog_users",$pro_users2,"userid = ?",array($_SESSION["usr_id"]),false);  
-
-
-
-
-    $mf_users1 = array();
-    $new_meiformid1 = "MEI-00000";
-    foreach($_POST['form_1'] as $form1_e => $key) {
-
-        $new_meiformid1 = lNexts($new_meiformid1);
-
-        if($act_status2 == "PMO"){
-            $mf_users1["userid"] = $_SESSION['usr_id'];
-            $mf_users1["partnerid"] = 1;
-            $mf_users1["meiformid"] = $new_meiformid1;
-            $mf_users1["answers"] = $key['option'];
-            $mf_users1["reasons"] = $key['input'];
-            $mf_users1["venue"] = $_POST['venue_hidden'];
-            $mf_users1["from_to"] = $_POST['timeline_hidden'];
-            $mf_users1["date"] = $_POST['date_hidden'];
-            //$mf_users1["usermeiformid"] = $meiformuid;
-        }else{
-            $mf_users1["userid"] = $_SESSION['usr_id'];
-            $mf_users1["partnerid"] = 1;
-            $mf_users1["meiformid"] = $new_meiformid1;
-            $mf_users1["answers"] = 'Agree';
-            $mf_users1["reasons"] = '';
-            $mf_users1["venue"] = $_POST['venue_hidden'];
-            $mf_users1["from_to"] = $_POST['timeline_hidden'];
-            $mf_users1["date"] = $_POST['date_hidden'];
-            //$mf_users1["usermeiformid"] = $meiformuid;
+        $meiformuid = '';
+        if (count($row_countAll) == 0) {
+            $meiformuid = "UMF-00001";
+        } else {
+            $meiformuid = lNexts($row_countAll2['usermeiformid']);
         }
 
+        $pro_users = array();
+        $pro_users["usermeiformid"] = $meiformuid;
+        $pro_users["status"] = $act_status2;
+        $pro_users["userid"] = $_SESSION["usr_id"];
+        $pro_users["counselorid"] = $_POST["counselorid"];
+        PDO_InsertRecord($link, 'pro_meiform', $pro_users, $debug = false);
 
-        PDO_InsertRecord($link,'ext_mf_meiform',$mf_users1,$debug=false);
-    }
+        $pro_users2 = array();
+        $pro_users2["act_status"] = $act_status2;
+        PDO_UpdateRecord($link, "mf_prog_users", $pro_users2, "userid = ?", array($_SESSION["usr_id"]), false);
 
-    $mf_users2 = array();
-    $new_meiformid2 = "MEI-00000";
-    foreach($_POST['form_2'] as $form2_e => $key) {
+        $mf_users1 = array();
+        $new_meiformid1 = "MEI-00000";
+        foreach ($_POST['form_1'] as $form1_e => $key) {
+            $new_meiformid1 = lNexts($new_meiformid1);
 
-        $new_meiformid2 = lNexts($new_meiformid2);
+            if ($act_status2 == "PMO") {
+                $mf_users1["userid"] = $_SESSION['usr_id'];
+                $mf_users1["partnerid"] = 1;
+                $mf_users1["meiformid"] = $new_meiformid1;
+                $mf_users1["answers"] = $key['option'];
+                $mf_users1["reasons"] = $key['input'];
+                $mf_users1["venue"] = $_POST['venue_hidden'];
+                $mf_users1["from_to"] = $_POST['timeline_hidden'];
+                $mf_users1["date"] = $_POST['date_hidden'];
+            } else {
+                $mf_users1["userid"] = $_SESSION['usr_id'];
+                $mf_users1["partnerid"] = 1;
+                $mf_users1["meiformid"] = $new_meiformid1;
+                $mf_users1["answers"] = 'Agree';
+                $mf_users1["reasons"] = '';
+                $mf_users1["venue"] = $_POST['venue_hidden'];
+                $mf_users1["from_to"] = $_POST['timeline_hidden'];
+                $mf_users1["date"] = $_POST['date_hidden'];
+            }
 
-        if($act_status2 == "PMO"){
-            $mf_users2["userid"] = $_SESSION['usr_id'];
-            $mf_users2["partnerid"] = 2;
-            $mf_users2["meiformid"] = $new_meiformid2;
-            $mf_users2["answers"] = $key['option'];
-            $mf_users2["reasons"] = $key['input'];
-            $mf_users2["venue"] = $_POST['venue_hidden'];
-            $mf_users2["from_to"] = $_POST['timeline_hidden'];
-            $mf_users2["date"] = $_POST['date_hidden'];
-            //$mf_users2["usermeiformid"] = $meiformuid;
-        }else{
-            $mf_users2["userid"] = $_SESSION['usr_id'];
-            $mf_users2["partnerid"] = 2;
-            $mf_users2["meiformid"] = $new_meiformid2;
-            $mf_users2["answers"] = "Agree";
-            $mf_users2["reasons"] = "";
-            $mf_users2["venue"] = $_POST['venue_hidden'];
-            $mf_users2["from_to"] = $_POST['timeline_hidden'];
-            $mf_users2["date"] = $_POST['date_hidden'];
-            //$mf_users2["usermeiformid"] = $meiformuid;
+            PDO_InsertRecord($link, 'ext_mf_meiform', $mf_users1, $debug = false);
         }
 
-        PDO_InsertRecord($link,'ext_mf_meiform',$mf_users2,$debug=false);
+        $mf_users2 = array();
+        $new_meiformid2 = "MEI-00000";
+        foreach ($_POST['form_2'] as $form2_e => $key) {
+            $new_meiformid2 = lNexts($new_meiformid2);
+
+            if ($act_status2 == "PMO") {
+                $mf_users2["userid"] = $_SESSION['usr_id'];
+                $mf_users2["partnerid"] = 2;
+                $mf_users2["meiformid"] = $new_meiformid2;
+                $mf_users2["answers"] = $key['option'];
+                $mf_users2["reasons"] = $key['input'];
+                $mf_users2["venue"] = $_POST['venue_hidden'];
+                $mf_users2["from_to"] = $_POST['timeline_hidden'];
+                $mf_users2["date"] = $_POST['date_hidden'];
+            } else {
+                $mf_users2["userid"] = $_SESSION['usr_id'];
+                $mf_users2["partnerid"] = 2;
+                $mf_users2["meiformid"] = $new_meiformid2;
+                $mf_users2["answers"] = " Agree";
+                $mf_users2["reasons"] = "";
+                $mf_users2["venue"] = $_POST['venue_hidden'];
+                $mf_users2["from_to"] = $_POST['timeline_hidden'];
+                $mf_users2["date"] = $_POST['date_hidden'];
+            }
+
+            PDO_InsertRecord($link, 'ext_mf_meiform', $mf_users2, $debug = false);
+        }
+    } else {
+        $ret['status'] = false;
+        $ret['msg'] = "No slots available for this venue and date.";
+        header('Content-Type: application/json');
+        echo json_encode($ret);
+        exit;
     }
-
-
 
     $ret['html'].= "<tr>";
         $ret['html'].= "<td colspan='5' style='height:100px'>";
