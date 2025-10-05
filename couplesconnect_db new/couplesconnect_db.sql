@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jul 19, 2025 at 05:34 PM
+-- Generation Time: Oct 05, 2025 at 04:16 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -76,7 +76,7 @@ INSERT INTO `ext_appointment_info` (`recid`, `appointment_info_id`, `clinic_date
 (274, 'APP-00010', '2024-07-15', '', '3:00AM', '4:30AM', '2024-07-02', '10', '', 'V-00005', 'cnr2@gmail.com'),
 (275, 'APP-00010', '2024-10-15', '', '6:00AM', '10:00AM', '2024-07-02', '5', '', 'V-00005', 'cnr2@gmail.com'),
 (276, 'APP-00010', '2024-07-23', '', '7:00PM', '10:30PM', '2024-07-02', '30', '', 'V-00008', 'cnr2@gmail.com'),
-(277, 'APP-00010', '2024-07-03', '', '3:00AM', '4:00AM', '2024-07-02', '15', '', 'V-00003', 'cnr2@gmail.com'),
+(277, 'APP-00010', '2024-07-03', '', '3:00AM', '4:00AM', '2024-07-02', '9', '', 'V-00003', 'cnr2@gmail.com'),
 (278, 'APP-00010', '2024-07-03', '', '9:30AM', '7:30PM', '2024-07-03', '', '', 'V-00010', 'cnr@gmail.com'),
 (279, 'APP-00011', '2024-07-30', '', '10:00AM', '2:00PM', '2024-07-03', '', '', 'V-00004', 'cnr@gmail.com'),
 (280, 'APP-00011', '2024-07-17', '', '8:30AM', '2:00PM', '2024-07-03', '', '', 'V-00001', 'cnr@gmail.com'),
@@ -84,13 +84,12 @@ INSERT INTO `ext_appointment_info` (`recid`, `appointment_info_id`, `clinic_date
 (282, 'APP-00011', '2024-07-14', '', '7:30AM', '1:30PM', '2024-07-03', '4', '', 'V-00003', 'cnr2@gmail.com'),
 (287, 'APP-00012', '2024-07-03', '', '9:00AM', '1:00PM', '2024-07-03', '', '', 'V-00001', 'cnr@gmail.com'),
 (288, 'APP-00013', '2024-07-03', '', '9:00AM', '10:00AM', '2024-07-03', '', '', 'V-00001', 'cnr@gmail.com'),
-(289, 'APP-00013', '2024-07-03', '', '2:30AM', '6:30AM', '2024-07-20', '2', '', 'V-00003', 'cnr2@gmail.com'),
+(289, 'APP-00013', '2024-07-03', '', '2:30AM', '6:30AM', '2024-07-20', '9', '', 'V-00003', 'cnr2@gmail.com'),
 (291, 'APP-00014', '2025-02-12', '', '9:30AM', '1:30PM', '2025-02-17', '', '', 'V-00001', '23@gmail.com'),
 (292, 'APP-00014', '2025-02-27', '', '9:30AM', '1:30PM', '2025-02-17', '', '', 'V-00011', '23@gmail.com'),
 (293, 'APP-00014', '2025-02-27', '', '12:00PM', '2:00PM', '2025-02-26', '10', '', 'V-00005', 'cnr2@gmail.com'),
 (294, 'APP-00014', '2025-02-28', '', '12:00PM', '3:00PM', '2025-02-26', '', '', 'V-00005', 'cnr2@gmail.com'),
-(295, 'APP-00014', '2025-02-28', '', '11:00AM', '12:00PM', '2025-02-26', '10', '', 'V-00005', 'cnr2@gmail.com'),
-(296, 'APP-00014', '2025-03-31', '', '12:00PM', '4:00PM', '2025-03-25', '5', '', 'V-00002', 'cnr@gmail.com');
+(295, 'APP-00014', '2025-02-28', '', '11:00AM', '12:00PM', '2025-02-26', '10', '', 'V-00005', 'cnr2@gmail.com');
 
 -- --------------------------------------------------------
 
@@ -255,15 +254,6 @@ CREATE TABLE `ext_mf_meiform` (
   `reasons` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `ext_mf_meiform`
---
-
-INSERT INTO `ext_mf_meiform` (`id`, `meiformid`, `userid`, `date`, `from_to`, `created_at`, `updated_at`, `venue`, `partnerid`, `answers`, `reasons`) VALUES
-(102, 204, 0, '2025-03-31', '12:00PM - 4:00PM', '2025-07-19 10:52:49', '2025-07-19 10:52:49', 'Place 2', NULL, NULL, NULL),
-(106, 0, 0, '2025-03-31', '12:00PM - 4:00PM', '2025-07-19 11:22:12', '2025-07-19 11:22:12', 'Place 2', NULL, NULL, NULL),
-(107, 0, 0, '2025-03-31', '12:00PM - 4:00PM', '2025-07-19 11:25:37', '2025-07-19 11:25:37', 'Place 2', NULL, NULL, NULL);
-
 -- --------------------------------------------------------
 
 --
@@ -397,7 +387,8 @@ INSERT INTO `mf_cc_menu` (`recid`, `mencap`, `menprog`, `menlogo`, `menidx`, `me
 (7, 'Couples Records', 'cc_couplesrecord.php', 'couples_record.png', '3', '', 'CNR'),
 (8, 'Mei Forms Approval', 'cc_meiformapproval.php', 'meiformapproval.png', '', '', 'HED'),
 (9, 'Add Questions', 'add_questions.php', 'meiformapproval.png', '', '', 'DSK, HED'),
-(10, 'Inquiry', 'inquiry.php', 'meiformapproval.png', '1', '', 'DSK');
+(10, 'Inquiry', 'inquiry.php', 'meiformapproval.png', '1', '', 'DSK'),
+(11, 'Feedback Management', 'feedback_management.php', 'feedback.png', '1', '', 'DSK');
 
 -- --------------------------------------------------------
 
@@ -733,78 +724,80 @@ CREATE TABLE `mf_prog_users` (
   `partner2_country` varchar(100) DEFAULT NULL,
   `partner2_municipality` varchar(100) DEFAULT NULL,
   `partner2_occupation` varchar(100) DEFAULT NULL,
-  `partner2_cellphone` varchar(20) DEFAULT NULL
+  `partner2_cellphone` varchar(20) DEFAULT NULL,
+  `last_cancellation_date` date DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 --
 -- Dumping data for table `mf_prog_users`
 --
 
-INSERT INTO `mf_prog_users` (`recid`, `username`, `userid`, `email`, `secondary_email`, `usertype`, `password`, `act_status`, `cert_status`, `cert_desc`, `date_requested`, `date_requested_desc`, `pmoc_online`, `doc_link`, `crm_link`, `justification`, `remarks`, `chk_by`, `print_status`, `partner1_fname`, `partner1_mname`, `partner1_lname`, `partner1_sex`, `partner1_bday`, `partner1_country`, `partner1_municipality`, `partner1_occupation`, `partner1_cellphone`, `partner2_fname`, `partner2_mname`, `partner2_lname`, `partner2_sex`, `partner2_bday`, `partner2_country`, `partner2_municipality`, `partner2_occupation`, `partner2_cellphone`) VALUES
-(17, 'deskstaff@gmail.com', 'USR-00001', 'test@gmail.com', '', 'DSK', '123', 'PMC', '', '', '0000-00-00', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(18, 'couple1@gmail.com', 'USR-00002', '', '', 'USR', '123', 'NCT', '', '', '2024-10-12', '', '', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(19, 'couple2@gmail.com', 'USR-00003', 'couple2@gmail.com', 'couple2_second@gmail.com', 'USR', '123', '', '', '', '2022-04-13', '', '', 'residencyfile.pdf', 'justificationfile.pdf', 'The reason why I want to apply for online PMOC is because I am uable to go to the office in cabuyao and apply there personally. I am currently residing in Visayas. I also consider going there during only weekends and not the weekdays but it is really confusing for me to commute to cabuyao just for the online counseling that is why it is a bit confusing for me.', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(22, 'brotha@gmail.com', 'USR-00005', 'brotha@gmail.com', '', 'USR', '1234', 'CRT', 'PRP', 'Preparing', '2024-04-11', 'April 11, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(23, 'mari@gmail.com', 'USR-00006', 'mari@gmail.com', '', 'USR', '123', 'DEC', '', '', '2024-03-16', '', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(24, 'Marko@gmail.com', 'USR-00007', 'Marko@gmail.com', 'delafuerte@gmail.com', 'USR', 'xx', 'CRT', 'RCV', 'Received', '2024-04-11', 'April 11, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(25, 'johnny@gmail.com', 'USR-00008', 'johnny@gmail.com', '', 'DSK', '123', '', '', '', '2024-03-16', '', 'JUST DOESNT HIT', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(27, 'motha@gmail.com', 'USR-00009', 'motha@gmail.com', '', 'USR', '67', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'Y', '', '', 'sdfdfffsdff', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(28, 'lennardlee100@gmail.com', 'USR-00010', 'lennardlee100@gmail.com', '', 'USR', '123', 'CRT', 'PUP', 'For Pickup', '2024-04-11', 'April 11, 2024', 'Y', 'uploads/344921063_253307063937716_1671525311257754', 'uploads/201939.avif', 'lebum        ', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(29, '123@gmail.com', 'USR-00011', '123@gmail.com', '', 'USR', '111', 'DEC', '', '', '2024-04-11', 'April 11, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(30, 'bruh@gmail.com', 'USR-00012', 'bruh@gmail.com', '', 'USR', '123', 'CRT', 'PRP', 'Preparing', '2024-04-11', 'April 11, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(31, '1234@gmail.com', 'USR-00013', '1234@gmail.com', '', 'USR', '111', 'APR', '', '', '2024-04-13', 'April 13, 2024', 'Y', 'uploads/423472452_929274195466944_4082494152046077', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(32, 'johnny2@gmail.com', 'USR-00014', 'johnny2@gmail.com', '', 'USR', 'xx', 'APR', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(33, 'jor@gmail.com', 'USR-00015', 'jor@gmail.com', '', 'USR', '11', 'APR', '', '', '2024-04-27', 'April 27, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(34, 'marky@gmail.com', 'USR-00016', 'marky@gmail.com', '', 'USR', '111', 'APR', '', '', '2024-05-27', 'May 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(35, 'yu@gmail.com', 'USR-00017', 'yu@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(36, 'cnr@gmail.com', 'USR-00018', 'cnr@gmail.com', '', 'CNR', '123', '', '', '', '2024-03-16', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(37, 'cnr2@gmail.com', 'USR-00019', 'cnr2@gmail.com', '', 'CNR', '123', '', '', '', '2024-03-16', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(38, 'head1@gmail.com', 'USR-00020', 'head1@gmail.com', '', 'HED', '123', '', '', '', '2024-03-25', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(39, 'joenel3@gmail.com', 'USR-00021', 'joenel3@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(40, 'test1@gmail.com', 'USR-00022', 'test1@gmail.com', '', 'USR', '123', 'CRT', 'PRP', 'Preparing', '2024-04-12', 'April 12, 2024', 'N', 'uploads/434142151_1120827459118053_756724852019588', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(41, 'lennard_lee@dlsu.edu.ph', 'USR-00023', 'lennard_lee@dlsu.edu.ph', '', 'USR', '123', 'PCT', '', '', '2024-04-12', 'April 12, 2024', 'Y', '', '', 'JOENEL', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(42, 'brb@gmail.com', 'USR-00024', 'brb@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(43, 'are@gmail.com', 'USR-00025', 'are@gmail.com', '', 'USR', '123', '', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(44, 'are2@gmail.com', 'USR-00026', 'are2@gmail.com', '', 'USR', '1', 'NCT', '', '', '2024-04-17', 'April 17, 2024', 'Y', 'uploads/434142151_1120827459118053_756724852019588', 'uploads/431681041_1788772974869851_747359344553442', 'IF you went to the moon then it would be over', 'Subject for approval.', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(45, '2@gmail.com', 'USR-00027', '2@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-23', 'April 23, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(46, 'y@gmail.com', 'USR-00028', 'y@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-28', 'April 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(47, '3@gmail.com', 'USR-00029', '3@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-18', 'April 18, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(48, '4@gmail.com', 'USR-00030', '4@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-18', 'April 18, 2024', 'N', 'uploads/314767425_10160179054267158_59458798754800', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(49, 'register@gmail.com', 'USR-00031', 'register@gmail.com', '', 'USR', '123', 'NCT', '', '', '2024-04-23', 'April 23, 2024', 'Y', 'uploads/doc.pdf', 'uploads/imao-MRW5405.jpg', 'JUSTIFICATION', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(51, 't@gmail.com', 'USR-00032', 't@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(52, 'jrue@gmail.com', 'USR-00033', 'jrue@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(53, 'r@gmail.com', 'USR-00034', 'r@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(54, '333@gmail.com', 'USR-00035', '333@gmail.com', 'marky@gmail.com', 'USR', '333', 'PCT', '', '', '2024-04-28', 'April 28, 2024', 'Y', 'uploads/imao-MRW5405.jpg', 'uploads/download (1).jpg', ' I CHOSE TO APPLY TO PMC BECAUE BECAUSE BECUASE', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(55, 'yuyu@gmail.com', 'USR-00036', 'yuyu@gmail.com', '', 'USR', '1', 'DEC', '', '', '2024-04-28', 'April 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(56, 'e@gmail.com', 'USR-00037', 'e@gmail.com', '', 'USR', '123', 'NCT', '', '', '2024-05-03', 'May 03, 2024', 'Y', 'uploads/ABM12-B Sched TERM 3.jpg', 'uploads/434142151_1120827459118053_756724852019588', 'SDADSDDADSDD', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(57, 'BRUH2@gmail.com', 'USR-00038', 'BRUH2@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-05-06', 'May 06, 2024', 'Y', 'uploads/lhyfpzbifpo21.png', 'uploads/imao-MRW5405.jpg', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(58, 'broseph@gmail.com', 'USR-00039', 'broseph@gmail.com', '', 'USR', '123', 'DEC', '', '', '2024-05-27', 'May 27, 2024', 'N', 'uploads/photo-1574005280900-3ff489fa1f70.jpg', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(59, 'wt@gmail.com', 'USR-00040', 'wt@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-05-27', 'May 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(60, 'g@gmail.com', 'USR-00041', 'g@gmail.com', '', 'USR', '1', 'APR', '', '', '2024-05-28', 'May 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(61, 'tt@gmail.com', 'USR-00042', 'tt@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(62, 'g2@gmail.com', 'USR-00043', 'g2@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-05-28', 'May 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(63, 'r2@gmail.com', 'USR-00044', 'r2@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(64, 'h@gmail.com', 'USR-00045', 'h@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-05-29', 'May 29, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(65, 'b@gmail.com', 'USR-00046', 'b@gmail.com', '', 'USR', '1', 'APR', '', '', '2024-05-29', 'May 29, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(66, '222@gmail.com', 'USR-00047', '222@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(67, 's@gmail.com', 'USR-00048', 's@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(68, 'f@gmail.com', 'USR-00049', 'f@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-06-24', 'June 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(69, 'q@gmail.com', 'USR-00050', 'q@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(70, 'broseph2@gmail.com', 'USR-00051', 'broseph2@gmail.com', '', 'USR', '1', 'PMO', '', '', '2024-07-15', 'July 15, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(71, 'u@gmail.com', 'USR-00052', 'u@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-07-17', 'July 17, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(72, '23@gmail.com', 'USR-00053', '23@gmail.com', '', 'CNR', '1', 'PCT', '', '', '2025-02-17', 'February 17, 2025', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(73, 'joen@gmail.com', 'USR-00054', '', '', 'CNR', '123', '', '', '', '0000-00-00', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(74, 'jdulatre22@gmail.com', 'USR-00055', 'jdulatre22@gmail.com', 'jdulatre22@gmail.com', 'USR', 'jdulatre22@gmail.com', 'APR', '', '', '2025-02-16', 'February 16, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Subject for approval.', 'johnny@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(75, '123456@gmail.com', 'USR-00056', '123456@gmail.com', '123456@gmail.com', 'USR', '123', 'PMO', 'PRP', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', 'No valid info.', 'Invalid info provided.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(76, 'rexluciano@yahoo.com', 'USR-00057', 'rexluciano@yahoo.com', 'rexluciano36@gmail.com', 'USR', '123', 'PMC', '', '', '2025-02-17', 'February 17, 2025', 'Y', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', 'I Want to apply for PMOC.', 'Subject for approval.', 'johnny@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(77, 'www@gmail.com', 'USR-00058', 'www@gmail.com', 'www@gmail.com', 'USR', '123', 'APR', '', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Invalid.', 'johnny@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(78, 'ttt@gmail.com', 'USR-00059', 'ttt@gmail.com', 'ttt@gmail.com', 'USR', '123', 'PMC', '', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Subject for approval.', 'johnny@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(79, 'testuser@gmail.com', 'USR-00060', 'testuser@gmail.com', '', 'USR', '1234', 'PCT', '', '', '2025-02-26', 'February 26, 2025', 'N', '', '', '', '', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(80, 'testuser2@gmail.com', 'USR-00061', 'testuser2@gmail.com', '', 'USR', '1234', 'DEC', '', '', '2025-02-26', 'February 26, 2025', 'N', '', '', '', 'Not a Resident Incomplete', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(81, 'frankocean@gmail.com', 'USR-00062', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(82, 'frankocean@gmail.com', 'USR-00063', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(83, 'frankocean@gmail.com', 'USR-00064', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
-(86, 'reyeshannahjoy82@gmail.com', 'USR-00065', 'reyeshannahjoy82@gmail.com', 'reyeshannahjoy82@gmail.com', 'USR', '123', 'POST', '', 'Pending verification', '2025-07-17', 'July 17, 2025', 'N', 'uploads/USR-00065_doc_1750421620.jpg', '', '', '', 'deskstaff@gmail.com', 1, 'Hannah', 'Dizon', 'Joy Reyes', 'F', '0000-00-00', 'Philippines', 'Guimba', 'NA', '09707744466', 'Asdewrer', 'gdbgeebt', 'Cgrgrd', 'M', '0000-00-00', 'Philippines', 'Guimba', 'Architect', '09123456789');
+INSERT INTO `mf_prog_users` (`recid`, `username`, `userid`, `email`, `secondary_email`, `usertype`, `password`, `act_status`, `cert_status`, `cert_desc`, `date_requested`, `date_requested_desc`, `pmoc_online`, `doc_link`, `crm_link`, `justification`, `remarks`, `chk_by`, `print_status`, `partner1_fname`, `partner1_mname`, `partner1_lname`, `partner1_sex`, `partner1_bday`, `partner1_country`, `partner1_municipality`, `partner1_occupation`, `partner1_cellphone`, `partner2_fname`, `partner2_mname`, `partner2_lname`, `partner2_sex`, `partner2_bday`, `partner2_country`, `partner2_municipality`, `partner2_occupation`, `partner2_cellphone`, `last_cancellation_date`) VALUES
+(17, 'deskstaff@gmail.com', 'USR-00001', 'test@gmail.com', '', 'DSK', '123', 'PMC', '', '', '0000-00-00', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(18, 'couple1@gmail.com', 'USR-00002', '', '', 'USR', '123', 'NCT', '', '', '2024-10-12', '', '', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(19, 'couple2@gmail.com', 'USR-00003', 'couple2@gmail.com', 'couple2_second@gmail.com', 'USR', '123', '', '', '', '2022-04-13', '', '', 'residencyfile.pdf', 'justificationfile.pdf', 'The reason why I want to apply for online PMOC is because I am uable to go to the office in cabuyao and apply there personally. I am currently residing in Visayas. I also consider going there during only weekends and not the weekdays but it is really confusing for me to commute to cabuyao just for the online counseling that is why it is a bit confusing for me.', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(22, 'brotha@gmail.com', 'USR-00005', 'brotha@gmail.com', '', 'USR', '1234', 'CRT', 'PRP', 'Preparing', '2024-04-11', 'April 11, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(23, 'mari@gmail.com', 'USR-00006', 'mari@gmail.com', '', 'USR', '123', 'DEC', '', '', '2024-03-16', '', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(24, 'Marko@gmail.com', 'USR-00007', 'Marko@gmail.com', 'delafuerte@gmail.com', 'USR', 'xx', 'CRT', 'RCV', 'Received', '2024-04-11', 'April 11, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(25, 'johnny@gmail.com', 'USR-00008', 'johnny@gmail.com', '', 'DSK', '123', '', '', '', '2024-03-16', '', 'JUST DOESNT HIT', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(27, 'motha@gmail.com', 'USR-00009', 'motha@gmail.com', '', 'USR', '67', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'Y', '', '', 'sdfdfffsdff', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(28, 'lennardlee100@gmail.com', 'USR-00010', 'lennardlee100@gmail.com', '', 'USR', '123', 'CRT', 'PUP', 'For Pickup', '2024-04-11', 'April 11, 2024', 'Y', 'uploads/344921063_253307063937716_1671525311257754', 'uploads/201939.avif', 'lebum        ', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(29, '123@gmail.com', 'USR-00011', '123@gmail.com', '', 'USR', '111', 'DEC', '', '', '2024-04-11', 'April 11, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(30, 'bruh@gmail.com', 'USR-00012', 'bruh@gmail.com', '', 'USR', '123', 'CRT', 'PRP', 'Preparing', '2024-04-11', 'April 11, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(31, '1234@gmail.com', 'USR-00013', '1234@gmail.com', '', 'USR', '111', 'APR', '', '', '2024-04-13', 'April 13, 2024', 'Y', 'uploads/423472452_929274195466944_4082494152046077', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(32, 'johnny2@gmail.com', 'USR-00014', 'johnny2@gmail.com', '', 'USR', 'xx', 'APR', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(33, 'jor@gmail.com', 'USR-00015', 'jor@gmail.com', '', 'USR', '11', 'APR', '', '', '2024-04-27', 'April 27, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(34, 'marky@gmail.com', 'USR-00016', 'marky@gmail.com', '', 'USR', '111', 'APR', '', '', '2024-05-27', 'May 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(35, 'yu@gmail.com', 'USR-00017', 'yu@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(36, 'cnr@gmail.com', 'USR-00018', 'cnr@gmail.com', '', 'CNR', '123', '', '', '', '2024-03-16', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(37, 'cnr2@gmail.com', 'USR-00019', 'cnr2@gmail.com', '', 'CNR', '123', '', '', '', '2024-03-16', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(38, 'head1@gmail.com', 'USR-00020', 'head1@gmail.com', '', 'HED', '123', '', '', '', '2024-03-25', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(39, 'joenel3@gmail.com', 'USR-00021', 'joenel3@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(40, 'test1@gmail.com', 'USR-00022', 'test1@gmail.com', '', 'USR', '123', 'CRT', 'PRP', 'Preparing', '2024-04-12', 'April 12, 2024', 'N', 'uploads/434142151_1120827459118053_756724852019588', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(41, 'lennard_lee@dlsu.edu.ph', 'USR-00023', 'lennard_lee@dlsu.edu.ph', '', 'USR', '123', 'PCT', '', '', '2024-04-12', 'April 12, 2024', 'Y', '', '', 'JOENEL', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(42, 'brb@gmail.com', 'USR-00024', 'brb@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(43, 'are@gmail.com', 'USR-00025', 'are@gmail.com', '', 'USR', '123', '', '', '', '2024-04-13', 'April 13, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(44, 'are2@gmail.com', 'USR-00026', 'are2@gmail.com', '', 'USR', '1', 'NCT', '', '', '2024-04-17', 'April 17, 2024', 'Y', 'uploads/434142151_1120827459118053_756724852019588', 'uploads/431681041_1788772974869851_747359344553442', 'IF you went to the moon then it would be over', 'Subject for approval.', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(45, '2@gmail.com', 'USR-00027', '2@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-23', 'April 23, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(46, 'y@gmail.com', 'USR-00028', 'y@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-28', 'April 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(47, '3@gmail.com', 'USR-00029', '3@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-04-18', 'April 18, 2024', 'Y', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(48, '4@gmail.com', 'USR-00030', '4@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-18', 'April 18, 2024', 'N', 'uploads/314767425_10160179054267158_59458798754800', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(49, 'register@gmail.com', 'USR-00031', 'register@gmail.com', '', 'USR', '123', 'NCT', '', '', '2024-04-23', 'April 23, 2024', 'Y', 'uploads/doc.pdf', 'uploads/imao-MRW5405.jpg', 'JUSTIFICATION', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(51, 't@gmail.com', 'USR-00032', 't@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-24', 'April 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(52, 'jrue@gmail.com', 'USR-00033', 'jrue@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(53, 'r@gmail.com', 'USR-00034', 'r@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-04-27', 'April 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(54, '333@gmail.com', 'USR-00035', '333@gmail.com', 'marky@gmail.com', 'USR', '333', 'PCT', '', '', '2024-04-28', 'April 28, 2024', 'Y', 'uploads/imao-MRW5405.jpg', 'uploads/download (1).jpg', ' I CHOSE TO APPLY TO PMC BECAUE BECAUSE BECUASE', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(55, 'yuyu@gmail.com', 'USR-00036', 'yuyu@gmail.com', '', 'USR', '1', 'DEC', '', '', '2024-04-28', 'April 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(56, 'e@gmail.com', 'USR-00037', 'e@gmail.com', '', 'USR', '123', 'NCT', '', '', '2024-05-03', 'May 03, 2024', 'Y', 'uploads/ABM12-B Sched TERM 3.jpg', 'uploads/434142151_1120827459118053_756724852019588', 'SDADSDDADSDD', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(57, 'BRUH2@gmail.com', 'USR-00038', 'BRUH2@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-05-06', 'May 06, 2024', 'Y', 'uploads/lhyfpzbifpo21.png', 'uploads/imao-MRW5405.jpg', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(58, 'broseph@gmail.com', 'USR-00039', 'broseph@gmail.com', '', 'USR', '123', 'DEC', '', '', '2024-05-27', 'May 27, 2024', 'N', 'uploads/photo-1574005280900-3ff489fa1f70.jpg', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(59, 'wt@gmail.com', 'USR-00040', 'wt@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-05-27', 'May 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(60, 'g@gmail.com', 'USR-00041', 'g@gmail.com', '', 'USR', '1', 'APR', '', '', '2024-05-28', 'May 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(61, 'tt@gmail.com', 'USR-00042', 'tt@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(62, 'g2@gmail.com', 'USR-00043', 'g2@gmail.com', '', 'USR', '1', 'PMC', '', '', '2024-05-28', 'May 28, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(63, 'r2@gmail.com', 'USR-00044', 'r2@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(64, 'h@gmail.com', 'USR-00045', 'h@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-05-29', 'May 29, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(65, 'b@gmail.com', 'USR-00046', 'b@gmail.com', '', 'USR', '1', 'APR', '', '', '2024-05-29', 'May 29, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(66, '222@gmail.com', 'USR-00047', '222@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(67, 's@gmail.com', 'USR-00048', 's@gmail.com', '', 'USR', '123', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(68, 'f@gmail.com', 'USR-00049', 'f@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-06-24', 'June 24, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(69, 'q@gmail.com', 'USR-00050', 'q@gmail.com', '', 'USR', '1', 'PCT', '', '', '2024-06-27', 'June 27, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(70, 'broseph2@gmail.com', 'USR-00051', 'broseph2@gmail.com', '', 'USR', '1', 'PMO', '', '', '2024-07-15', 'July 15, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(71, 'u@gmail.com', 'USR-00052', 'u@gmail.com', '', 'USR', '123', 'APR', '', '', '2024-07-17', 'July 17, 2024', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(72, '23@gmail.com', 'USR-00053', '23@gmail.com', '', 'CNR', '1', 'PCT', '', '', '2025-02-17', 'February 17, 2025', 'N', '', '', '', 'Subject for approval.', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(73, 'joen@gmail.com', 'USR-00054', '', '', 'CNR', '123', '', '', '', '0000-00-00', '', '', '', '', '', 'Subject for approval.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(74, 'jdulatre22@gmail.com', 'USR-00055', 'jdulatre22@gmail.com', 'jdulatre22@gmail.com', 'USR', 'jdulatre22@gmail.com', 'APR', '', '', '2025-02-16', 'February 16, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Subject for approval.', 'johnny@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(75, '123456@gmail.com', 'USR-00056', '123456@gmail.com', '123456@gmail.com', 'USR', '123', 'PMO', 'PRP', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', 'No valid info.', 'Invalid info provided.', '', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(76, 'rexluciano@yahoo.com', 'USR-00057', 'rexluciano@yahoo.com', 'rexluciano36@gmail.com', 'USR', '123', 'PMC', '', '', '2025-02-17', 'February 17, 2025', 'Y', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', 'I Want to apply for PMOC.', 'Subject for approval.', 'johnny@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(77, 'www@gmail.com', 'USR-00058', 'www@gmail.com', 'www@gmail.com', 'USR', '123', 'APR', '', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Invalid.', 'johnny@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(78, 'ttt@gmail.com', 'USR-00059', 'ttt@gmail.com', 'ttt@gmail.com', 'USR', '123', 'PMC', '', '', '2025-02-17', 'February 17, 2025', 'N', 'uploads/2013-10-21_Notice_of_Privacy_Practices_edi', '', '', 'Subject for approval.', 'johnny@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(79, 'testuser@gmail.com', 'USR-00060', 'testuser@gmail.com', '', 'USR', '1234', 'PCT', '', '', '2025-02-26', 'February 26, 2025', 'N', '', '', '', '', 'deskstaff@gmail.com', 1, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(80, 'testuser2@gmail.com', 'USR-00061', 'testuser2@gmail.com', '', 'USR', '1234', 'DEC', '', '', '2025-02-26', 'February 26, 2025', 'N', '', '', '', 'Not a Resident Incomplete', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(81, 'frankocean@gmail.com', 'USR-00062', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(82, 'frankocean@gmail.com', 'USR-00063', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(83, 'frankocean@gmail.com', 'USR-00064', 'frankocean@gmail.com', '', 'USR', 'frank', 'PMO', '', '', '2025-03-25', 'March 25, 2025', 'N', 'uploads/reportgeneration.png', '', '', '', 'deskstaff@gmail.com', 0, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL, NULL),
+(92, 'ajcoloma@gmail.com', 'USR-00066', 'ajcoloma@gmail.com', '', 'USR', '123', 'PMO', '', 'Pending verification', '2025-07-19', 'July 19, 2025', 'N', 'uploads/USR-00066_doc_1752947094.pdf', '', '', '', 'deskstaff@gmail.com', 0, 'Hannah', 'Dizon', 'Joy Reyes', 'M', '2021-02-10', 'Philippines', 'fffwfwe', 'treterte', '09707744466', 'Charmaine', 'Joyce', 'Coloma', 'M', '2025-07-09', 'Philippines', 'sefvwfw', 'gdgdrg', '09763414271', NULL),
+(93, 'reyeshannahjoy82@gmail.com', 'USR-00067', 'reyeshannahjoy82@gmail.com', '', 'USR', '123', 'APR', '', 'Pending verification', '2025-09-28', 'September 28, 2025', 'N', 'uploads/USR-00067_doc_1759057751.docx', '', '', '', 'deskstaff@gmail.com', 0, 'Hannah Joy', 'Dizon', 'Reyes', 'F', '1999-10-26', 'Philippines', 'Guimba', 'Web Developer', '09707744466', 'ffadfs', 'cqrrfs', 'fwwq', 'M', '1999-11-20', 'Philippines', 'Guimba', 'Web Developer', '09952650331', '2025-09-28');
 
 -- --------------------------------------------------------
 
@@ -959,9 +952,7 @@ INSERT INTO `pro_meiform` (`recid`, `usermeiformid`, `userid`, `status`, `counse
 (187, 'UMF-00010', 'USR-00056', 'PMO', 'USR-00018'),
 (189, 'UMF-00011', 'USR-00051', 'PMO', 'USR-00018'),
 (190, 'UMF-00012', 'USR-00059', 'PMO', 'USR-00018'),
-(191, 'UMF-00013', 'USR-00060', 'PMO', 'USR-00018'),
-(202, 'UMF-00014', 'USR-00065', 'PMO', 'USR-00018'),
-(209, 'UMF-00015', 'USR-00065', 'POST', 'USR-00018');
+(191, 'UMF-00013', 'USR-00060', 'PMO', 'USR-00018');
 
 -- --------------------------------------------------------
 
@@ -1025,6 +1016,30 @@ INSERT INTO `useractivitylogfile` (`usrcde`, `usrname`, `usrdte`, `usrtim`, `trn
 ('admin', 'admin', '2024-08-15', '07:22:18', '2024-08-15 07:22:18', '', 'Login', 'admin', 'admin_fullname', 'Successfull login', 0, '', '', '', 8, '', 'admin'),
 ('admin', 'admin', '2024-08-15', '07:24:44', '2024-08-15 07:24:44', '', 'Added Record', 'admin', 'admin_fullname', 'Added Record In \'USERS\', Email: \'joen@gmail.com\' , Record ID: ', 0, '', '', '', 9, '', 'admin'),
 ('admin', 'admin', '2024-08-15', '08:08:40', '2024-08-15 08:08:40', '', 'Login', 'admin', 'admin_fullname', 'Successfull login', 0, '', '', '', 10, '', 'admin');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `user_feedback`
+--
+
+CREATE TABLE `user_feedback` (
+  `feedback_id` int(11) NOT NULL,
+  `user_id` varchar(50) DEFAULT NULL,
+  `subject` varchar(255) NOT NULL,
+  `message` text NOT NULL,
+  `status` varchar(20) DEFAULT 'unread',
+  `date_submitted` datetime DEFAULT current_timestamp(),
+  `date_read` datetime DEFAULT NULL,
+  `read_by` varchar(50) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `user_feedback`
+--
+
+INSERT INTO `user_feedback` (`feedback_id`, `user_id`, `subject`, `message`, `status`, `date_submitted`, `date_read`, `read_by`) VALUES
+(1, 'USR-00067', 'Service', 'fsihfehofwfh', 'unread', '2025-09-28 23:18:23', NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -1214,6 +1229,15 @@ ALTER TABLE `useractivitylogfile`
   ADD PRIMARY KEY (`recid`);
 
 --
+-- Indexes for table `user_feedback`
+--
+ALTER TABLE `user_feedback`
+  ADD PRIMARY KEY (`feedback_id`),
+  ADD KEY `idx_user_id` (`user_id`),
+  ADD KEY `idx_status` (`status`),
+  ADD KEY `idx_date_submitted` (`date_submitted`);
+
+--
 -- Indexes for table `user_messages`
 --
 ALTER TABLE `user_messages`
@@ -1248,7 +1272,7 @@ ALTER TABLE `ext_couples_accountinfo`
 -- AUTO_INCREMENT for table `ext_mf_meiform`
 --
 ALTER TABLE `ext_mf_meiform`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=108;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=388;
 
 --
 -- AUTO_INCREMENT for table `ext_pro_couple_apc`
@@ -1278,7 +1302,7 @@ ALTER TABLE `mf_appointment_info`
 -- AUTO_INCREMENT for table `mf_cc_menu`
 --
 ALTER TABLE `mf_cc_menu`
-  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `mf_concerns`
@@ -1308,7 +1332,7 @@ ALTER TABLE `mf_premariage_concerns`
 -- AUTO_INCREMENT for table `mf_prog_users`
 --
 ALTER TABLE `mf_prog_users`
-  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=87;
+  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=94;
 
 --
 -- AUTO_INCREMENT for table `mf_sample_prog`
@@ -1344,7 +1368,7 @@ ALTER TABLE `pro_counselorbooking`
 -- AUTO_INCREMENT for table `pro_meiform`
 --
 ALTER TABLE `pro_meiform`
-  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=210;
+  MODIFY `recid` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=224;
 
 --
 -- AUTO_INCREMENT for table `tbl_questions`
@@ -1357,6 +1381,12 @@ ALTER TABLE `tbl_questions`
 --
 ALTER TABLE `useractivitylogfile`
   MODIFY `recid` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+
+--
+-- AUTO_INCREMENT for table `user_feedback`
+--
+ALTER TABLE `user_feedback`
+  MODIFY `feedback_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT for table `user_messages`
