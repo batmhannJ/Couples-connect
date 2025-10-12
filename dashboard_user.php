@@ -834,23 +834,44 @@ if($act_status === "PCT") {
             $("#modal_feedback").modal("show");
         }
         function ajaxSubmit(){
-            var email_subject = $("#feedback_subject").val();
-            var email_remarks = $("#feedback_remarks").val();
+            var email_subject = $("#feedback_subject").val().trim();
+            var email_remarks = $("#feedback_remarks").val().trim();
+
+            if(!email_subject || !email_remarks) {
+                alert("Please fill in all fields");
+                return;
+            }
+
+            $("button[onclick='ajaxSubmit()']").html("Submitting...").prop('disabled', true);
 
             jQuery.ajax({    
                 data:{
-                    email_subject:email_subject,
-                    email_remarks:email_remarks
+                    email_subject: email_subject,
+                    email_remarks: email_remarks
                 },
                 dataType:"json",
                 type:"post",
                 url:"dashboard_user_ajax.php", 
                 success: function(xdata){
-                    $("#modal_feedback").modal("hide");
+                    if(xdata.status === true) {
+                        alert("Feedback submitted successfully! Thank you for your feedback.");
+                        $("#modal_feedback").modal("hide");
+                        $("#feedback_subject").val('');
+                        $("#feedback_remarks").val('');
+                    } else {
+                        alert("Error: " + xdata.message);
+                    }
+                    
+                    $("button[onclick='ajaxSubmit()']").html("Submit").prop('disabled', false);
                 },
                 error: function (request, status, error) {
+                    console.error("AJAX Error:", error);
+                    console.error("Response:", request.responseText);
+                    alert("An error occurred while submitting feedback. Please try again.");
+                    
+                    $("button[onclick='ajaxSubmit()']").html("Submit").prop('disabled', false);
                 }
-            })
+            });
         }
 
         function onBooking(){
