@@ -18,12 +18,14 @@ $ret['recid']='';
 $ret['status']=true;
 $ret['html']='';
 
-$current_row = $_POST['current_rows'];
+$current_row = isset($_POST['current_rows']) ? $_POST['current_rows'] : 0;
 $new_row = $current_row + 1;
 
-$ret['new_row']=$new_row;
+$ret['new_row'] = $new_row;
 
-if($_POST['event_action'] == 'add_new'){
+// REMOVE THE STRAY "87" - IT WAS HERE: $ret['new_row']=$new_row;87
+
+if(isset($_POST['event_action']) && $_POST['event_action'] == 'add_new'){
     $ret['html']="<tr>";
         $ret['html'].="<td style='height:80px;width:25%'>";
             $ret['html'].="<div style='border-bottom:1px solid black;
@@ -94,10 +96,11 @@ if($_POST['event_action'] == 'add_new'){
         $ret['html'].="</td>";
 
     $ret['html'].="</tr>";
-}else if($_POST['event_action'] == 'submit_data'){
-    $select_db="SELECT * FROM mf_prog_users WHERE username='".$_POST['ac_recid_hidden']."' LIMIT 1";
+
+}else if(isset($_POST['event_action']) && $_POST['event_action'] == 'submit_data'){
+    $select_db="SELECT * FROM mf_prog_users WHERE username=? LIMIT 1";
     $stmt	= $link->prepare($select_db);
-    $stmt->execute();
+    $stmt->execute(array($_POST['ac_recid_hidden']));
     $row = $stmt->fetch();
     $userid = $row['userid'];
     
@@ -119,8 +122,6 @@ if($_POST['event_action'] == 'add_new'){
         $select_mf_users = "NCT";
     }else if($_POST['select_status'] == "APR"){
         $select_mf_users = "PCT";
-        // $cert_status = "PRP";
-        // $cert_desc = "Preparing";
     }
 
     $date_today = date('Y-m-d');
@@ -137,7 +138,6 @@ if($_POST['event_action'] == 'add_new'){
     $pro_counselorbooking = array();
     $pro_counselorbooking["pro_crbookingid"] = $crid;
     $pro_counselorbooking["userid"] = $userid;
-    // $pro_counselorbooking["reccomendation_future"] = $_POST['future_reco'];
     $pro_counselorbooking["status"] = $_POST['select_status'];
     $pro_counselorbooking["date"] = $date_today;
     $pro_counselorbooking["date_desc"] = $date_today_desc;
@@ -145,21 +145,20 @@ if($_POST['event_action'] == 'add_new'){
     PDO_InsertRecord($link,'pro_counselorbooking',$pro_counselorbooking,$debug=false);
  
     $ext_pro_counselorbooking = array();
-    foreach($_POST['text_submit'] as $form2_e => $key) {
+    if(isset($_POST['text_submit']) && is_array($_POST['text_submit'])) {
+        foreach($_POST['text_submit'] as $form2_e => $key) {
 
-        $ext_pro_counselorbooking["pro_crbookingid"] = $crid;
-        $ext_pro_counselorbooking["userid"] = $userid;
-        $ext_pro_counselorbooking["concern_id"] = $key['concern'];
-        $ext_pro_counselorbooking["description"] = $key['description'];
-        $ext_pro_counselorbooking["reccomendation"] = $key['reccomendation'];
-        $ext_pro_counselorbooking["future_actions"] = $key['future_actions'];
+            $ext_pro_counselorbooking["pro_crbookingid"] = $crid;
+            $ext_pro_counselorbooking["userid"] = $userid;
+            $ext_pro_counselorbooking["concern_id"] = $key['concern'];
+            $ext_pro_counselorbooking["description"] = $key['description'];
+            $ext_pro_counselorbooking["reccomendation"] = $key['reccomendation'];
+            $ext_pro_counselorbooking["future_actions"] = $key['future_actions'];
 
-        PDO_InsertRecord($link,'ext_pro_counselorbooking',$ext_pro_counselorbooking,$debug=false);
-
+            PDO_InsertRecord($link,'ext_pro_counselorbooking',$ext_pro_counselorbooking,$debug=false);
+        }
     }
 }
-
-
 
 header('Content-Type: application/json');
 echo json_encode($ret);

@@ -424,25 +424,169 @@ while ($rs_userid = $stmt_userid->fetch()) {
                                         });
 
                                         // Fetch Recommendations for all rows
-                                        document
-                                            .getElementById("fetchData")
-                                            .addEventListener("click", async () => {
-                                                const output = document.getElementById("output");
-                                                output.textContent = "Loading..."; // Indicate loading
+                                        document.getElementById("fetchData").addEventListener("click", async () => {
+    const output = document.getElementById("output");
+    
+    // Check if API key is valid and show warning
+    const apiKey = "AIzaSyD6xlbDwZN_ri4XFheL9UqDU4LDlxraifk";
+    
+    if(!apiKey || apiKey.includes("AIzaSy")) {
+        output.textContent = "⚠️ API Key Issue: Your Google Gemini quota may be exceeded. Please:";
+        output.innerHTML += `
+            <ul style="text-align:left; margin-top:10px;">
+                <li><strong>Option 1:</strong> Wait 60 seconds and try again (rate limit resets)</li>
+                <li><strong>Option 2:</strong> Go to <a href="https://cloud.google.com/docs/quotas/help/request_increase" target="_blank">Google Cloud Console</a> to increase your quota</li>
+                <li><strong>Option 3:</strong> Manually enter descriptions/recommendations instead</li>
+            </ul>
+        `;
+        return;
+    }
+    
+    output.textContent = "Loading...";
+    
+const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyCwQHwKNRnN6khP35YWreRmAEHCkWIfN8s`;
+    let errorCount = 0;
+            const rows = document.querySelectorAll("#change_table tbody tr");
 
-                                                const apiKey = "AIzaSyAn1lc5_YQFiS3296o9SwXxjtujWomQt0c"; // Replace with your actual API key
-                                                const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`;
-
-                                                // Loop through all rows to fetch data for each issue
-                                                const rows = document.querySelectorAll("#change_table tbody tr");
-
-                                                await detailedDescription(rows, apiKey, endpoint);
-
-                                                await recomedation(rows, apiKey, endpoint);
-
-                                                await futureActions(rows, apiKey, endpoint);
-                                                output.textContent = ""; 
-                                            });
+    try {
+        // Process each row with delays to avoid rate limiting
+        for (let i = 0; i < rows.length; i++) {
+            const row = rows[i];
+            const issueSelect = row.querySelector(".issue-select");
+            const selectedIssue = issueSelect ? issueSelect.options[issueSelect.selectedIndex].text : "Unknown Issue";
+            
+            const textareas = row.querySelectorAll("textarea");
+            if(textareas.length < 3) continue;
+            
+            const descTextarea = textareas[0];
+            const recTextarea = textareas[1];
+            const futureTextarea = textareas[2];
+            
+            // Add delay between requests (500ms) to help with rate limiting
+            if(i > 0) {
+                await new Promise(resolve => setTimeout(resolve, 500));
+            }
+            
+            try {
+                // Generate Detailed Description
+                if(!descTextarea.value) {
+                    const descResponse = await fetch(endpoint, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{
+                                    text: `Provide a brief professional detailed description for this counseling issue: "${selectedIssue}". Keep it to 2-3 sentences.`
+                                }]
+                            }]
+                        })
+                    });
+                    
+                    if(!descResponse.ok) {
+                        throw new Error(`API Error: ${descResponse.status}`);
+                    }
+                    
+                    const descData = await descResponse.json();
+                    const descText = descData?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if(descText) {
+                        descTextarea.value = descText;
+                        successCount++;
+                    }
+                }
+                
+                // Add delay between requests
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Generate Recommendations
+                if(!recTextarea.value) {
+                    const recResponse = await fetch(endpoint, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{
+                                    text: `Provide professional recommendations for this counseling concern: "${selectedIssue}". Keep it to 2-3 sentences.`
+                                }]
+                            }]
+                        })
+                    });
+                    
+                    if(!recResponse.ok) {
+                        throw new Error(`API Error: ${recResponse.status}`);
+                    }
+                    
+                    const recData = await recResponse.json();
+                    const recText = recData?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if(recText) {
+                        recTextarea.value = recText;
+                        successCount++;
+                    }
+                }
+                
+                // Add delay between requests
+                await new Promise(resolve => setTimeout(resolve, 500));
+                
+                // Generate Future Actions
+                if(!futureTextarea.value) {
+                    const futureResponse = await fetch(endpoint, {
+                        method: "POST",
+                        headers: {"Content-Type": "application/json"},
+                        body: JSON.stringify({
+                            contents: [{
+                                parts: [{
+                                    text: `Suggest future actions for this counseling follow-up: "${selectedIssue}". Keep it to 2-3 sentences.`
+                                }]
+                            }]
+                        })
+                    });
+                    
+                    if(!futureResponse.ok) {
+                        throw new Error(`API Error: ${futureResponse.status}`);
+                    }
+                    
+                    const futureData = await futureResponse.json();
+                    const futureText = futureData?.candidates?.[0]?.content?.parts?.[0]?.text;
+                    if(futureText) {
+                        futureTextarea.value = futureText;
+                        successCount++;
+                    }
+                }
+                
+            } catch(error) {
+                console.error("Row error:", error);
+                errorCount++;
+                
+                // Check if it's a rate limit error
+                if(error.toString().includes("429") || error.toString().includes("RESOURCE_EXHAUSTED")) {
+                    output.innerHTML = `
+                        <div style="color:#e60000;font-weight:bold;">
+                            ⚠️ API Rate Limit Exceeded<br>
+                            Generated ${successCount} suggestions before limit was hit.<br>
+                            <br>
+                            <strong>Solutions:</strong><br>
+                            1. Wait 1-2 minutes and try again<br>
+                            2. <a href="https://cloud.google.com/docs/quotas/help/request_increase" target="_blank">Request higher quota</a><br>
+                            3. Manually fill remaining fields
+                        </div>
+                    `;
+                    break;
+                }
+            }
+        }
+        
+        if(errorCount === 0 && successCount > 0) {
+            output.textContent = `✅ Generated ${successCount} suggestions successfully!`;
+        }
+        
+    } catch(error) {
+        output.innerHTML = `
+            <div style="color:#e60000;">
+                <strong>Error:</strong> ${error.message}<br>
+                Please try again later or fill fields manually.
+            </div>
+        `;
+    }
+});
 
                                         const detailedDescription = async (rows, apiKey, endpoint) => {
                                             // Loop through each row
@@ -833,46 +977,6 @@ while ($rs_userid = $stmt_userid->fetch()) {
         </div>
     </div>
 
-    <!-- <footer style='height:100px;background-color:#23408E' class='footer'>
-            <div class="container-fluid"  style='height:100px'>
-
-                <div class="row"  style='height:100px'>
-                    <div class="col-4">
-                        <div class="row ms-3"  style='height:100px'>
-                            <div class="col-2 d-flex align-items-center">
-                                <img src="images/op office logo.png" style="height:77px;width:auto">
-                            </div>
-
-                            <div class="col-10 d-flex align-items-center">
-                                <div class="container" style='font-family:inter;color:white'>
-                                    <div class="col-12" style='font-size:15px;font-weight:bold'>
-                                        City Population Office of Cabuyao
-                                    </div>
-
-                                    <div class="col-12" style='font-size:9px'>
-                                        Brgy Dos. Cabuyao Retail Plaza, Cabuyao, Philippines
-                                    </div>
-
-                                    <div class="col-12" style='font-size:9px'>
-                                        cpocabuyao@gmail.com
-                                    </div>
-
-                                </div>
-          
-                            </div>
-                        </div>       
-                    </div>
-
-                    <div class="col-8 d-flex align-items-center justify-content-end">
-                        <div>
-                            <img src="images/pajamas_question.png" style='width:63px;height:auto;'>
-                        </div>   
-                    </div>
-                </div>
-
-            </div>
-        </footer> -->
-
     <input type="hidden" name="ac_recid_hidden" id="ac_recid_hidden" value="<?php echo $_POST['ac_recid_hidden']; ?>">
     <input type="hidden" name="current_rows" id="current_rows">
     <input type="hidden" name="username_hidden" id="username_hidden" value="<?= $username_hidden; ?>">
@@ -880,112 +984,275 @@ while ($rs_userid = $stmt_userid->fetch()) {
 </form>
 
 <script>
-    function add_new(xevent_action) {
+// Initialize only once when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    
+    // Add new row functionality
+    const addRowBtn = document.getElementById("addRowBtn");
+    if(addRowBtn) {
+        addRowBtn.addEventListener("click", () => {
+            const tableBody = document.querySelector("#change_table tbody");
+            if(!tableBody) return;
 
-
-        var current_rows = $("#current_rows").val();
-        var ac_recid_hidden = $("#ac_recid_hidden").val();
-
-
-        if (current_rows == "" || current_rows == null) {
-            current_rows = 1;
-        }
-
-
-        if (xevent_action == 'add_new') {
-            var xallData = `event_action=${xevent_action}&current_rows=${current_rows}`;
-        } else if (xevent_action == 'submit_data') {
-            var xallData = $("#myforms *").serialize() + `&event_action=${xevent_action}&current_rows=${current_rows}&ac_recid_hidden=${ac_recid_hidden}`;
-        }
-
-        $.ajax({
-            url: 'cc_counseling2_ajax.php',
-            type: "post",
-            data: xallData,
-            success: function(xdata) {
-
-                if (xevent_action == "add_new") {
-                    $("#current_rows").val(xdata['new_row']);
-                    $("#change_table").append(xdata['html']);
-                } else if (xevent_action == "submit_data") {
-                    document.forms.myforms.method = "post";
-                    document.forms.myforms.target = "_self";
-                    document.forms.myforms.action = "cc_counseling.php";
-                    document.forms.myforms.submit();
-                }
-
-
-            },
-            error: function(request, status, error) {}
+            const newRow = document.createElement("tr");
+            newRow.innerHTML = `
+                <td style='height:80px;width:25%'>
+                    <div style='border-bottom:1px solid black; border-left:1px solid black; width:100%;height:100%'>
+                        <select class="issue-select" style='width:100%;height:100%;border:none;'>
+                            <option>Select Concern</option>
+                        </select>
+                    </div>
+                </td>
+                <td style='height:80px;width:25%'>
+                    <div style='border-bottom:1px solid black; border-left:1px solid black; border-right:1px solid black; width:100%;height:100%'>
+                        <textarea class="detailedDescription" style='width:100%;height:100%;border:none;border-radius:15px;'></textarea>
+                    </div>
+                </td>
+                <td style='height:80px;width:25%'>
+                    <div style='border-bottom:1px solid black; border-right:1px solid black; width:100%;height:100%'>
+                        <textarea class="recommendations" style='width:100%;height:100%;border:none;border-radius:15px;'></textarea>
+                    </div>
+                </td>
+                <td style='height:80px;width:25%'>
+                    <div style='border-bottom:1px solid black; border-right:1px solid black; width:100%;height:100%'>
+                        <textarea class="futureActions" style='width:100%;height:100%;border:none;border-radius:15px;'></textarea>
+                    </div>
+                </td>
+            `;
+            tableBody.appendChild(newRow);
         });
     }
 
-    function viewMei() {
+    // Generate Suggestions - MAIN FUNCTION
+    const fetchDataBtn = document.getElementById("fetchData");
+    if(fetchDataBtn) {
+        fetchDataBtn.addEventListener("click", async () => {
+            const output = document.getElementById("output");
+            const apiKey = "AIzaSyAxLNSYPQb9EGss2YwsrZef02lJCo_2a5Q";
+            
+            output.textContent = "Loading...";
+            
+const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=AIzaSyCwQHwKNRnN6khP35YWreRmAEHCkWIfN8s`;
+            let errorCount = 0;
+                    const rows = document.querySelectorAll("#change_table tbody tr");
 
-        var username_hidden2 = $("#username_hidden").val();
-
-        $.ajax({
-            url: 'cc_counseling_ajax.php',
-            type: "post",
-            data: {
-                xevent_action: "view_meiform",
-                xusername: username_hidden2
-            },
-            success: function(xdata) {
-
-                var counter_cert = 1;
-                $.each(xdata, function(index, value) {
-
-                    if (value.hasOwnProperty('p1')) {
-
-                        $(`[id="ans_1[${counter_cert}]"]`).val(function() {
-                            return $(this).find("option").filter(function() {
-                                return $(this).text() === value.p1.answer;
-                            }).val();
-                        });
-
-                        if (value.p1.answer == 'Agree') {
-                            $(`[id="ans_1[${counter_cert}]"]`).css('background-color', '#2eb82e')
-                        } else {
-                            $(`[id="ans_1[${counter_cert}]"]`).css('background-color', '#e62e00')
-                        }
-
-                        $(`[id="reason_1[${counter_cert}]"]`).html(value.p1.reason);
-
-                        // console.log('p1 answer: ' + value.p1.answer);
-                        // console.log('p1 reason: ' + value.p1.reason);
-                        // console.log('p1 reason: ' + value.p1.counter);
-
-                    } else if (value.hasOwnProperty('p2')) {
-
-                        $(`[id="ans_2[${counter_cert}]"]`).val(function() {
-                            return $(this).find("option").filter(function() {
-                                return $(this).text() === value.p2.answer;
-                            }).val();
-                        });
-
-                        if (value.p2.answer == 'Agree') {
-                            $(`[id="ans_2[${counter_cert}]"]`).css('background-color', '#2eb82e')
-                        } else {
-                            $(`[id="ans_2[${counter_cert}]"]`).css('background-color', '#e62e00')
-                        }
-
-                        $(`[id="reason_2[${counter_cert}]"]`).html(value.p2.reason);
-
-
+            try {
+                for (let i = 0; i < rows.length; i++) {
+                    const row = rows[i];
+                    const issueSelect = row.querySelector(".issue-select");
+                    const selectedIssue = issueSelect ? issueSelect.options[issueSelect.selectedIndex].text : "Unknown Issue";
+                    
+                    const textareas = row.querySelectorAll("textarea");
+                    if(textareas.length < 3) continue;
+                    
+                    const descTextarea = textareas[0];
+                    const recTextarea = textareas[1];
+                    const futureTextarea = textareas[2];
+                    
+                    // Delay between rows
+                    if(i > 0) {
+                        await new Promise(resolve => setTimeout(resolve, 800));
                     }
-
-                    counter_cert++;
-
-                });
-
-                $("#meiform_p1_name").html(xdata['partner1_name']);
-                $("#meiform_p2_name").html(xdata['partner2_name']);
-            },
-            error: function(request, status, error) {}
+                    
+                    try {
+                        // Generate Description
+                        if(!descTextarea.value) {
+                            const descResponse = await fetch(endpoint, {
+                                method: "POST",
+                                headers: {"Content-Type": "application/json"},
+                                body: JSON.stringify({
+                                    contents: [{
+                                        parts: [{
+                                            text: `Provide a brief professional detailed description for this counseling issue: "${selectedIssue}". Keep it to 2-3 sentences only.`
+                                        }]
+                                    }]
+                                })
+                            });
+                            
+                            if(!descResponse.ok) {
+                                throw new Error(`API Error: ${descResponse.status}`);
+                            }
+                            
+                            const descData = await descResponse.json();
+                            const descText = descData?.candidates?.[0]?.content?.parts?.[0]?.text;
+                            if(descText) {
+                                descTextarea.value = descText;
+                                successCount++;
+                            }
+                        }
+                        
+                        await new Promise(resolve => setTimeout(resolve, 800));
+                        
+                        // Generate Recommendations
+                        if(!recTextarea.value) {
+                            const recResponse = await fetch(endpoint, {
+                                method: "POST",
+                                headers: {"Content-Type": "application/json"},
+                                body: JSON.stringify({
+                                    contents: [{
+                                        parts: [{
+                                            text: `Provide professional recommendations for this counseling concern: "${selectedIssue}". Keep it to 2-3 sentences only.`
+                                        }]
+                                    }]
+                                })
+                            });
+                            
+                            if(!recResponse.ok) {
+                                throw new Error(`API Error: ${recResponse.status}`);
+                            }
+                            
+                            const recData = await recResponse.json();
+                            const recText = recData?.candidates?.[0]?.content?.parts?.[0]?.text;
+                            if(recText) {
+                                recTextarea.value = recText;
+                                successCount++;
+                            }
+                        }
+                        
+                        await new Promise(resolve => setTimeout(resolve, 800));
+                        
+                        // Generate Future Actions
+                        if(!futureTextarea.value) {
+                            const futureResponse = await fetch(endpoint, {
+                                method: "POST",
+                                headers: {"Content-Type": "application/json"},
+                                body: JSON.stringify({
+                                    contents: [{
+                                        parts: [{
+                                            text: `Suggest future actions for this counseling follow-up: "${selectedIssue}". Keep it to 2-3 sentences only.`
+                                        }]
+                                    }]
+                                })
+                            });
+                            
+                            if(!futureResponse.ok) {
+                                throw new Error(`API Error: ${futureResponse.status}`);
+                            }
+                            
+                            const futureData = await futureResponse.json();
+                            const futureText = futureData?.candidates?.[0]?.content?.parts?.[0]?.text;
+                            if(futureText) {
+                                futureTextarea.value = futureText;
+                                successCount++;
+                            }
+                        }
+                        
+                    } catch(error) {
+                        console.error("Row error:", error);
+                        errorCount++;
+                        
+                        if(error.toString().includes("429") || error.toString().includes("RESOURCE_EXHAUSTED")) {
+                            output.innerHTML = `
+                                <div style="color:#e60000;font-weight:bold;margin-top:10px;">
+                                    ⚠️ API Rate Limit Exceeded<br>
+                                    Generated ${successCount} suggestions before limit was hit.<br>
+                                    <br>
+                                    <strong>Solutions:</strong><br>
+                                    1. Wait 1-2 minutes and try again<br>
+                                    2. <a href="https://cloud.google.com/docs/quotas" target="_blank">Check your quota</a><br>
+                                    3. Manually fill remaining fields
+                                </div>
+                            `;
+                            break;
+                        }
+                    }
+                }
+                
+                if(errorCount === 0 && successCount > 0) {
+                    output.innerHTML = `<div style="color:#2eb82e;font-weight:bold;margin-top:10px;">✅ Generated ${successCount} suggestions successfully!</div>`;
+                }
+                
+            } catch(error) {
+                console.error("Error:", error);
+                output.innerHTML = `
+                    <div style="color:#e60000;margin-top:10px;">
+                        <strong>Error:</strong> ${error.message}<br>
+                        Please try again later or fill fields manually.
+                    </div>
+                `;
+            }
         });
-        $("#modal_meiform").modal("show");
     }
+});
+
+// Add New function for form submission
+function add_new(xevent_action) {
+    var current_rows = $("#current_rows").val();
+    var ac_recid_hidden = $("#ac_recid_hidden").val();
+
+    if (current_rows == "" || current_rows == null) {
+        current_rows = 1;
+    }
+
+    if (xevent_action == 'add_new') {
+        var xallData = `event_action=${xevent_action}&current_rows=${current_rows}`;
+    } else if (xevent_action == 'submit_data') {
+        var xallData = $("#myforms *").serialize() + `&event_action=${xevent_action}&current_rows=${current_rows}&ac_recid_hidden=${ac_recid_hidden}`;
+    }
+
+    $.ajax({
+        url: 'cc_counseling2_ajax.php',
+        type: "post",
+        data: xallData,
+        success: function(xdata) {
+            if (xevent_action == "add_new") {
+                $("#current_rows").val(xdata['new_row']);
+                $("#change_table").append(xdata['html']);
+            } else if (xevent_action == "submit_data") {
+                document.forms.myforms.method = "post";
+                document.forms.myforms.target = "_self";
+                document.forms.myforms.action = "cc_counseling.php";
+                document.forms.myforms.submit();
+            }
+        },
+        error: function(request, status, error) {
+            console.error("Error:", error);
+        }
+    });
+}
+
+// View MEI Form
+function viewMei() {
+    var username_hidden2 = $("#username_hidden").val();
+
+    $.ajax({
+        url: 'cc_counseling_ajax.php',
+        type: "post",
+        data: {
+            xevent_action: "view_meiform",
+            xusername: username_hidden2
+        },
+        success: function(xdata) {
+            var counter_cert = 1;
+            $.each(xdata, function(index, value) {
+                if (value.hasOwnProperty('p1')) {
+                    $(`[id="ans_1[${counter_cert}]"]`).val(value.p1.answer);
+                    if (value.p1.answer == 'Agree') {
+                        $(`[id="ans_1[${counter_cert}]"]`).css('background-color', '#2eb82e');
+                    } else {
+                        $(`[id="ans_1[${counter_cert}]"]`).css('background-color', '#e62e00');
+                    }
+                    $(`[id="reason_1[${counter_cert}]"]`).html(value.p1.reason);
+                } else if (value.hasOwnProperty('p2')) {
+                    $(`[id="ans_2[${counter_cert}]"]`).val(value.p2.answer);
+                    if (value.p2.answer == 'Agree') {
+                        $(`[id="ans_2[${counter_cert}]"]`).css('background-color', '#2eb82e');
+                    } else {
+                        $(`[id="ans_2[${counter_cert}]"]`).css('background-color', '#e62e00');
+                    }
+                    $(`[id="reason_2[${counter_cert}]"]`).html(value.p2.reason);
+                }
+                counter_cert++;
+            });
+            $("#meiform_p1_name").html(xdata['partner1_name']);
+            $("#meiform_p2_name").html(xdata['partner2_name']);
+        },
+        error: function(request, status, error) {
+            console.error("Error:", error);
+        }
+    });
+    $("#modal_meiform").modal("show");
+}
 </script>
 
 <?php

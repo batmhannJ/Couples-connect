@@ -273,7 +273,12 @@ ul.checkout-bar:before {
                         
                             while($row_xid = $stmt->fetch()){
 
-                                $select_db_checker = "SELECT * FROM pro_meiform LEFT JOIN mf_prog_users ON pro_meiform.userid = mf_prog_users.userid WHERE pro_meiform.userid='".$_SESSION['usr_id']."' AND pro_meiform.status='".$act_status2."'";
+                                $select_db_checker = "SELECT * FROM pro_meiform LEFT JOIN mf_prog_users 
+                                    ON pro_meiform.userid = mf_prog_users.userid 
+                                    WHERE pro_meiform.userid='".$_SESSION['usr_id']."' 
+                                    AND pro_meiform.status='".$act_status2."'
+                                    AND pro_meiform.counselorid IS NOT NULL
+                                    AND pro_meiform.counselorid != ''";
                                 $stmt_checker	= $link->prepare($select_db_checker);
                                 $stmt_checker->execute();
                                 $row_checker = $stmt_checker->fetchAll();
