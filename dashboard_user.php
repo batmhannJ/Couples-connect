@@ -481,46 +481,75 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                         <?php
                                             echo '<div style="width:100%;display:flex;justify-content:center">';
 
-                                            $select_all_bookings = "SELECT ext_mf_meiform.date as 'mf_date', 
-                                                                    ext_mf_meiform.from_to as 'from_to',
-                                                                    ext_mf_meiform.venue as 'venue',
-                                                                    pro_meiform.status as 'booking_status',
-                                                                    pro_meiform.usermeiformid as 'meiformid'
-                                                                    FROM ext_mf_meiform 
-                                                                    LEFT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  
-                                                                    WHERE ext_mf_meiform.userid=? 
-                                                                    ORDER BY ext_mf_meiform.date DESC
-                                                                    LIMIT 1";
-                                            $stmt_all_bookings = $link->prepare($select_all_bookings);
-                                            $stmt_all_bookings->execute(array($_SESSION['usr_id']));
-                                            $booking_data = $stmt_all_bookings->fetch();
+                                            $select_cancelled = "SELECT * FROM mf_prog_users 
+                                                                WHERE userid = ? 
+                                                                AND act_status IN ('APR', 'PMC')
+                                                                AND last_booking_cancelled = 1";
+                                            $stmt_cancelled = $link->prepare($select_cancelled);
+                                            $stmt_cancelled->execute(array($_SESSION['usr_id']));
+                                            $is_cancelled = $stmt_cancelled->fetch();
 
-                                            if($booking_data && !empty($booking_data['from_to'])) {
-                                                // User has a booking - display it
-                                                $booking_type = '';
-                                                if($booking_data['booking_status'] == 'PMO') {
-                                                    $booking_type = 'Pre-Marriage Orientation';
-                                                } else if($booking_data['booking_status'] == 'PMC') {
-                                                    $booking_type = 'Post Marriage Counseling';
-                                                } else {
-                                                    $booking_type = 'Appointment';
-                                                }
-                                                
-                                                $date_formatted = safe_date_format($booking_data["mf_date"]);
-                                                
-                                                echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
-                                                    echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
-                                                    echo "<div style='display:flex;flex-direction:column'>";
-                                                        echo "<span style='margin-left:10px'>".$date_formatted." (".$booking_data['from_to'].")</span>";
-                                                        echo "<span style='margin-left:10px;font-size:14px;color:#616161;font-weight:400'>".$booking_data['venue']."</span>";
-                                                        echo "<span style='margin-left:10px;font-size:11px;color:#616161;font-weight:400'>".$booking_type."</span>";
+                                            if($is_cancelled) {
+                                                // Show cancellation notice
+                                                echo "<div style='text-align:center;padding:20px;background:#fff3cd;border-radius:10px;margin:20px;border-left:5px solid #ff6600'>";
+                                                    echo "<div style='color:#856404;font-family:inter;font-size:20px;font-weight:700;margin-bottom:10px'>";
+                                                        echo "<i class='fas fa-exclamation-triangle' style='font-size:30px;display:block;margin-bottom:10px'></i>";
+                                                        echo "Appointment Cancelled";
                                                     echo "</div>";
+                                                    echo "<div style='color:#856404;font-size:16px;line-height:1.6'>";
+                                                        echo "Your scheduled appointment has been cancelled by the counselor.<br>";
+                                                        echo "Please book another schedule at your earliest convenience.";
+                                                    echo "</div>";
+                                                    echo "<button onclick='clearCancellationNotice()' class='btn btn-warning' style='margin-top:15px;font-weight:600'>";
+                                                        echo "<i class='fas fa-calendar-check'></i> Book New Schedule";
+                                                    echo "</button>";
                                                 echo "</div>";
+                                                
+                                                // Clear the notification flag
+                                                $clear_flag = "UPDATE mf_prog_users SET last_booking_cancelled = 0 WHERE userid = ?";
+                                                $stmt_clear = $link->prepare($clear_flag);
+                                                $stmt_clear->execute(array($_SESSION['usr_id']));
                                             } else {
-                                                // No booking found
-                                                echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
-                                                    echo "<span style='margin-left:10px'>No Appointment.</span>";
-                                                echo "</div>";
+                                                // Original appointment display code
+                                                $select_all_bookings = "SELECT ext_mf_meiform.date as 'mf_date', 
+                                                                        ext_mf_meiform.from_to as 'from_to',
+                                                                        ext_mf_meiform.venue as 'venue',
+                                                                        pro_meiform.status as 'booking_status',
+                                                                        pro_meiform.usermeiformid as 'meiformid'
+                                                                        FROM ext_mf_meiform 
+                                                                        LEFT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  
+                                                                        WHERE ext_mf_meiform.userid=? 
+                                                                        ORDER BY ext_mf_meiform.date DESC
+                                                                        LIMIT 1";
+                                                $stmt_all_bookings = $link->prepare($select_all_bookings);
+                                                $stmt_all_bookings->execute(array($_SESSION['usr_id']));
+                                                $booking_data = $stmt_all_bookings->fetch();
+
+                                                if($booking_data && !empty($booking_data['from_to'])) {
+                                                    $booking_type = '';
+                                                    if($booking_data['booking_status'] == 'PMO') {
+                                                        $booking_type = 'Pre-Marriage Orientation';
+                                                    } else if($booking_data['booking_status'] == 'PMC' || $booking_data['booking_status'] == 'POST') {
+                                                        $booking_type = 'Post Marriage Counseling';
+                                                    } else {
+                                                        $booking_type = 'Appointment';
+                                                    }
+                                                    
+                                                    $date_formatted = safe_date_format($booking_data["mf_date"]);
+                                                    
+                                                    echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
+                                                        echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
+                                                        echo "<div style='display:flex;flex-direction:column'>";
+                                                            echo "<span style='margin-left:10px'>".$date_formatted." (".$booking_data['from_to'].")</span>";
+                                                            echo "<span style='margin-left:10px;font-size:14px;color:#616161;font-weight:400'>".$booking_data['venue']."</span>";
+                                                            echo "<span style='margin-left:10px;font-size:11px;color:#616161;font-weight:400'>".$booking_type."</span>";
+                                                        echo "</div>";
+                                                    echo "</div>";
+                                                } else {
+                                                    echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                                        echo "<span style='margin-left:10px'>No Appointment.</span>";
+                                                    echo "</div>";
+                                                }
                                             }
 
                                             echo '</div>';
@@ -933,6 +962,9 @@ if($act_status === "PCT") {
                 console.log(request)
             }
         });
+    }
+    function clearCancellationNotice() {
+        window.location.href = 'booking.php';
     }
     </script>
 <?php 

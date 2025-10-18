@@ -574,10 +574,13 @@ if($_SESSION['usertype'] == 'DSK'){
                                                                 echo "Review";
                                                             echo "</button>";
 
-                                                            echo"<ul class='dropdown-menu'>";
-                                                                echo"<li onclick=\"schedule_func('get_sched',".$rs_ac['ext_recid'].")\"><a class='dropdown-item dd_action' style='color:#4d4dff!important;font-weight:bold;'><i class='fas fa-pencil-alt'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Edit</span></a></li>";
-                                                                echo"<li onclick=\"schedule_func('delete_sched',".$rs_ac['ext_recid'].")\"><a class='dropdown-item dd_action' style='color:#cc0000!important;font-weight:bold;'><i class='fas fa-trash-alt'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Delete</span></a></li>";
-                                                            echo"</ul>";
+                                                            echo "<ul class='dropdown-menu'>";
+                                                                echo "<li onclick=\"schedule_func('get_sched',".$rs_ac['ext_recid'].")\"><a class='dropdown-item dd_action' style='color:#4d4dff!important;font-weight:bold;cursor:pointer;'><i class='fas fa-pencil-alt'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Edit</span></a></li>";
+                                                                
+                                                                echo "<li onclick=\"confirmCancelSchedule(".$rs_ac['ext_recid'].", '".$rs_ac['clinic_date']."', '".$rs_ac['time_from']."', '".$rs_ac['time_to']."', '".$rs_ac['venue']."')\"><a class='dropdown-item dd_action' style='color:#ff6600!important;font-weight:bold;cursor:pointer;'><i class='fas fa-times-circle'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Cancel Schedule</span></a></li>";
+                                                                
+                                                                echo "<li onclick=\"schedule_func('delete_sched',".$rs_ac['ext_recid'].")\"><a class='dropdown-item dd_action' style='color:#cc0000!important;font-weight:bold;cursor:pointer;'><i class='fas fa-trash-alt'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Delete</span></a></li>";
+                                                            echo "</ul>";
                                                         echo "</div>";
                                                     echo "</td>";
                                             echo "</tr>";
@@ -1272,7 +1275,126 @@ if($_SESSION['usertype'] == 'DSK'){
         })         
     }
 
-    
+    function confirmCancelSchedule(recid, date, timeFrom, timeTo, venue) {
+        var dateObj = new Date(date);
+        var formattedDate = dateObj.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        
+        var scheduleInfo = '<strong>Venue:</strong> ' + venue + '<br>' +
+                        '<strong>Date:</strong> ' + formattedDate + '<br>' +
+                        '<strong>Time:</strong> ' + timeFrom + ' - ' + timeTo;
+        
+        if ($('#cancelScheduleModal').length === 0) {
+            var modalHTML = `
+                <div class="modal fade" id="cancelScheduleModal" data-bs-backdrop="static" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content" style="border-radius:15px">
+                            <div class="modal-header" style="background: linear-gradient(90deg, #e60000 35%, #990000 100%); color: white; border-radius: 15px 15px 0 0;">
+                                <h5 class="modal-title" style="font-family:inter;font-weight:bold">
+                                    <i class="fas fa-exclamation-triangle"></i> Cancel Schedule Confirmation
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body" style="font-family:inter;padding:30px">
+                                <div style="text-align:center;margin-bottom:20px">
+                                    <i class="fas fa-calendar-times" style="font-size:60px;color:#ff6600"></i>
+                                </div>
+                                <h6 style="font-weight:bold;color:#333;margin-bottom:15px">Schedule Details:</h6>
+                                <div id="scheduleDetailsContent" style="background:#f8f9fa;padding:15px;border-radius:8px;margin-bottom:20px"></div>
+                                <div style="background:#fff3cd;border-left:4px solid #ff6600;padding:15px;border-radius:5px;margin-bottom:20px">
+                                    <strong style="color:#856404">⚠️ Important Notice:</strong>
+                                    <p style="margin:10px 0 0 0;color:#856404">
+                                        All users with bookings on this schedule will be notified and their appointments will be automatically cancelled. They will need to rebook another schedule.
+                                    </p>
+                                </div>
+                                <p style="font-size:16px;color:#666;text-align:center">
+                                    Are you sure you want to cancel this schedule?
+                                </p>
+                            </div>
+                            <div class="modal-footer" style="justify-content:center;padding:20px">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:140px;height:45px;font-size:17px;font-family:inter;font-weight:600;border-radius:8px">
+                                    <i class="fas fa-times"></i> No, Keep It
+                                </button>
+                                <button type="button" id="confirmCancelBtn" class="btn" style="background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:140px;height:45px;font-size:17px;font-family:inter;font-weight:600;border-radius:8px">
+                                    <i class="fas fa-check"></i> Yes, Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('body').append(modalHTML);
+        }
+        
+        $('#scheduleDetailsContent').html(scheduleInfo);
+        
+        $('#confirmCancelBtn').off('click').on('click', function() {
+            $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Cancelling...');
+            cancelScheduleAjax(recid);
+        });
+        
+        $('#cancelScheduleModal').modal('show');
+    }
+
+    function cancelScheduleAjax(recid) {
+        $.ajax({
+            url: 'cc_timeslotmanage2_ajax.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                event_action: 'cancel_schedule',
+                xrecid: recid
+            },
+            success: function(response) {
+                $('#cancelScheduleModal').modal('hide');
+                
+                if(response.status === true) {
+                    $('.error_msg').html(
+                        '<div style="color:#28a745">' +
+                        '<i class="fas fa-check-circle" style="font-size:24px;margin-bottom:10px"></i><br>' +
+                        '<strong>Schedule Cancelled Successfully!</strong><br>' +
+                        '<span style="font-size:16px">' + response.affected_users + ' user(s) notified and their bookings have been cancelled.</span>' +
+                        '</div>'
+                    );
+                    $('.xerror_modal').modal('show');
+                    
+                    $('.xerror_modal').on('hidden.bs.modal', function() {
+                        location.reload();
+                    });
+                } else {
+                    $('.error_msg').html(
+                        '<div style="color:#dc3545">' +
+                        '<i class="fas fa-times-circle" style="font-size:24px;margin-bottom:10px"></i><br>' +
+                        '<strong>Cancellation Failed!</strong><br>' +
+                        '<span style="font-size:16px">' + response.msg + '</span>' +
+                        '</div>'
+                    );
+                    $('.xerror_modal').modal('show');
+                }
+                
+                $('#confirmCancelBtn').prop('disabled', false).html('<i class="fas fa-check"></i> Yes, Cancel');
+            },
+            error: function(xhr, status, error) {
+                $('#cancelScheduleModal').modal('hide');
+                console.error('Cancel Schedule Error:', error);
+                console.error('Response:', xhr.responseText);
+                
+                $('.error_msg').html(
+                    '<div style="color:#dc3545">' +
+                    '<i class="fas fa-exclamation-triangle" style="font-size:24px;margin-bottom:10px"></i><br>' +
+                    '<strong>Error Occurred!</strong><br>' +
+                    '<span style="font-size:16px">Failed to cancel schedule. Please try again.</span>' +
+                    '</div>'
+                );
+                $('.xerror_modal').modal('show');
+                
+                $('#confirmCancelBtn').prop('disabled', false).html('<i class="fas fa-check"></i> Yes, Cancel');
+            }
+        });
+    }
 
     </script>
 

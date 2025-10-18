@@ -21,8 +21,6 @@ $xfalse = array();
 $xfalse["1"] = false;
 
 require_once('resources/connect4.php');
-
-// HELPER FUNCTION: Calculate hour difference between two times
 function calculateTimeDifference($time_from, $time_to) {
     $from_military = date("H:i:s", strtotime($time_from));
     $to_military = date("H:i:s", strtotime($time_to));
@@ -30,7 +28,6 @@ function calculateTimeDifference($time_from, $time_to) {
     $from_time = new DateTime($from_military);
     $to_time = new DateTime($to_military);
     
-    // Handle overnight schedules
     if($to_time < $from_time) {
         $to_time->modify('+1 day');
     }
@@ -40,13 +37,10 @@ function calculateTimeDifference($time_from, $time_to) {
     
     return $hours;
 }
-
-// HELPER FUNCTION: Validate time duration based on service type
 function validateScheduleDuration($service_type, $time_from, $time_to) {
     $hour_diff = calculateTimeDifference($time_from, $time_to);
     
     if($service_type == "PMO") {
-        // PMO must be exactly 2 hours
         if($hour_diff != 2) {
             return [
                 'valid' => false,
@@ -54,7 +48,6 @@ function validateScheduleDuration($service_type, $time_from, $time_to) {
             ];
         }
     } else if($service_type == "PMC") {
-        // PMC must be exactly 1 hour
         if($hour_diff != 1) {
             return [
                 'valid' => false,
@@ -80,12 +73,10 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
 
     $search_negative = "-";
 
-    // VALIDATE: Time from cannot be >= Time to
     if($hour_diff == "00:0:0" || strpos($hour_diff, '-') !== false){
         $ret["msg"] = "Time from <b>cannot be greater than or equal to</b> Time to";
         $ret["status"] = false;
     } else {
-        // NEW VALIDATION: Check if duration matches service type requirements
         $duration_check = validateScheduleDuration(
             $_POST['select_type'], 
             $_POST['sched_from'], 
@@ -96,7 +87,6 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
             $ret["msg"] = $duration_check['message'];
             $ret["status"] = false;
         } else {
-            // Proceed with adding schedule
             $select_db_check = "SELECT * FROM mf_appointment_info WHERE sched_type='".$_POST['select_type']."' AND userid='".$_SESSION['usr_id']."'";
             $stmt	= $link->prepare($select_db_check);
             $stmt->execute();
@@ -161,10 +151,8 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
 	$stmt2->execute(array($_POST['xrecid']));
     $rs = $stmt2->fetch();
 
-    // Create a DateTime object from the input date
     $dateObject = new DateTime($rs['clinic_date']);
 
-    // Format the date into mm/dd/yyyy format
     $formattedDate = $dateObject->format('m/d/Y');
 
     $ret["retEdit"] = [
@@ -195,12 +183,10 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
 
     $search_negative = "-";
 
-    // VALIDATE: Time from cannot be >= Time to
     if($hour_diff == "00:0:0" || strpos($hour_diff, '-') !== false){
         $ret["msg"] = "Time from <b>cannot be greater than or equal to</b> Time to";
         $ret["status"] = false;
     } else {
-        // NEW VALIDATION: Check if duration matches service type requirements
         $duration_check = validateScheduleDuration(
             $_POST['modal_service'], 
             $_POST['modal_schedfrom'], 
@@ -211,7 +197,6 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
             $ret["msg"] = $duration_check['message'];
             $ret["status"] = false;
         } else {
-            // Proceed with updating schedule
             $modal_part = '';
             if(isset($_POST["modal_participants"])){
                 $modal_part = $_POST["modal_participants"];
@@ -226,10 +211,8 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
             $xdata_update["sched_type"] = $_POST['modal_service'];
             PDO_UpdateRecord($link,'mf_appointment_info',$xdata_update,$condition=' appointment_info_id = ?',array($row_xid['appointment_info_id']),$debug=false);
 
-            // Create a DateTime object from the input date
             $dateObject2 = DateTime::createFromFormat('m/d/Y', $_POST['modal_clinicdate']);
 
-            // Format the date into Y-m-d format
             $newFormattedDate = $dateObject2->format('Y-m-d');
 
             $ext_arr = array();
@@ -293,7 +276,97 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
 
         $ret['status']=true;
     }
+} else if(isset($_POST['event_action']) && $_POST['event_action'] == "cancel_schedule"){
+    
+    $recid = $_POST['xrecid'];
+    $ret['affected_users'] = 0;
+    
+    try {
+        $link->beginTransaction();
+        
+        $select_schedule = "SELECT ext_appointment_info.clinic_date, 
+                                   ext_appointment_info.time_from, 
+                                   ext_appointment_info.time_to,
+                                   ext_appointment_info.venue_id,
+                                   ext_appointment_info.appointment_info_id,
+                                   mf_venue.venue,
+                                   mf_appointment_info.sched_type
+                            FROM ext_appointment_info
+                            LEFT JOIN mf_venue ON ext_appointment_info.venue_id = mf_venue.venue_id
+                            LEFT JOIN mf_appointment_info ON ext_appointment_info.appointment_info_id = mf_appointment_info.appointment_info_id
+                            WHERE ext_appointment_info.recid = ?";
+        $stmt_schedule = $link->prepare($select_schedule);
+        $stmt_schedule->execute(array($recid));
+        $schedule_data = $stmt_schedule->fetch(PDO::FETCH_ASSOC);
+        
+        if(!$schedule_data) {
+            throw new Exception('Schedule not found');
+        }
+        
+        $select_affected_users = "SELECT DISTINCT 
+                                    pro_meiform.userid,
+                                    pro_meiform.usermeiformid,
+                                    pro_meiform.status as booking_status,
+                                    ext_mf_meiform.date,
+                                    ext_mf_meiform.venue,
+                                    ext_mf_meiform.from_to
+                                   FROM pro_meiform
+                                   INNER JOIN ext_mf_meiform ON pro_meiform.usermeiformid = ext_mf_meiform.meiformid
+                                   WHERE ext_mf_meiform.date = ? 
+                                   AND ext_mf_meiform.venue = ?
+                                   AND pro_meiform.status IN ('PMO', 'PMC', 'POST')";
+        
+        $stmt_affected = $link->prepare($select_affected_users);
+        $stmt_affected->execute(array(
+            $schedule_data['clinic_date'],
+            $schedule_data['venue']
+        ));
+        $affected_users = $stmt_affected->fetchAll(PDO::FETCH_ASSOC);
+        
+        $ret['affected_users'] = count($affected_users);
+        
+        foreach($affected_users as $user) {
+            $rollback_status = 'APR';
+            if($user['booking_status'] == 'POST' || $user['booking_status'] == 'PMC') {
+                $rollback_status = 'PMC'; 
+            }
+            
+            $delete_meiform = "DELETE FROM pro_meiform WHERE usermeiformid = ?";
+            $stmt_delete_meiform = $link->prepare($delete_meiform);
+            $stmt_delete_meiform->execute(array($user['usermeiformid']));
+            
+            $delete_ext_meiform = "DELETE FROM ext_mf_meiform WHERE meiformid = ?";
+            $stmt_delete_ext = $link->prepare($delete_ext_meiform);
+            $stmt_delete_ext->execute(array($user['usermeiformid']));
+            
+            $update_user_status = "UPDATE mf_prog_users 
+                                  SET act_status = ?, 
+                                      last_booking_cancelled = 1 
+                                  WHERE userid = ?";
+            $stmt_update_user = $link->prepare($update_user_status);
+            $stmt_update_user->execute(array($rollback_status, $user['userid']));
+        }
+        
+        $delete_schedule = "DELETE FROM ext_appointment_info WHERE recid = ?";
+        $stmt_delete_schedule = $link->prepare($delete_schedule);
+        $stmt_delete_schedule->execute(array($recid));
+        
+        $link->commit();
+        
+        $ret['status'] = true;
+        $ret['msg'] = 'Schedule cancelled successfully. ' . $ret['affected_users'] . ' user(s) notified.';
+        
+    } catch(Exception $e) {
+        if($link->inTransaction()) {
+            $link->rollBack();
+        }
+        
+        $ret['status'] = false;
+        $ret['msg'] = 'Failed to cancel schedule: ' . $e->getMessage();
+        $ret['affected_users'] = 0;
+    }
 }
+
 
 header('Content-Type: application/json');
 echo json_encode($ret);
