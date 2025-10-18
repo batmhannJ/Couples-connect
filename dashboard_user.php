@@ -479,56 +479,52 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                     </div>
                                     <div style='width:100%;display:flex;justify-content:center'>
                                         <?php
-                                            if($act_status == "PMO"){
-                                                $select_db2="SELECT ext_mf_meiform.date as 'mf_date', ext_mf_meiform.from_to as 'from_to'  FROM ext_mf_meiform LEFT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  WHERE ext_mf_meiform.userid=? AND pro_meiform.status = 'PMO' LIMIT 1";
-                                                $stmt2	= $link->prepare($select_db2);
-                                                $stmt2->execute(array($_SESSION['usr_id']));
-                                                $row2 = $stmt2->fetch();
+                                            echo '<div style="width:100%;display:flex;justify-content:center">';
 
-                                                $from_to = $row2["from_to"] ?? '';
-                                                $date_formatted = safe_date_format($row2["mf_date"] ?? null);
+                                            $select_all_bookings = "SELECT ext_mf_meiform.date as 'mf_date', 
+                                                                    ext_mf_meiform.from_to as 'from_to',
+                                                                    ext_mf_meiform.venue as 'venue',
+                                                                    pro_meiform.status as 'booking_status',
+                                                                    pro_meiform.usermeiformid as 'meiformid'
+                                                                    FROM ext_mf_meiform 
+                                                                    LEFT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  
+                                                                    WHERE ext_mf_meiform.userid=? 
+                                                                    ORDER BY ext_mf_meiform.date DESC
+                                                                    LIMIT 1";
+                                            $stmt_all_bookings = $link->prepare($select_all_bookings);
+                                            $stmt_all_bookings->execute(array($_SESSION['usr_id']));
+                                            $booking_data = $stmt_all_bookings->fetch();
 
-                                                if(!empty($from_to) && $date_formatted !== 'No Date Available' && $date_formatted !== 'Invalid Date'){
-                                                    echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
-                                                        echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
-                                                        echo "<div style='display:flex;flex-direction:column'>";
-                                                            echo "<span style='margin-left:10px'>".$date_formatted."(".$from_to.")</span>";
-                                                            echo "<span style='margin-left:10px;font-size:11px;color:#616161;font-weight:400'>Pre-Marriage Orientation</span>";
-                                                        echo "</div>";
-                                                        
-                                                    echo "</div>";
-
+                                            if($booking_data && !empty($booking_data['from_to'])) {
+                                                // User has a booking - display it
+                                                $booking_type = '';
+                                                if($booking_data['booking_status'] == 'PMO') {
+                                                    $booking_type = 'Pre-Marriage Orientation';
+                                                } else if($booking_data['booking_status'] == 'PMC') {
+                                                    $booking_type = 'Post Marriage Counseling';
+                                                } else {
+                                                    $booking_type = 'Appointment';
                                                 }
-                                                $req_now_disabled = "disabled";
-                                            } else if($act_status == "PMC"){
-                                                $select_db2="SELECT ext_mf_meiform.date as 'mf_date', ext_mf_meiform.from_to as 'from_to'  FROM ext_mf_meiform RIGHT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  WHERE ext_mf_meiform.userid=? AND pro_meiform.status = 'PMC' LIMIT 1";
-                                                $stmt2	= $link->prepare($select_db2);
-                                                $stmt2->execute(array($_SESSION['usr_id']));
-                                                $row2 = $stmt2->fetch();
-
-                                                $from_to = $row2["from_to"] ?? '';
-                                                $date_formatted = safe_date_format($row2["mf_date"] ?? null);
-
-                                                if(!empty($from_to) && $date_formatted !== 'No Date Available' && $date_formatted !== 'Invalid Date'){
-                                                    echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
-                                                        echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
-                                                        echo "<div style='display:flex;flex-direction:column'>";
-                                                            echo "<span style='margin-left:10px'>".$date_formatted."(".$from_to.")</span>";
-                                                            echo "<span style='margin-left:10px;font-size:11px;color:#616161;font-weight:400'>Post Marriage Counseling</span>";
-                                                        echo "</div>";
+                                                
+                                                $date_formatted = safe_date_format($booking_data["mf_date"]);
+                                                
+                                                echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
+                                                    echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
+                                                    echo "<div style='display:flex;flex-direction:column'>";
+                                                        echo "<span style='margin-left:10px'>".$date_formatted." (".$booking_data['from_to'].")</span>";
+                                                        echo "<span style='margin-left:10px;font-size:14px;color:#616161;font-weight:400'>".$booking_data['venue']."</span>";
+                                                        echo "<span style='margin-left:10px;font-size:11px;color:#616161;font-weight:400'>".$booking_type."</span>";
                                                     echo "</div>";
-                                                    $book_now_disbaled = "";
-                                                    $req_now_disabled = "disabled";
-                                                }else{
-                                                    $book_now_disbaled = "";
-                                                }
+                                                echo "</div>";
                                             } else {
-
+                                                // No booking found
                                                 echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
                                                     echo "<span style='margin-left:10px'>No Appointment.</span>";
                                                 echo "</div>";
                                             }
-                                        ?>
+
+                                            echo '</div>';
+                                            ?>
                                     </div>
                                 <div>
                                 </div>
