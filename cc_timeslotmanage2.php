@@ -878,9 +878,9 @@ if($_SESSION['usertype'] == 'DSK'){
             var select_type_val = $('#select_type').find(":selected").val();
 
             if(select_type_val == "PMO"){
-                var hours_add = 4
+                var hours_add = 2;
             }else{
-                var hours_add = 1
+                var hours_add = 1;
             }
 
             var xtime_input = $(this).val();
@@ -890,25 +890,26 @@ if($_SESSION['usertype'] == 'DSK'){
 
         $("#select_type").on("change", function(event) { 
             var select_type_val = $('#select_type').find(":selected").val();
-
+            
             if(select_type_val == "PMO"){
-                var hours_add = 4
-            }else{
-                var hours_add = 1
+                var hours_add = 2;
+            } else {
+                var hours_add = 1;
             }
 
             var xtime_input = $("#sched_from").val();
-            let time_result = addHoursToTime(xtime_input, hours_add);
-            $("#sched_to").val(time_result)
+            
+            // Only recalculate if there's a time selected
+            if(xtime_input) {
+                let time_result = addHoursToTime(xtime_input, hours_add);
+                $("#sched_to").val(time_result);
+            }
         });
 
-
         function addHoursToTime(timeString, hoursToAdd) {
-            // Parse the input time string
             let [time, modifier] = timeString.split(/(AM|PM)/);
             let [hours, minutes] = time.split(':').map(Number);
             
-            // Convert to 24-hour format
             if (modifier === 'PM' && hours !== 12) {
                 hours += 12;
             }
@@ -916,32 +917,161 @@ if($_SESSION['usertype'] == 'DSK'){
                 hours = 0;
             }
 
-            // Create a new Date object with today's date and the parsed time
             let date = new Date();
             date.setHours(hours, minutes);
 
-            // Add the specified number of hours
             date.setHours(date.getHours() + hoursToAdd);
 
-            // Format the new time string
             let newHours = date.getHours();
             let newMinutes = date.getMinutes();
             let newModifier = newHours >= 12 ? 'PM' : 'AM';
 
             newHours = newHours % 12;
-            newHours = newHours ? newHours : 12; // handle case for 12:00 AM/PM
+            newHours = newHours ? newHours : 12;
             newMinutes = newMinutes < 10 ? '0' + newMinutes : newMinutes;
 
             return `${newHours}:${newMinutes}${newModifier}`;
         }
 
+        function schedule_func(xevent, xrecid) {
+            if(xrecid !== undefined){
+                new_xrecid = xrecid;
+            } else {
+                new_xrecid = "";
+            }
 
+            if(xevent === 'add_sched') {
+                var select_type = $('#select_type').val();
+                var time_from = $('#sched_from').val();
+                var time_to = $('#sched_to').val();
+                
+                var hourDiff = calculateHourDifference(time_from, time_to);
+                
+                if(select_type === 'PMO' && hourDiff !== 2) {
+                    alert('PMO schedules must be exactly 2 hours long!');
+                    return false;
+                }
+                
+                if(select_type === 'PMC' && hourDiff !== 1) {
+                    alert('PMC schedules must be exactly 1 hour long!');
+                    return false;
+                }
+            }
+
+            var xdata = $("#myforms *").serialize()+"&event_action="+xevent+"&xrecid="+new_xrecid;
+
+            jQuery.ajax({    
+                data:xdata,
+                dataType:"json",
+                type:"post",
+                url:"cc_timeslotmanage2_ajax.php", 
+                success: function(xdata){
+                    if(xevent == 'add_sched'){
+                        if(xdata['status'] == false){
+                            $('.error_msg').html(xdata['msg']);
+                            $(".xerror_modal").modal("show");
+                        } else {
+                            document.forms.myforms.method = "post";
+                            document.forms.myforms.target = "_self";
+                            document.forms.myforms.action = "cc_timeslotmanage2.php";
+                            document.forms.myforms.submit();                          
+                        }
+                    } else if(xevent == 'get_sched'){
+                        var sched_type = xdata['retEdit']['sched_type'];
+                        var clinic_date = xdata['retEdit']['clinic_date'];
+                        var time_from = xdata['retEdit']['time_from'];
+                        var time_to = xdata['retEdit']['time_to'];
+                        var ext_recid = xdata['retEdit']['recid'];
+
+                        if(sched_type == "PMC"){
+                            $("#modal_participants").prop('disabled', true);
+                        }
+
+                        $("#modal_clinicdate").val(clinic_date);
+                        $("#modal_service option[value='"+sched_type+"']").prop('selected', true);
+
+                        $("#modal_schedfrom option").filter(function() {
+                            return $(this).val() === time_from;
+                        }).attr('selected', 'selected');
+
+                        $("#modal_schedto option").filter(function() {
+                            return $(this).val() === time_to;
+                        }).attr('selected', 'selected');
+
+                        $("#modal_venue option").filter(function() {
+                            return $(this).val() === xdata['retEdit']['venue_id'];
+                        }).attr('selected', 'selected');
+
+                        $("#modal_participants").val(xdata['retEdit']['slots_avail']);
+
+                        $(".innerhtml_btn").html("<button type='button' class='btn btn-primary' onclick='schedule_func(\"setEdit\",\""+ext_recid+"\")'>Save</button>");
+                        $(".xedit_modal").modal("show");
+                        
+                    } else if(xevent == 'setEdit'){
+                        if(xdata['status'] == false){
+                            var xerror_msg = xdata['msg'];
+                            $(".xerror_alert").html(`
+                                <div class='alert alert-danger' role="alert">
+                                    ${xerror_msg}
+                                </div>
+                            `);
+                        } else {
+                            $(".xedit_modal").modal("hide");
+                            document.forms.myforms.method = "post";
+                            document.forms.myforms.target = "_self";
+                            document.forms.myforms.action = "cc_timeslotmanage2.php";
+                            document.forms.myforms.submit();  
+                        }
+                    } else if(xevent == 'delete_sched'){
+                        document.forms.myforms.method = "post";
+                        document.forms.myforms.target = "_self";
+                        document.forms.myforms.action = "cc_timeslotmanage2.php";
+                        document.forms.myforms.submit();  
+                    }
+                },
+                error: function (request, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+
+        function calculateHourDifference(timeFrom, timeTo) {
+            let [fromTime, fromModifier] = timeFrom.split(/(AM|PM)/);
+            let [fromHours, fromMinutes] = fromTime.split(':').map(Number);
+            
+            if (fromModifier === 'PM' && fromHours !== 12) {
+                fromHours += 12;
+            }
+            if (fromModifier === 'AM' && fromHours === 12) {
+                fromHours = 0;
+            }
+            
+            let [toTime, toModifier] = timeTo.split(/(AM|PM)/);
+            let [toHours, toMinutes] = toTime.split(':').map(Number);
+            
+            if (toModifier === 'PM' && toHours !== 12) {
+                toHours += 12;
+            }
+            if (toModifier === 'AM' && toHours === 12) {
+                toHours = 0;
+            }
+            
+            let fromTotalMinutes = fromHours * 60 + fromMinutes;
+            let toTotalMinutes = toHours * 60 + toMinutes;
+            
+            let diffMinutes = toTotalMinutes - fromTotalMinutes;
+            
+            if (diffMinutes < 0) {
+                diffMinutes += 24 * 60;
+            }
+            
+            return diffMinutes / 60;
+        }
 
         function handleVenueChange(event) {
             const selectedOption = event.target.options[event.target.selectedIndex];
             if (selectedOption.id === 'add-zoom-option') {
                 openZoomModal();
-                // Reset the select element to prevent auto-selecting the "Add zoom" option
                 event.target.selectedIndex = 0;
             }
         }
@@ -980,21 +1110,36 @@ if($_SESSION['usertype'] == 'DSK'){
         }
     })
 
-
-
     $('#modal_service').on('change', function() {
-    
         var dd_val = this.value;
-
+        
         if(dd_val == "PMC"){
             $("#modal_participants").prop('disabled', true);
             $("#modal_participants").attr('Placeholder', '');
             $("#modal_participants").val('');
-        }else{
+        } else {
             $("#modal_participants").prop('disabled', false);
             $("#modal_participants").attr('Placeholder', '1-15');
         }
-    })
+        
+        var time_from = $("#modal_schedfrom").val();
+        if(time_from) {
+            var hours_add = dd_val === "PMO" ? 2 : 1;
+            var time_to = addHoursToTime(time_from, hours_add);
+            $("#modal_schedto").val(time_to);
+        }
+    });
+
+    $("#modal_schedfrom").on("change", function() {
+        var service_type = $('#modal_service').val();
+        var hours_add = service_type === "PMO" ? 2 : 1;
+        var time_from = $(this).val();
+        
+        if(time_from) {
+            var time_to = addHoursToTime(time_from, hours_add);
+            $("#modal_schedto").val(time_to);
+        }
+    });
 
     function schedule_func(xevent,xrecid){
 

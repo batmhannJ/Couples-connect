@@ -22,6 +22,50 @@ $xfalse["1"] = false;
 
 require_once('resources/connect4.php');
 
+// HELPER FUNCTION: Calculate hour difference between two times
+function calculateTimeDifference($time_from, $time_to) {
+    $from_military = date("H:i:s", strtotime($time_from));
+    $to_military = date("H:i:s", strtotime($time_to));
+    
+    $from_time = new DateTime($from_military);
+    $to_time = new DateTime($to_military);
+    
+    // Handle overnight schedules
+    if($to_time < $from_time) {
+        $to_time->modify('+1 day');
+    }
+    
+    $interval = $from_time->diff($to_time);
+    $hours = $interval->h + ($interval->days * 24);
+    
+    return $hours;
+}
+
+// HELPER FUNCTION: Validate time duration based on service type
+function validateScheduleDuration($service_type, $time_from, $time_to) {
+    $hour_diff = calculateTimeDifference($time_from, $time_to);
+    
+    if($service_type == "PMO") {
+        // PMO must be exactly 2 hours
+        if($hour_diff != 2) {
+            return [
+                'valid' => false,
+                'message' => 'Pre-Marriage Orientation (PMO) schedules must be exactly <b>2 hours</b> long. Currently: ' . $hour_diff . ' hour(s).'
+            ];
+        }
+    } else if($service_type == "PMC") {
+        // PMC must be exactly 1 hour
+        if($hour_diff != 1) {
+            return [
+                'valid' => false,
+                'message' => 'Pre-Marriage Counseling (PMC) schedules must be exactly <b>1 hour</b> long. Currently: ' . $hour_diff . ' hour(s).'
+            ];
+        }
+    }
+    
+    return ['valid' => true, 'message' => ''];
+}
+
 if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
     $from_military = date("H:i:s", strtotime($_POST["sched_from"]));
     $to_military = date("H:i:s", strtotime($_POST["sched_to"]));
@@ -36,65 +80,74 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
 
     $search_negative = "-";
 
+    // VALIDATE: Time from cannot be >= Time to
     if($hour_diff == "00:0:0" || strpos($hour_diff, '-') !== false){
-        $ret["msg"] = "Time from <b>cannot be greater than or equal to</b> than Time to";
+        $ret["msg"] = "Time from <b>cannot be greater than or equal to</b> Time to";
         $ret["status"] = false;
-    }else{
+    } else {
+        // NEW VALIDATION: Check if duration matches service type requirements
+        $duration_check = validateScheduleDuration(
+            $_POST['select_type'], 
+            $_POST['sched_from'], 
+            $_POST['sched_to']
+        );
+        
+        if(!$duration_check['valid']) {
+            $ret["msg"] = $duration_check['message'];
+            $ret["status"] = false;
+        } else {
+            // Proceed with adding schedule
+            $select_db_check = "SELECT * FROM mf_appointment_info WHERE sched_type='".$_POST['select_type']."' AND userid='".$_SESSION['usr_id']."'";
+            $stmt	= $link->prepare($select_db_check);
+            $stmt->execute();
+            $row_check = $stmt->fetchAll();
 
-        $select_db_check = "SELECT * FROM mf_appointment_info WHERE sched_type='".$_POST['select_type']."' AND userid='".$_SESSION['usr_id']."'";
-        $stmt	= $link->prepare($select_db_check);
-        $stmt->execute();
-        $row_check = $stmt->fetchAll();
+            $select_db_xid = "SELECT * FROM mf_appointment_info ORDER BY recid DESC limit 1";
+            $stmt	= $link->prepare($select_db_xid);
+            $stmt->execute();
+            $row_xid = $stmt->fetch();
 
-        $select_db_xid = "SELECT * FROM mf_appointment_info ORDER BY recid DESC limit 1";
-        $stmt	= $link->prepare($select_db_xid);
-        $stmt->execute();
-        $row_xid = $stmt->fetch();
-
-        if($row_xid['userid'] == "" || empty($row_xid['userid'])){
-            $app_id = "APP-00001";
-        }else{
-            if(count($row_check)  == 0){
-                $app_id = lNexts($row_xid['appointment_info_id']);
+            if($row_xid['userid'] == "" || empty($row_xid['userid'])){
+                $app_id = "APP-00001";
             }else{
-                $app_id = $row_xid['appointment_info_id'];
+                if(count($row_check)  == 0){
+                    $app_id = lNexts($row_xid['appointment_info_id']);
+                }else{
+                    $app_id = $row_xid['appointment_info_id'];
+                }
             }
 
+            $num_part = '';
+            if(isset($_POST["num_part"])){
+                $num_part = $_POST["num_part"];
+            }
+
+            if(count($row_check)  == 0 ){
+                $xdata_add = array();
+                $xdata_add["userid"] = $_SESSION["usr_id"];
+                $xdata_add["appointment_info_id"] = $app_id;
+                $xdata_add["sched_type"] = $_POST['select_type'];
+                PDO_InsertRecord($link,'mf_appointment_info',$xdata_add,$debug=false,$ignore_errors=false);
+            }
+
+            $_POST['date_select'] = date('Y-m-d', strtotime(str_replace('-', '/', $_POST['date_select'])));
+
+            $ext_arr = array();
+            $ext_arr["appointment_info_id"] = $app_id;
+            $ext_arr["clinic_date"] = $_POST['date_select'];
+            $ext_arr["time_from"] = $_POST['sched_from'];
+            $ext_arr["time_to"] = $_POST['sched_to'];
+            $ext_arr["date_added"] = $date_today;
+            $ext_arr["slots_avail"] = $num_part;
+            $ext_arr["venue_id"] = $_POST["venue"];
+            $ext_arr["counseloremail"] = $_SESSION["username"];
+            PDO_InsertRecord($link,'ext_appointment_info',$ext_arr,$debug=false,$ignore_errors=false);
+
+            $xdata_update = array();
+            $xdata_update["sched_type"] = $_POST['select_type'];
+            $xdata_update["userid"] = $_SESSION["usr_id"];
+            PDO_UpdateRecord($link,'mf_appointment_info',$xdata_update,$condition=' appointment_info_id = ?',array($app_id),$debug=false);
         }
-
-        $num_part = '';
-        if(isset($_POST["num_part"])){
-            $num_part = $_POST["num_part"];
-        }
-
-        if(count($row_check)  == 0 ){
-            $xdata_add = array();
-
-            $xdata_add["userid"] = $_SESSION["usr_id"];
-            $xdata_add["appointment_info_id"] = $app_id;
-            $xdata_add["sched_type"] = $_POST['select_type'];
-            PDO_InsertRecord($link,'mf_appointment_info',$xdata_add,$debug=false,$ignore_errors=false);
-        
-        }
-
-        $_POST['date_select'] = date('Y-m-d', strtotime(str_replace('-', '/', $_POST['date_select'])));
-
-        $ext_arr = array();
-        $ext_arr["appointment_info_id"] = $app_id;
-        // $ext_arr["week_day"] = $_POST['day_select'];
-        $ext_arr["clinic_date"] = $_POST['date_select'];
-        $ext_arr["time_from"] = $_POST['sched_from'];
-        $ext_arr["time_to"] = $_POST['sched_to'];
-        $ext_arr["date_added"] = $date_today;
-        $ext_arr["slots_avail"] = $num_part;
-        $ext_arr["venue_id"] = $_POST["venue"];
-        $ext_arr["counseloremail"] = $_SESSION["username"];
-        PDO_InsertRecord($link,'ext_appointment_info',$ext_arr,$debug=false,$ignore_errors=false);
-
-        $xdata_update = array();
-        $xdata_update["sched_type"] = $_POST['select_type'];
-        $xdata_update["userid"] = $_SESSION["usr_id"];
-        PDO_UpdateRecord($link,'mf_appointment_info',$xdata_update,$condition=' appointment_info_id = ?',array($app_id),$debug=false);
     }
 
 }else if(isset($_POST['event_action']) && $_POST['event_action'] == "get_sched"){
@@ -126,6 +179,7 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
     ];
 
     $xret["status"] = "retEdit";
+    
 }else if(isset($_POST['event_action']) && $_POST['event_action'] == "setEdit"){
 
     $from_military = date("H:i:s", strtotime($_POST["modal_schedfrom"]));
@@ -141,53 +195,61 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
 
     $search_negative = "-";
 
+    // VALIDATE: Time from cannot be >= Time to
     if($hour_diff == "00:0:0" || strpos($hour_diff, '-') !== false){
-        $ret["msg"] = "Time from <b>cannot be greater than or equal to</b> than Time to";
+        $ret["msg"] = "Time from <b>cannot be greater than or equal to</b> Time to";
         $ret["status"] = false;
-    }else{
+    } else {
+        // NEW VALIDATION: Check if duration matches service type requirements
+        $duration_check = validateScheduleDuration(
+            $_POST['modal_service'], 
+            $_POST['modal_schedfrom'], 
+            $_POST['modal_schedto']
+        );
+        
+        if(!$duration_check['valid']) {
+            $ret["msg"] = $duration_check['message'];
+            $ret["status"] = false;
+        } else {
+            // Proceed with updating schedule
+            $modal_part = '';
+            if(isset($_POST["modal_participants"])){
+                $modal_part = $_POST["modal_participants"];
+            }
 
-        $modal_part = '';
-        if(isset($_POST["modal_participants"])){
-            $modal_part = $_POST["modal_participants"];
+            $select_db_xid = "SELECT * FROM ext_appointment_info WHERE recid=?";
+            $stmt	= $link->prepare($select_db_xid);
+            $stmt->execute(array($_POST['xrecid']));
+            $row_xid = $stmt->fetch();
+
+            $xdata_update = array();
+            $xdata_update["sched_type"] = $_POST['modal_service'];
+            PDO_UpdateRecord($link,'mf_appointment_info',$xdata_update,$condition=' appointment_info_id = ?',array($row_xid['appointment_info_id']),$debug=false);
+
+            // Create a DateTime object from the input date
+            $dateObject2 = DateTime::createFromFormat('m/d/Y', $_POST['modal_clinicdate']);
+
+            // Format the date into Y-m-d format
+            $newFormattedDate = $dateObject2->format('Y-m-d');
+
+            $ext_arr = array();
+            $ext_arr["clinic_date"] = $newFormattedDate;
+            $ext_arr["venue_id"] = $_POST["modal_venue"];
+            $ext_arr["time_from"] = $_POST['modal_schedfrom'];
+            $ext_arr["time_to"] = $_POST['modal_schedto'];
+            $ext_arr["slots_avail"] = $modal_part;
+            PDO_UpdateRecord($link,'ext_appointment_info',$ext_arr,$condition=' recid = ?',array($_POST['xrecid']),$debug=false);
         }
-
-
-        $select_db_xid = "SELECT * FROM ext_appointment_info WHERE recid=?";
-        $stmt	= $link->prepare($select_db_xid);
-        $stmt->execute(array($_POST['xrecid']));
-        $row_xid = $stmt->fetch();
-
-
-        $xdata_update = array();
-        $xdata_update["sched_type"] = $_POST['modal_service'];
-        PDO_UpdateRecord($link,'mf_appointment_info',$xdata_update,$condition=' appointment_info_id = ?',array($row_xid['appointment_info_id']),$debug=false);
-
- 
-        // Create a DateTime object from the input date
-        $dateObject2 = DateTime::createFromFormat('m/d/Y', $_POST['modal_clinicdate']);
-
-        // Format the date into Y-m-d format
-        $newFormattedDate = $dateObject2->format('Y-m-d');
-
-
-        $ext_arr = array();
-        // $ext_arr["week_day"] = $_POST['modal_weekday'];
-        $ext_arr["clinic_date"] = $newFormattedDate;
-        $ext_arr["venue_id"] = $_POST["modal_venue"];
-        $ext_arr["time_from"] = $_POST['modal_schedfrom'];
-        $ext_arr["time_to"] = $_POST['modal_schedto'];
-        $ext_arr["slots_avail"] = $modal_part;
-        PDO_UpdateRecord($link,'ext_appointment_info',$ext_arr,$condition=' recid = ?',array($_POST['xrecid']),$debug=false);
     }
+    
 }else if(isset($_POST['event_action']) && $_POST['event_action'] == "delete_sched"){
 
 	$delete_id=$_POST['xrecid'];
-	$delete_query="DELETE  FROM ext_appointment_info WHERE recid=?";
+	$delete_query="DELETE FROM ext_appointment_info WHERE recid=?";
 	$xstmt=$link->prepare($delete_query);
 	$xstmt->execute(array($delete_id));
 
 }else if(isset($_POST['event_action']) && $_POST['event_action'] == "add_zoom_link"){
-
 
     $select_db_zoom = "SELECT * FROM mf_venue WHERE userid=? AND venue_link=?";
     $stmt_zoom	= $link->prepare($select_db_zoom);
@@ -200,26 +262,21 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
     $row_zoom2 = $stmt_zoom2->fetchAll();
 
     if(count($row_zoom) !== 0){
-        
         $ret['msg']='Zoom link already in use, try a different one';
-
         $xfalse['1'] = true;
         $ret['status']=false;
     }
 
     if(count($row_zoom2) !== 0){
-
         if($xfalse['1'] == true){
             $ret['msg'].=' and title is in use';
         }else{
             $ret['msg'].='Title in use';
         }
-
         $ret['status']=false;
     }
 
     if($ret['status'] == true){
-
         $select_db_xid = "SELECT * FROM mf_venue ORDER BY recid DESC limit 1";
         $stmt	= $link->prepare($select_db_xid);
         $stmt->execute();
@@ -236,9 +293,8 @@ if(isset($_POST['event_action']) && $_POST['event_action'] == "add_sched"){
 
         $ret['status']=true;
     }
-
-
 }
+
 header('Content-Type: application/json');
 echo json_encode($ret);
 ?>

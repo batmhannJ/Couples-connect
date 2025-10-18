@@ -248,7 +248,7 @@ ul.checkout-bar:before {
                                 if($act_status == "PMC" || $act_status == "APR" || $act_status == "PMO"){
                                     echo "<td>";
                                         echo "<div class='container text-center' style='font-family:inter;font-weight:700;font-size:25px;color:#797979''>";    
-                                            echo "Slots Available";    
+                                            echo "Couple Slots Available";    
                                         echo "</div>";    
                                     echo "</td>";   
                                 }
