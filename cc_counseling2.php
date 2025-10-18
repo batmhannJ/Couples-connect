@@ -1176,6 +1176,7 @@ const endpoint = `https://generativelanguage.googleapis.com/v1beta/models/gemini
 });
 
 // Add New function for form submission
+// Add New function for form submission
 function add_new(xevent_action) {
     var current_rows = $("#current_rows").val();
     var ac_recid_hidden = $("#ac_recid_hidden").val();
@@ -1186,31 +1187,50 @@ function add_new(xevent_action) {
 
     if (xevent_action == 'add_new') {
         var xallData = `event_action=${xevent_action}&current_rows=${current_rows}`;
-    } else if (xevent_action == 'submit_data') {
-        var xallData = $("#myforms *").serialize() + `&event_action=${xevent_action}&current_rows=${current_rows}&ac_recid_hidden=${ac_recid_hidden}`;
-    }
-
-    $.ajax({
-        url: 'cc_counseling2_ajax.php',
-        type: "post",
-        data: xallData,
-        success: function(xdata) {
-            if (xevent_action == "add_new") {
+        
+        $.ajax({
+            url: 'cc_counseling2_ajax.php',
+            type: "post",
+            data: xallData,
+            success: function(xdata) {
                 $("#current_rows").val(xdata['new_row']);
                 $("#change_table").append(xdata['html']);
-            } else if (xevent_action == "submit_data") {
-                document.forms.myforms.method = "post";
-                document.forms.myforms.target = "_self";
-                document.forms.myforms.action = "cc_counseling.php";
-                document.forms.myforms.submit();
+            },
+            error: function(request, status, error) {
+                console.error("Error:", error);
+                alert("Error adding new row: " + error);
             }
-        },
-        error: function(request, status, error) {
-            console.error("Error:", error);
-        }
-    });
-}
+        });
+        
+    } else if (xevent_action == 'submit_data') {
+        var xallData = $("#myforms *").serialize() + `&event_action=${xevent_action}&current_rows=${current_rows}&ac_recid_hidden=${ac_recid_hidden}`;
 
+        $.ajax({
+            url: 'cc_counseling2_ajax.php',
+            type: "post",
+            data: xallData,
+            dataType: 'json',
+            success: function(xdata) {
+                console.log("Response:", xdata);
+                
+                if(xdata.status === false) {
+                    alert("Error saving: " + xdata.msg + "\n\nDebug: " + xdata.debug);
+                    return;  // Don't redirect if there's an error
+                }
+                
+                // Data saved successfully - now redirect
+                alert("Counseling session saved successfully!");
+                
+                // Redirect to counseling page
+                window.location.href = "http://localhost/couples-connect/cc_counseling.php";
+            },
+            error: function(request, status, error) {
+                alert("AJAX Error: " + error);
+                console.error("Error:", error);
+            }
+        });
+    }
+}
 // View MEI Form
 function viewMei() {
     var username_hidden2 = $("#username_hidden").val();
