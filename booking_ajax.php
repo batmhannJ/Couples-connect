@@ -44,6 +44,12 @@ $ret['time_fromto']='';
 $ret['first_time'] = '';
 $ret["retEdit"] = array();
 
+if(isset($_POST['counselorid']) && !empty($_POST['counselorid'])) {
+    $counselor_id = $_POST['counselorid'];
+} else {
+    $counselor_id = null;
+}
+
 $select_db="SELECT * FROM mf_prog_users WHERE recid=?";
 $stmt	= $link->prepare($select_db);
 $stmt->execute(array($_SESSION['usr_recid']));
@@ -401,7 +407,7 @@ if($_POST['event_action'] == "first_load" || $_POST['event_action'] == "changeDa
         $pro_users["usermeiformid"] = $meiformuid;
         $pro_users["status"] = $act_status2;
         $pro_users["userid"] = $_SESSION["usr_id"];
-        $pro_users["counselorid"] = $_POST["counselorid"];
+        $pro_users["counselorid"] = $counselor_id;  // NOW THIS WILL BE POPULATED
         PDO_InsertRecord($link, 'pro_meiform', $pro_users, $debug = false);
 
         $pro_users2 = array();

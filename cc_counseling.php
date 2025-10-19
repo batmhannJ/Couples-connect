@@ -67,7 +67,7 @@ if ($_SESSION['usertype'] == 'DSK') {
                     <div style='width:1025px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));display:flex;flex-direction:column'>
 
                         <div class="m-3 pt-2 text-center">
-                            <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Counseling</p>
+                            <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Couple Records</p>
                             <img src="images/Rectangle 11934.png" style='width:100%;height:4px'>
                         </div>
                         <div class="m-3">
@@ -88,15 +88,25 @@ if ($_SESSION['usertype'] == 'DSK') {
                                         <option disabled selected>Select a user:</option>
                                         <?php
 
+                                       $select_dd = "SELECT DISTINCT 
+                                                        mf_prog_users.userid,
+                                                        mf_prog_users.username,
+                                                        mf_prog_users.act_status,
+                                                        pro_meiform.usermeiformid,
+                                                        pro_meiform.status,
+                                                        pro_meiform.counselorid
+                                                    FROM pro_meiform
+                                                    INNER JOIN mf_prog_users ON pro_meiform.userid = mf_prog_users.userid
+                                                    WHERE pro_meiform.status = 'PMO' 
+                                                    AND pro_meiform.counselorid = '" . $_SESSION['usr_id'] . "'
+                                                    AND mf_prog_users.act_status = 'PMO'
+                                                    ORDER BY mf_prog_users.username ASC";
 
-                                    
-                                        $select_dd = "SELECT * FROM mf_prog_users LEFT JOIN pro_meiform ON mf_prog_users.userid = pro_meiform.userid WHERE pro_meiform.status='PMC' AND pro_meiform.counselorid='" . $_SESSION['usr_id'] . "' AND mf_prog_users.act_status='PMC' GROUP BY mf_prog_users.username";
-
-                                        $stmt_dd    = $link->prepare($select_dd);
+                                        $stmt_dd = $link->prepare($select_dd);
                                         $stmt_dd->execute();
 
                                         while ($row_dd = $stmt_dd->fetch()) {
-                                            echo "<option>";
+                                            echo "<option value='" . $row_dd['userid'] . "'>";
                                             echo $row_dd['username'];
                                             echo "</option>";
                                         }
@@ -246,12 +256,12 @@ if ($_SESSION['usertype'] == 'DSK') {
                                     MEI Form:
                                 </div>
 
-                                <button type="button" id="view_meiform_btn" disabled="true" onclick="viewMei('PMC')" class="btn cnr_btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:185px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25));margin-top:15px;margin-left:20px">View</button>
+                                <button type="button" id="view_meiform_btn" disabled="true" onclick="viewMei('PMO')" class="btn cnr_btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:185px;height:40px;font-size:20px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25));margin-top:15px;margin-left:20px">View</button>
 
                             </div>
 
                             <div class="row mt-3 d-flex justify-content-center align-items-center">
-                                <button type="button" id="proceed_btn" disabled="true" onclick="onProceed('PMC')" class="btn cnr_btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:200px;height:auto;font-size:21px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Proceed</button>
+                                <button type="button" id="proceed_btn" disabled="true" onclick="onProceed('PMO')" class="btn cnr_btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:200px;height:auto;font-size:21px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Proceed</button>
                             </div>
 
                         </div>

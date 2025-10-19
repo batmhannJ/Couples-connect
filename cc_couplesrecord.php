@@ -71,7 +71,7 @@ if($_SESSION['usertype'] == 'DSK'){
                         <div style='width:1025px;height:700px;background-color:white;border-radius:30px;filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25));display:flex;flex-direction:column'>
 
                             <div class="m-3 pt-2 text-center">
-                                    <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Couples Records</p>
+                                    <p style="font-weight:bold;font-size:27px;font-family:inter;margin-bottom:0">Counseling</p>
                                     <img src="images/Rectangle 11934.png" style='width:100%;height:4px'>
                             </div>
                             <div class="m-3 d-flex justify-content-center" style="overflow:auto">

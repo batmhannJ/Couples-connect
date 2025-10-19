@@ -248,7 +248,7 @@ ul.checkout-bar:before {
                                 if($act_status == "PMC" || $act_status == "APR" || $act_status == "PMO"){
                                     echo "<td>";
                                         echo "<div class='container text-center' style='font-family:inter;font-weight:700;font-size:25px;color:#797979''>";    
-                                            echo "Slots Available";    
+                                            echo "Couple Slots Available";    
                                         echo "</div>";    
                                     echo "</td>";   
                                 }
@@ -273,7 +273,12 @@ ul.checkout-bar:before {
                         
                             while($row_xid = $stmt->fetch()){
 
-                                $select_db_checker = "SELECT * FROM pro_meiform LEFT JOIN mf_prog_users ON pro_meiform.userid = mf_prog_users.userid WHERE pro_meiform.userid='".$_SESSION['usr_id']."' AND pro_meiform.status='".$act_status2."'";
+                                $select_db_checker = "SELECT * FROM pro_meiform LEFT JOIN mf_prog_users 
+                                    ON pro_meiform.userid = mf_prog_users.userid 
+                                    WHERE pro_meiform.userid='".$_SESSION['usr_id']."' 
+                                    AND pro_meiform.status='".$act_status2."'
+                                    AND pro_meiform.counselorid IS NOT NULL
+                                    AND pro_meiform.counselorid != ''";
                                 $stmt_checker	= $link->prepare($select_db_checker);
                                 $stmt_checker->execute();
                                 $row_checker = $stmt_checker->fetchAll();
@@ -649,7 +654,7 @@ ul.checkout-bar:before {
                     <label for="" style='font-size:21px;color:252733;font-weight:600;font-family:inter;margin-top:20px'>Feedback:</label>
                     <textarea class="form-control" name="feedback_remarks" id="feedback_remarks" cols="30" rows="7" style='border-radius:5px;border:1px solid black' placeholder='Enter remarks'></textarea>
                     <div style='display:flex;justify-content:center;padding-top:25px;padding-bottom:20px'>
-                        <button type="button" onclick="ajaxSubmit()" class="btn" style=";background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
+                        <button type="button" onclick="ajaxSubmit()" class="btn" style="background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:250px;height:45px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
                     </div>
                 </div>
                 </div>
