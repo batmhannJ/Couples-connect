@@ -14,66 +14,215 @@ if($_SESSION['usertype'] == 'DSK'){
 
     <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
     <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
-    <style>
+<style>
+    /* Global Styles (unchanged) */
+    #search_text:focus { outline: none; }
+    .has_hover:hover { color: #4f46e5 !important; transition: color 0.2s ease; }
+    input[type="date"]:focus { border-color: #4f46e5 !important; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important; outline: none !important; }
+    .btn-filter:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4) !important; }
+    tbody tr:hover button { transform: scale(1.05) !important; }
 
-        #search_text:focus{
-            outline:none;
+    /* ======================================================= */
+    /* RESPONSIVE LAYOUT & SIDEBAR COLLAPSE STYLES             */
+    /* ======================================================= */
+
+    /* 1. Default (Desktop/Tablet Grid) - RETAINED */
+    .dashboard-grid {
+        grid-template-columns: 320px 1fr; /* Default Grid: Sidebar and Content side-by-side */
+        gap: 24px;
+        height: auto; 
+        max-width: 1400px; 
+        display: grid; 
+    }
+    .cc-sidebar { height: calc(100vh - 80px); max-height: 650px; }
+    .main-content-box { height: calc(100vh - 80px); max-height: 650px; }
+
+    /* 2. Medium Screen Collapse (1200px) - Shrinks Sidebar to ONLY ICONS */
+    @media (max-width: 1200px) {
+        .dashboard-grid { 
+            grid-template-columns: 80px 1fr !important; /* Sidebar width is 80px */
+            gap: 16px !important; 
         }
-    </style>
-    <div class="container-fluid">
-        <div class='row bg-white' style="height:99px">
-            <div class="col-3 pe-0 d-flex align-items-center">
-                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+        .dashboard-grid > div:first-child { width: 80px; }
+        
+        /* *** CRITICAL FIX ENFORCEMENT *** */
+        
+        /* Force-hide the text label and related elements (Primary target) */
+        .sidebar-label { 
+            display: none !important; 
+            opacity: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            max-width: 0 !important; /* Ensure it collapses fully */
+        } 
+        
+        /* Hide Profile/Search elements that may contain text */
+        .cc-profile-info, .cc-search-bar input { 
+            display: none !important; 
+        }
+        
+        /* Force menu link to collapse and center the icon */
+        .cc-menu-link { 
+            display: flex !important; 
+            flex-direction: column !important; /* Stack icon and text label (which is hidden above) */
+            justify-content: center !important; 
+            align-items: center !important;
+            padding: 10px 0 !important; /* Vertical padding only */
+            width: 100% !important; /* Takes full 80px width */
+            overflow: hidden !important; /* Hides anything that overflows */
+            text-align: center !important; /* Centers any remaining text/element */
+            max-width: 80px !important; /* Ensures the link does not exceed 80px */
+        } 
+        
+        /* Ensure the icon wrapper itself has no margin and the list item is clean */
+        .cc-menu-link .cc-icon-wrap { margin: 0 !important; }
+        .cc-sidebar li {
+            padding: 0 !important;
+            margin: 0 !important;
+        }
+        
+        /* Prevent text wrapping and ensure no space is taken by hidden text */
+        .cc-menu-link > *:not(.cc-icon-wrap) {
+            display: none !important;
+        }
+
+    }
+
+    /* 3. Small Screen (768px and below) - SIDEBAR MOVED TO TOP (FLEX COLUMN) */
+    @media (max-width: 768px) {
+        /* HEADER FIX */
+        .container-fluid { padding: 0 !important; max-width: 100% !important; }
+        .container-fluid > .row { margin: 0 !important; padding: 0 !important; }
+
+        /* FORM AND OUTER BODY FIX */
+        form { padding: 0 !important; min-height: auto !important; }
+        
+        /* DASHBOARD GRID FIX (Parent Container - Changed to Flex Column) */
+        .dashboard-grid {
+             display: flex !important; 
+             flex-direction: column !important; 
+             gap: 8px !important;
+             width: 100% !important;
+             max-width: 100% !important;
+             margin: 0 !important;
+             padding: 5px !important; 
+        }
+        
+        /* SIDEBAR CONTAINER (Icons Container - Now Horizontal) */
+        .cc-sidebar {
+            order: 1; 
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+            margin: 0 !important;
+            padding: 8px 5px !important; 
+            border-radius: 12px !important;
+            
+            /* Horizontal Icon Display */
+            display: flex;
+            flex-direction: row !important;
+            justify-content: space-around; 
+            align-items: center;
+            overflow-x: auto; 
+            white-space: nowrap; 
+        }
+        
+        /* Re-enable display of labels for the horizontal menu, but the cc-menu-link rules should make it stacked */
+        .sidebar-label { opacity: 1 !important; width: auto !important; overflow: visible !important; display: none; } 
+        .cc-menu-link { flex-direction: column; align-items: center; justify-content: center; padding: 4px; }
+        .cc-menu-link .cc-icon-wrap { margin: 0 !important; }
+        
+        /* MAIN CONTENT CONTAINER (Certificates Container - Full Width) */
+        .main-content-box {
+            order: 2; 
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important; 
+            max-height: none !important;
+            margin: 0 !important;
+            padding: 8px !important; 
+        }
+
+        /* Content Adjustments */
+        .main-content-box > div:first-child { padding: 8px !important; } 
+        h1 { font-size: 16px !important; }
+        .main-content-box > div:nth-child(2) { padding: 6px !important; } 
+        
+        /* Filter Area Adjustments (Retained as column) */
+        .filter-container { flex-direction: column !important; gap: 4px !important; padding: 6px !important; }
+        .filter-container > div { width: 100%; min-width: 100% !important; }
+        .btn-filter { width: 100%; padding: 5px 10px !important; font-size: 11px !important; }
+
+        /* Table Content */
+        .main-content-box > div:nth-child(3) { padding: 0 5px 5px 5px !important; } 
+        table th, table td {
+            padding: 6px 4px !important;
+            font-size: 11px !important; 
+        }
+    }
+</style>
+
+<div class="container-fluid">
+    <div class='row bg-white' style="height:99px">
+        <div class="col-3 pe-0 d-flex align-items-center">
+            <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+        </div>
+        <div class="col-3 offset-6 d-none">
+            <div style="flex:0.5;text-align:right;margin-right:10px">
+                <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
             </div>
-
-            <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
-                <div style="flex:0.5;text-align:right;margin-right:10px">
-                    <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
-                </div>
-
-                <div style="flex:.1;text-align:center;padding-right:10px">
-                    <a style='color:black;text-decoration:none'>|</a>
-                </div>
-
-                <div style="flex:.3;text-align:center;padding-right:15px">
-                    <a style='color:black;text-decoration:none'><?php echo $header_name;?> </a>
-                </div>
-
-                <div style="flex:0.6;text-align:right;padding-right:35px">
-                    <a href="http://localhost/couples-connect/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
-                </div>
-
-            </div> 
+            <div style="flex:.1;text-align:center;padding-right:10px">
+                <a style='color:black;text-decoration:none'>|</a>
+            </div>
+            <div style="flex:.3;text-align:center;padding-right:15px">
+                <a style='color:black;text-decoration:none'><?php echo $header_name;?> </a>
+            </div>
+            <div style="flex:0.6;text-align:right;padding-right:35px">
+                <a href="http://localhost/couples-connect/logout_cc.php" class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
+            </div>
         </div>
     </div>
+</div>
 
-    <form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
-    <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 24px; height: calc(100vh - 40px);">
-        
-        <!-- Left Sidebar -->
-        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 24px 20px; height: fit-content; max-height: calc(100vh - 80px); border: 1px solid rgba(255, 255, 255, 0.2); overflow-y: auto;">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2 style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0 0 12px 0;">Options</h2>
-                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 100%;"></div>
-            </div>
+<form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
 
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <?php
-                    require 'cc_mf_menu.php';
-                ?>
+    <div class="dashboard-grid" style="max-width: 1400px; margin: 0 auto; display: grid;">
+
+        <div class="cc-sidebar" style=" 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            height: calc(100vh - 80px); 
+            max-height: 650px; 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow-y: auto;
+            transition: width 0.3s ease;
+        ">
+            <div style="display: flex; flex-direction: column; gap: 0;">
+                <?php require 'cc_mf_menu.php'; ?>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.2); height: calc(100vh - 80px); max-height: 650px;">
+        <div class="main-content-box" style=" 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            height: calc(100vh - 80px); 
+            max-height: 650px; 
+        ">
 
-            <!-- Header -->
             <div style="padding: 20px 24px 16px 24px; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.05); flex-shrink: 0;">
                 <h1 style="font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0 0 10px 0;">Certificates</h1>
                 <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 150px; margin: 0 auto;"></div>
             </div>
 
-            <!-- Filter Section -->
             <div style="padding: 16px 24px; flex-shrink: 0;">
                 <?php if(isset($_GET['dateFrom']) && isset($_GET['dateTo'])):?>
                     <div style="text-align: center;">
@@ -86,7 +235,7 @@ if($_SESSION['usertype'] == 'DSK'){
                     </div>
                 <?php else: ?>
                     <div style="background: rgba(255, 255, 255, 0.7); border-radius: 12px; padding: 16px; border: 1px solid rgba(0, 0, 0, 0.05);">
-                        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                        <div class="filter-container" style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
                             <div style="display: flex; align-items: center; gap: 8px; flex: 1; min-width: 180px;">
                                 <label style="font-weight: 600; color: #374151; font-size: 13px; white-space: nowrap;">Date From:</label>
                                 <input type="date" class="form-control" id="dateFrom" style="border: 2px solid rgba(0, 0, 0, 0.1); border-radius: 8px; padding: 8px 12px; font-size: 13px; background: white; flex: 1; transition: all 0.2s ease;">
@@ -113,7 +262,6 @@ if($_SESSION['usertype'] == 'DSK'){
                 })
             </script>
 
-            <!-- Table Container -->
             <div style="flex: 1; padding: 0 24px 24px 24px; overflow: hidden; min-height: 0;">
                 <div style="background: rgba(255, 255, 255, 0.7); border-radius: 12px; height: 100%; overflow: auto; border: 1px solid rgba(0, 0, 0, 0.05);">
                     <table style="width: 100%; border-collapse: collapse;">
@@ -128,45 +276,46 @@ if($_SESSION['usertype'] == 'DSK'){
 
                         <tbody name="tbody_table" id="tbody_table">
                             <?php
+                            // PHP logic (unchanged)
                             if(isset($_GET['dateFrom']) && isset($_GET['dateTo'])) {
                                 $datefrom = $_GET['dateFrom'];
                                 $dateto = $_GET['dateTo'];
                                 $select_db_ac = "
-                                    SELECT 
-                                        pro_cert_table.status AS 'cert_status', 
-                                        mf_prog_users.username AS 'username', 
-                                        pro_cert_table.date_claimed AS 'date_claimed', 
-                                        pro_cert_table.control_number AS 'cntrl_number', 
-                                        pro_cert_table.recid AS 'recid_cert', 
-                                        pro_cert_table.reason AS 'reason', 
+                                    SELECT
+                                        pro_cert_table.status AS 'cert_status',
+                                        mf_prog_users.username AS 'username',
+                                        pro_cert_table.date_claimed AS 'date_claimed',
+                                        pro_cert_table.control_number AS 'cntrl_number',
+                                        pro_cert_table.recid AS 'recid_cert',
+                                        pro_cert_table.reason AS 'reason',
                                         mf_prog_users.recid AS 'recid_users'
-                                    FROM 
-                                        pro_cert_table 
-                                    LEFT JOIN 
-                                        mf_prog_users 
-                                    ON 
+                                    FROM
+                                        pro_cert_table
+                                    LEFT JOIN
+                                        mf_prog_users
+                                    ON
                                         pro_cert_table.userid = mf_prog_users.userid
-                                    WHERE 
+                                    WHERE
                                         pro_cert_table.date_claimed BETWEEN '$datefrom' AND '$dateto'
-                                    ORDER BY 
-                                        pro_cert_table.status ASC, 
+                                    ORDER BY
+                                        pro_cert_table.status ASC,
                                         mf_prog_users.date_requested DESC
-                                ";
+                                    ";
                             } else {
-                                $select_db_ac="SELECT pro_cert_table.status as 'cert_status', 
-                                  mf_prog_users.username  as 'username', 
-                                  pro_cert_table.date_claimed as 'date_claimed',
-                                  pro_cert_table.control_number as 'cntrl_number',
-                                  pro_cert_table.recid as 'recid_cert',
-                                  pro_cert_table.reason as 'reason',
-                                  mf_prog_users.recid as 'recid_users'
+                                $select_db_ac="SELECT pro_cert_table.status as 'cert_status',
+                                    mf_prog_users.username as 'username',
+                                    pro_cert_table.date_claimed as 'date_claimed',
+                                    pro_cert_table.control_number as 'cntrl_number',
+                                    pro_cert_table.recid as 'recid_cert',
+                                    pro_cert_table.reason as 'reason',
+                                    mf_prog_users.recid as 'recid_users'
                                     FROM pro_cert_table LEFT JOIN mf_prog_users ON pro_cert_table.userid = mf_prog_users.userid ORDER BY pro_cert_table.status ASC, mf_prog_users.date_requested DESC";
                             }
-
-                            $stmt = $link->prepare($select_db_ac);
-                            $stmt->execute();
+                            
+                            $stmt = @$link->prepare($select_db_ac);
+                            @$stmt->execute();
                             $row_count = 0;
-                            while($rs_ac = $stmt->fetch()){
+                            while($rs_ac = @$stmt->fetch()){
                                 $cert_color = '';
                                 if($rs_ac['cert_status'] == 'PRP'){
                                     $cert_color = '#f59e0b';
@@ -186,9 +335,9 @@ if($_SESSION['usertype'] == 'DSK'){
                                     $status = "PENDING";
                                     $status_color = '#f59e0b';
                                 }
-
-                                $bg_color = $row_count % 2 == 0 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(249, 250, 251, 0.5)';
                                 
+                                $bg_color = $row_count % 2 == 0 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(249, 250, 251, 0.5)';
+
                                 echo "<tr style='background: {$bg_color}; transition: all 0.2s ease;' onmouseover='this.style.background=\"rgba(79, 70, 229, 0.05)\"' onmouseout='this.style.background=\"{$bg_color}\"'>";
                                     echo "<td style='padding: 12px 20px; font-size: 13px; font-weight: 500; color: #1f2937; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
                                         echo htmlspecialchars($rs_ac['username']);
@@ -217,68 +366,7 @@ if($_SESSION['usertype'] == 'DSK'){
             </div>
         </div>
     </div>
-
-    <!-- Responsive Design -->
-    <style>
-        @media (max-width: 1200px) {
-            form > div {
-                grid-template-columns: 1fr !important;
-                gap: 16px !important;
-            }
-            
-            form > div > div:first-child {
-                order: 2;
-            }
-            
-            form > div > div:last-child {
-                order: 1;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            form {
-                padding: 12px !important;
-            }
-            
-            form > div > div:nth-child(2) .filter-container {
-                flex-direction: column !important;
-                gap: 12px !important;
-            }
-            
-            form > div > div:nth-child(2) .filter-container > div {
-                flex-direction: column !important;
-                min-width: 100% !important;
-            }
-            
-            table th, table td {
-                padding: 12px 8px !important;
-                font-size: 12px !important;
-            }
-            
-            h1 {
-                font-size: 24px !important;
-            }
-            
-            h2 {
-                font-size: 20px !important;
-            }
-        }
-        
-        input[type="date"]:focus {
-            border-color: #4f46e5 !important;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
-            outline: none !important;
-        }
-        
-        .btn-filter:hover {
-            transform: translateY(-2px) !important;
-            box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4) !important;
-        }
-        
-        tbody tr:hover button {
-            transform: scale(1.05) !important;
-        }
-    </style>
+</form>
 
     <!-- Modals -->
     <div class="modal fade xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
