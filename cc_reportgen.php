@@ -13,62 +13,59 @@ if($_SESSION['usertype'] == 'DSK'){
 
 ?>
 
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
-    <div class="container-fluid">
-        <div class='row bg-white' style="height:99px">
-            <div class="col-3 pe-0 d-flex align-items-center">
-                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+<div class="container-fluid">
+    <div class='row bg-white' style="height:99px">
+        <div class="col-3 pe-0 d-flex align-items-center">
+            <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+        </div>
+        <div class="col-3 offset-6 d-none">
+            <div style="flex:0.5;text-align:right;margin-right:10px">
+                <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
             </div>
-
-            <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
-                <div style="flex:0.5;text-align:right;margin-right:10px">
-                    <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
-                </div>
-
-                <div style="flex:.1;text-align:center;padding-right:10px">
-                    <a style='color:black;text-decoration:none'>|</a>
-                </div>
-
-                <div style="flex:.3;text-align:center;padding-right:15px">
-                    <a style='color:black;text-decoration:none'><?php echo $header_name;?> </a>
-                </div>
-
-                <div style="flex:0.6;text-align:right;padding-right:35px">
-                    <a href="http://localhost/couples-connect/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
-                </div>
-
-            </div> 
+            <div style="flex:.1;text-align:center;padding-right:10px">
+                <a style='color:black;text-decoration:none'>|</a>
+            </div>
+            <div style="flex:.3;text-align:center;padding-right:15px">
+                <a style='color:black;text-decoration:none'><?php echo $header_name;?> </a>
+            </div>
+            <div style="flex:0.6;text-align:right;padding-right:35px">
+                <a href="http://localhost/couples-connect/logout_cc.php" class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
+            </div>
         </div>
     </div>
+</div>
 
-   <form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
-    <div style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 24px; height: calc(100vh - 40px);">
-        
-        <!-- Left Sidebar -->
-        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); padding: 24px 20px; height: fit-content; max-height: calc(100vh - 80px); border: 1px solid rgba(255, 255, 255, 0.2); overflow-y: auto;">
-            <div style="text-align: center; margin-bottom: 20px;">
-                <h2 style="font-size: 24px; font-weight: 700; color: #1a1a1a; margin: 0 0 12px 0;">Options</h2>
-                <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 100%;"></div>
-            </div>
+<form name='myforms' id="myforms" method="post" target="_self" style='min-height:100vh; background: linear-gradient(135deg, rgb(215, 217, 225) 0%, rgb(162, 185, 231) 100%); padding: 20px; font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;'>
 
-            <div style="display: flex; flex-direction: column; gap: 8px;">
-                <?php
-                    require 'cc_mf_menu.php';
-                ?>
+    <div id="main-grid" class="dashboard-grid" style="max-width: 1400px; margin: 0 auto; display: grid; grid-template-columns: 320px 1fr; gap: 24px; height: calc(100vh - 40px);">
+
+        <div class="cc-sidebar" style=" 
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 24px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            padding: 0;
+            height: calc(100vh - 80px); 
+            max-height: 650px; 
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            overflow-y: auto;
+            transition: width 0.3s ease;
+        ">
+            <div style="display: flex; flex-direction: column; gap: 0;">
+                <?php require 'cc_mf_menu.php'; ?>
             </div>
         </div>
 
-        <!-- Main Content -->
-        <div style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.2); height: calc(100vh - 80px); overflow-y: auto;">
 
-            <!-- Header -->
+        <div class="main-content" style="background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(10px); border-radius: 24px; box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1); display: flex; flex-direction: column; border: 1px solid rgba(255, 255, 255, 0.2); height: calc(100vh - 80px); overflow-y: auto;">
+
             <div style="padding: 20px 32px 16px 32px; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.05); flex-shrink: 0;">
                 <h1 style="font-size: 26px; font-weight: 700; color: #1a1a1a; margin: 0 0 10px 0;">Report Generation</h1>
                 <div style="height: 3px; background: linear-gradient(90deg, #4f46e5 0%, #7c3aed 100%); border-radius: 2px; width: 200px; margin: 0 auto;"></div>
             </div>
 
-            <!-- Date Selection Section -->
             <div style="padding: 24px 32px; flex-shrink: 0;">
                 <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; padding: 24px; border: 1px solid rgba(0, 0, 0, 0.05);">
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: end;">
@@ -84,10 +81,8 @@ if($_SESSION['usertype'] == 'DSK'){
                 </div>
             </div>
 
-            <!-- Statistics Content -->
             <div style="flex: 1; padding: 0 32px 24px 32px; display: flex; flex-direction: column; gap: 20px; min-height: 0;">
-                
-                <!-- Orientations Section -->
+
                 <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; padding: 24px; border: 1px solid rgba(0, 0, 0, 0.05);">
                     <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px;">
                         <div style="width: 6px; height: 24px; background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); border-radius: 3px;"></div>
@@ -95,10 +90,11 @@ if($_SESSION['usertype'] == 'DSK'){
                     </h3>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <?php
+                            // PHP logic for Orientations
                             $select_db_totalpmo = "SELECT COUNT(*) as xcount FROM pro_meiform WHERE status='PMO'";
                             $stmt_totalpmo = $link->prepare($select_db_totalpmo);
                             $stmt_totalpmo->execute();
-                            while($rs_totalpmo = $stmt_totalpmo->fetch()){                                                
+                            while($rs_totalpmo = $stmt_totalpmo->fetch()){                                                    
                                 echo "<div style='background: rgba(79, 70, 229, 0.05); border-radius: 12px; padding: 16px; border-left: 4px solid #4f46e5;'>";
                                 echo "<span style='font-size: 16px; font-weight: 600; color: #1f2937; font-family: Inter;'>Total Number of Orientations Sessions Held: <span style='color: #4f46e5; font-weight: 700;'>".$rs_totalpmo['xcount']."</span></span>";
                                 echo "</div>";
@@ -119,7 +115,6 @@ if($_SESSION['usertype'] == 'DSK'){
                     </div>
                 </div>
 
-                <!-- Counseling Section -->
                 <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; padding: 24px; border: 1px solid rgba(0, 0, 0, 0.05);">
                     <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px;">
                         <div style="width: 6px; height: 24px; background: linear-gradient(135deg, #10b981 0%, #059669 100%); border-radius: 3px;"></div>
@@ -127,12 +122,15 @@ if($_SESSION['usertype'] == 'DSK'){
                     </h3>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <?php
+                            // PHP logic for Counseling Sessions Held
                             $select_db_totalpmc = "SELECT COUNT(*) as xcount FROM pro_meiform WHERE status='PMC'";
                             $stmt_totalpmc = $link->prepare($select_db_totalpmc);
                             $stmt_totalpmc->execute();
+                            $pmc_count = 0; // Initialize counter for use below
                             while($rs_totalpmc = $stmt_totalpmc->fetch()){
+                                $pmc_count = $rs_totalpmc['xcount'];
                                 echo "<div style='background: rgba(16, 185, 129, 0.05); border-radius: 12px; padding: 16px; border-left: 4px solid #10b981;'>";
-                                echo "<span style='font-size: 16px; font-weight: 600; color: #1f2937; font-family: Inter;'>Total Number of Counseling Sessions Held: <span style='color: #10b981; font-weight: 700;'>".$rs_totalpmc['xcount']."</span></span>";
+                                echo "<span style='font-size: 16px; font-weight: 600; color: #1f2937; font-family: Inter;'>Total Number of Counseling Sessions Held: <span style='color: #10b981; font-weight: 700;'>".$pmc_count."</span></span>";
                                 echo "</div>";
                             }
                         ?>
@@ -140,6 +138,7 @@ if($_SESSION['usertype'] == 'DSK'){
                             <span style="font-size: 15px; font-weight: 500; color: #374151; font-family: Inter;">Total Number of Pre-marriage Counseling: 
                                 <span style="color: #ef4444; font-weight: 700;">
                                     <?php
+                                        // Re-running query (or using $pmc_count if available)
                                         $select_db_totalpmc = "SELECT COUNT(*) as xcount FROM pro_meiform WHERE status='PMC'";
                                         $stmt_totalpmc = $link->prepare($select_db_totalpmc);
                                         $stmt_totalpmc->execute();
@@ -156,7 +155,6 @@ if($_SESSION['usertype'] == 'DSK'){
                     </div>
                 </div>
 
-                <!-- Couples Section -->
                 <div style="background: rgba(255, 255, 255, 0.7); border-radius: 16px; padding: 24px; border: 1px solid rgba(0, 0, 0, 0.05);">
                     <h3 style="font-size: 20px; font-weight: 700; color: #1a1a1a; margin: 0 0 16px 0; display: flex; align-items: center; gap: 8px;">
                         <div style="width: 6px; height: 24px; background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); border-radius: 3px;"></div>
@@ -164,6 +162,7 @@ if($_SESSION['usertype'] == 'DSK'){
                     </h3>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <?php
+                            // PHP logic for Couples/Concerns
                             $select_db_ac = "SELECT * FROM mf_concerns";
                             $stmt = $link->prepare($select_db_ac);
                             $stmt->execute();
@@ -172,7 +171,7 @@ if($_SESSION['usertype'] == 'DSK'){
                             
                             while($rs_ac = $stmt->fetch()){
                                 try {
-                                    $select_db_ac2 = "SELECT COUNT(*) as xcount FROM pro_counselorbooking";
+                                    $select_db_ac2 = "SELECT COUNT(*) as xcount FROM pro_counselorbooking"; // NOTE: This query counts ALL bookings, not bookings specific to $rs_ac['concerns']
                                     $stmt2 = $link->prepare($select_db_ac2);
                                     $stmt2->execute();
                                     $xcount = 0;
@@ -186,8 +185,15 @@ if($_SESSION['usertype'] == 'DSK'){
                                 
                                 $current_color = $concern_colors[$color_index % count($concern_colors)];
                                 $color_index++;
+
+                                // Helper function to convert HEX to RGB for the rgba background
+                                $hex = ltrim($current_color, '#');
+                                $r = hexdec(substr($hex, 0, 2));
+                                $g = hexdec(substr($hex, 2, 2));
+                                $b = hexdec(substr($hex, 4, 2));
+                                $rgba_bg = "rgba($r, $g, $b, 0.05)";
                                 
-                                echo "<div style='background: rgba(" . hexdec(substr($current_color, 1, 2)) . ", " . hexdec(substr($current_color, 3, 2)) . ", " . hexdec(substr($current_color, 5, 2)) . ", 0.05); border-radius: 12px; padding: 16px; border-left: 4px solid {$current_color};'>";
+                                echo "<div style='background: {$rgba_bg}; border-radius: 12px; padding: 16px; border-left: 4px solid {$current_color};'>";
                                 echo "<span style='font-size: 15px; font-weight: 500; color: #374151; font-family: Inter;'>Total Number of Reports of ".$rs_ac['concerns'].": <span style='color: {$current_color}; font-weight: 700;'>".$xcount."</span></span>";
                                 echo "</div>";
                             }
@@ -195,7 +201,6 @@ if($_SESSION['usertype'] == 'DSK'){
                     </div>
                 </div>
 
-                <!-- Export Button -->
                 <div style="display: flex; justify-content: center; padding: 20px 0;">
                     <button type="button" onclick="acc_choose('DEC')" style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; border: none; padding: 16px 48px; border-radius: 16px; font-size: 16px; font-family: Inter; font-weight: 700; box-shadow: 0 8px 24px rgba(79, 70, 229, 0.3); cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 12px;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 32px rgba(79, 70, 229, 0.4)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(79, 70, 229, 0.3)'">
                         <svg width="20" height="20" fill="currentColor" viewBox="0 0 16 16">
@@ -209,79 +214,180 @@ if($_SESSION['usertype'] == 'DSK'){
         </div>
     </div>
 
-    <!-- Responsive Design -->
-    <style>
-        @media (max-width: 1200px) {
-            form > div {
-                grid-template-columns: 1fr !important;
-                gap: 16px !important;
-            }
-            
-            form > div > div:first-child {
-                order: 2;
-                height: auto !important;
-                max-height: none !important;
-            }
-            
-            form > div > div:last-child {
-                order: 1;
-                height: auto !important;
-            }
+<style>
+    /* Global Styles (unchanged) */
+    #search_text:focus { outline: none; }
+    .has_hover:hover { color: #4f46e5 !important; transition: color 0.2s ease; }
+    input[type="date"]:focus { border-color: #4f46e5 !important; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important; outline: none !important; }
+    .btn-filter:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4) !important; }
+    tbody tr:hover button { transform: scale(1.05) !important; }
+
+    /* ======================================================= */
+    /* RESPONSIVE LAYOUT & SIDEBAR COLLAPSE STYLES             */
+    /* ======================================================= */
+
+    /* 1. Default (Desktop/Tablet Grid) - RETAINED */
+    .dashboard-grid {
+        grid-template-columns: 320px 1fr; /* Default Grid: Sidebar and Content side-by-side */
+        gap: 24px;
+        height: auto; 
+        max-width: 1400px; 
+        display: grid; 
+    }
+    .cc-sidebar { height: calc(100vh - 80px); max-height: 650px; }
+    /* Corrected to main-content for consistency with HTML structure, though it's not strictly needed here */
+    .main-content { height: calc(100vh - 80px); max-height: 650px; } 
+
+    /* 2. Medium Screen Collapse (1200px) - Shrinks Sidebar to ONLY ICONS */
+    @media (max-width: 1200px) {
+        .dashboard-grid { 
+            grid-template-columns: 80px 1fr !important; /* Sidebar width is 80px */
+            gap: 16px !important; 
+        }
+        .dashboard-grid > div:first-child { width: 80px; }
+        
+        /* *** CRITICAL FIX ENFORCEMENT *** */
+        
+        /* Force-hide the text label and related elements (Primary target) */
+        .sidebar-label { 
+            display: none !important; 
+            opacity: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            max-width: 0 !important; /* Ensure it collapses fully */
+        } 
+        
+        /* Hide Profile/Search elements that may contain text */
+        .cc-profile-info, .cc-search-bar input { 
+            display: none !important; 
         }
         
-        @media (max-width: 768px) {
-            form {
-                padding: 12px !important;
-            }
-            
-            form > div > div:nth-child(2) > div:nth-child(2) > div > div {
-                grid-template-columns: 1fr !important;
-                gap: 16px !important;
-            }
-            
-            h1 {
-                font-size: 24px !important;
-            }
-            
-            h2 {
-                font-size: 20px !important;
-            }
-            
-            h3 {
-                font-size: 18px !important;
-            }
-            
-            .period_from, .period_to {
-                padding: 10px 12px !important;
-                font-size: 13px !important;
-            }
+        /* Force menu link to collapse and center the icon */
+        .cc-menu-link { 
+            display: flex !important; 
+            flex-direction: column !important; /* Stack icon and text label (which is hidden above) */
+            justify-content: center !important; 
+            align-items: center !important;
+            padding: 10px 0 !important; /* Vertical padding only */
+            width: 100% !important; /* Takes full 80px width */
+            overflow: hidden !important; /* Hides anything that overflows */
+            text-align: center !important; /* Centers any remaining text/element */
+            max-width: 80px !important; /* Ensures the link does not exceed 80px */
+        } 
+        
+        /* Ensure the icon wrapper itself has no margin and the list item is clean */
+        .cc-menu-link .cc-icon-wrap { margin: 0 !important; }
+        .cc-sidebar li {
+            padding: 0 !important;
+            margin: 0 !important;
         }
         
-        .period_from:focus, .period_to:focus {
-            border-color: #4f46e5 !important;
-            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important;
-            outline: none !important;
+        /* Prevent text wrapping and ensure no space is taken by hidden text */
+        .cc-menu-link > *:not(.cc-icon-wrap) {
+            display: none !important;
+        }
+    }
+
+    /* 3. Small Screen (768px and below) - SIDEBAR MOVED TO TOP (FLEX COLUMN) */
+    @media (max-width: 768px) {
+        /* HEADER FIX */
+        .container-fluid { padding: 0 !important; max-width: 100% !important; }
+        .container-fluid > .row { margin: 0 !important; padding: 0 !important; }
+
+        /* FORM AND OUTER BODY FIX */
+        form { 
+            padding: 5px !important; /* Add a little padding to the overall form for edges */
+            min-height: auto !important; 
+            overflow-x: hidden; /* Prevent horizontal scroll on body */
         }
         
-        /* Scrollbar Styling */
-        ::-webkit-scrollbar {
-            width: 8px;
+        /* DASHBOARD GRID FIX (Parent Container - Changed to Flex Column) */
+        #main-grid.dashboard-grid { /* Target by ID for higher specificity */
+            display: flex !important; 
+            flex-direction: column !important; 
+            gap: 8px !important;
+            width: 100% !important;
+            max-width: 100% !important;
+            margin: 0 !important;
+            padding: 0 !important; /* Padding is now on the form */
+            height: auto !important; /* Allow content to dictate height */
         }
         
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 4px;
+        /* SIDEBAR CONTAINER (Icons Container - Now Horizontal and First) */
+        .cc-sidebar {
+            order: 1 !important; /* *** THIS IS THE CRITICAL CHANGE: Put the sidebar first *** */
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important;
+            max-height: none !important;
+            margin: 0 !important;
+            padding: 8px 5px !important; 
+            border-radius: 12px !important;
+            overflow-y: hidden !important; /* Disable vertical scroll */
+            
+            /* Horizontal Icon Display */
+            display: flex;
+            flex-direction: row !important;
+            justify-content: space-around; 
+            align-items: center;
+            overflow-x: auto; 
+            white-space: nowrap; 
         }
+
+        /* Hide the text labels in the horizontal menu */
+        .sidebar-label { 
+            display: none !important; 
+            opacity: 0 !important; 
+            width: 0 !important; 
+            overflow: hidden !important; 
+        } 
         
-        ::-webkit-scrollbar-thumb {
-            background: rgba(79, 70, 229, 0.3);
-            border-radius: 4px;
+        /* Ensure the menu links stack icon and (hidden) text */
+        .cc-menu-link { 
+             flex-direction: column; 
+             align-items: center; 
+             justify-content: center; 
+             padding: 4px; 
         }
+        .cc-menu-link .cc-icon-wrap { margin: 0 !important; }
+
         
-        ::-webkit-scrollbar-thumb:hover {
-            background: rgba(79, 70, 229, 0.5);
+        /* MAIN CONTENT CONTAINER (Report Generation Content - Second) */
+        .main-content { /* *** TARGETING THE CORRECT CLASS: .main-content *** */
+            order: 2 !important; 
+            width: 100% !important;
+            max-width: 100% !important;
+            height: auto !important; 
+            max-height: none !important;
+            margin: 0 !important;
+            padding: 0 !important; /* Remove container padding, manage within children */
+            overflow-y: visible !important; /* Allow the content to scroll if needed */
         }
-    </style>
+
+        /* Content Padding Adjustments */
+        .main-content > div:first-child { padding: 16px 16px 12px 16px !important; } /* Header */
+        .main-content > div:nth-child(2) { padding: 12px 16px !important; } /* Period Filter */
+        .main-content > div:nth-child(3) { padding: 0 16px 16px 16px !important; } /* Stats and Button */
+        
+        /* Inner box padding adjustment */
+        .main-content > div > div { padding: 16px !important; } 
+        
+        /* Date Picker Grid Adjustment */
+        .main-content > div:nth-child(2) > div > div {
+            grid-template-columns: 1fr !important; /* Stack date pickers */
+            gap: 16px !important;
+        }
+
+        /* Font size/spacing adjustments */
+        h1 { font-size: 22px !important; }
+        h3 { font-size: 18px !important; }
+        .main-content button {
+             padding: 12px 32px !important;
+             font-size: 14px !important;
+        }
+    }
+</style>
+</form>
 
     <!-- Modal -->
     <div class="modal fade xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
