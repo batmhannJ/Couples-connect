@@ -277,9 +277,11 @@ if($_SESSION['usertype'] == 'DSK'){
                         <tbody name="tbody_table" id="tbody_table">
                             <?php
                             // PHP logic (unchanged)
-                            if(isset($_GET['dateFrom']) && isset($_GET['dateTo'])) {
-                                $datefrom = $_GET['dateFrom'];
-                                $dateto = $_GET['dateTo'];
+                            $datefrom = isset($_GET['dateFrom']) && !empty($_GET['dateFrom']) ? $_GET['dateFrom'] : null;
+                            $dateto = isset($_GET['dateTo']) && !empty($_GET['dateTo']) ? $_GET['dateTo'] : null;
+
+                            // Build query based on whether dates are provided
+                            if($datefrom && $dateto) {
                                 $select_db_ac = "
                                     SELECT
                                         pro_cert_table.status AS 'cert_status',
@@ -296,26 +298,42 @@ if($_SESSION['usertype'] == 'DSK'){
                                     ON
                                         pro_cert_table.userid = mf_prog_users.userid
                                     WHERE
-                                        pro_cert_table.date_claimed BETWEEN '$datefrom' AND '$dateto'
+                                        pro_cert_table.date_claimed BETWEEN ? AND ?
                                     ORDER BY
                                         pro_cert_table.status ASC,
                                         mf_prog_users.date_requested DESC
-                                    ";
+                                ";
+                                
+                                $stmt = $link->prepare($select_db_ac);
+                                $stmt->execute([$datefrom, $dateto]);
+                                
                             } else {
-                                $select_db_ac="SELECT pro_cert_table.status as 'cert_status',
-                                    mf_prog_users.username as 'username',
-                                    pro_cert_table.date_claimed as 'date_claimed',
-                                    pro_cert_table.control_number as 'cntrl_number',
-                                    pro_cert_table.recid as 'recid_cert',
-                                    pro_cert_table.reason as 'reason',
-                                    mf_prog_users.recid as 'recid_users'
-                                    FROM pro_cert_table LEFT JOIN mf_prog_users ON pro_cert_table.userid = mf_prog_users.userid ORDER BY pro_cert_table.status ASC, mf_prog_users.date_requested DESC";
+                                $select_db_ac = "
+                                    SELECT
+                                        pro_cert_table.status AS 'cert_status',
+                                        mf_prog_users.username AS 'username',
+                                        pro_cert_table.date_claimed AS 'date_claimed',
+                                        pro_cert_table.control_number AS 'cntrl_number',
+                                        pro_cert_table.recid AS 'recid_cert',
+                                        pro_cert_table.reason AS 'reason',
+                                        mf_prog_users.recid AS 'recid_users'
+                                    FROM
+                                        pro_cert_table
+                                    LEFT JOIN
+                                        mf_prog_users
+                                    ON
+                                        pro_cert_table.userid = mf_prog_users.userid
+                                    ORDER BY
+                                        pro_cert_table.status ASC,
+                                        mf_prog_users.date_requested DESC
+                                ";
+                                
+                                $stmt = $link->prepare($select_db_ac);
+                                $stmt->execute();
                             }
-                            
-                            $stmt = @$link->prepare($select_db_ac);
-                            @$stmt->execute();
+
                             $row_count = 0;
-                            while($rs_ac = @$stmt->fetch()){
+                            while($rs_ac = $stmt->fetch()){
                                 $cert_color = '';
                                 if($rs_ac['cert_status'] == 'PRP'){
                                     $cert_color = '#f59e0b';
@@ -339,20 +357,32 @@ if($_SESSION['usertype'] == 'DSK'){
                                 $bg_color = $row_count % 2 == 0 ? 'rgba(255, 255, 255, 0.5)' : 'rgba(249, 250, 251, 0.5)';
 
                                 echo "<tr style='background: {$bg_color}; transition: all 0.2s ease;' onmouseover='this.style.background=\"rgba(79, 70, 229, 0.05)\"' onmouseout='this.style.background=\"{$bg_color}\"'>";
+                                    
+                                    // Fixed htmlspecialchars with null handling
                                     echo "<td style='padding: 12px 20px; font-size: 13px; font-weight: 500; color: #1f2937; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
-                                        echo htmlspecialchars($rs_ac['username']);
+                                        echo htmlspecialchars($rs_ac['username'] ?? 'N/A');
                                     echo "</td>";
 
                                     echo "<td style='padding: 12px 20px; font-size: 13px; font-weight: 500; color: #6b7280; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
-                                        echo date('M d, Y', strtotime($rs_ac['date_claimed']));
+                                        // Check if date_claimed is not null before formatting
+                                        if(!empty($rs_ac['date_claimed'])){
+                                            echo date('M d, Y', strtotime($rs_ac['date_claimed']));
+                                        } else {
+                                            echo 'N/A';
+                                        }
                                     echo "</td>";
 
                                     echo "<td style='padding: 12px 20px; font-size: 13px; font-weight: 600; color: {$cert_color}; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
-                                        echo htmlspecialchars($rs_ac['cntrl_number']);
+                                        echo htmlspecialchars($rs_ac['cntrl_number'] ?? 'N/A');
                                     echo "</td>";
 
                                     echo "<td style='padding: 12px 20px; text-align: center; border-bottom: 1px solid rgba(0, 0, 0, 0.02);'>";
-                                        echo "<button onclick='review(\"{$rs_ac['recid_users']}\",\"{$rs_ac['recid_cert']}\",\"{$rs_ac['reason']}\")' type='button' style='background: linear-gradient(135deg, {$status_color} 0%, {$status_color}dd 100%); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);' onmouseover='this.style.transform=\"translateY(-1px)\"; this.style.boxShadow=\"0 3px 10px rgba(0, 0, 0, 0.2)\"' onmouseout='this.style.transform=\"translateY(0)\"; this.style.boxShadow=\"0 2px 6px rgba(0, 0, 0, 0.1)\"'>";
+                                        // Escape values for JavaScript
+                                        $recid_users_escaped = htmlspecialchars($rs_ac['recid_users'] ?? '', ENT_QUOTES);
+                                        $recid_cert_escaped = htmlspecialchars($rs_ac['recid_cert'] ?? '', ENT_QUOTES);
+                                        $reason_escaped = htmlspecialchars($rs_ac['reason'] ?? '', ENT_QUOTES);
+                                        
+                                        echo "<button onclick='review(\"{$recid_users_escaped}\",\"{$recid_cert_escaped}\",\"{$reason_escaped}\")' type='button' style='background: linear-gradient(135deg, {$status_color} 0%, {$status_color}dd 100%); color: white; border: none; padding: 6px 12px; border-radius: 6px; font-size: 11px; font-weight: 600; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);' onmouseover='this.style.transform=\"translateY(-1px)\"; this.style.boxShadow=\"0 3px 10px rgba(0, 0, 0, 0.2)\"' onmouseout='this.style.transform=\"translateY(0)\"; this.style.boxShadow=\"0 2px 6px rgba(0, 0, 0, 0.1)\"'>";
                                             echo $status;
                                         echo "</button>";
                                     echo "</td>";
