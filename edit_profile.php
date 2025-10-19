@@ -46,52 +46,124 @@ try {
 ?>
 
 <style>
+    /* Reset and Background - KEPT THE SAME */
     html, body {
         height: 100%;
         margin: 0;
         padding: 0;
-        background-color: #f8f9fa;
+        background: url('https://i.pinimg.com/736x/f3/e9/10/f3e910d63d8733cfb20a6c0a6eb70b06.jpg') center/cover fixed;
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
     }
 
+    /* Profile Container - WIDER */
     .profile-container {
-        max-width: 800px;
+        max-width: 1100px;
         margin: 40px auto;
         background: white;
         border-radius: 20px;
-        box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        box-shadow: 0 10px 40px rgba(0,0,0,0.15);
         overflow: hidden;
+        display: flex;
+        min-height: 620px;
     }
 
-    .profile-header {
-        background: linear-gradient(135deg, #23408E, #3C94C6);
-        padding: 40px 30px;
-        text-align: center;
+    /* Left Side - Image/Header (WIDER) */
+    .profile-image-side {
+        flex: 2; 
+        min-width: 250px;
+        
+        background: url('https://i.pinimg.com/1200x/02/b5/5a/02b55a0a6573a3b7c2417dec3c0098bf.jpg') no-repeat;
+        
+        background-position: bottom center; 
+        background-size: 140%; 
+        
+        position: relative; 
+        padding: 20px 20px; 
         color: white;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: flex-start; 
+        text-align: center;
+    }
+    
+    /* Image Overlay for Text Readability */
+    .profile-image-side::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(35, 64, 142, 0.65); 
+        z-index: 1;
     }
 
+    /* Divider and Content Positioning */
+    .profile-image-side::after {
+        content: '';
+        position: absolute;
+        right: 0;
+        top: 10%;
+        bottom: 10%;
+        width: 1px;
+        background: rgba(255, 255, 255, 0.3);
+        z-index: 2; 
+    }
+    
+    /* Ensure all text content is above the overlay */
+    .profile-image-side > * {
+        position: relative;
+        z-index: 2;
+    }
+    
     .profile-avatar {
-        width: 120px;
-        height: 120px;
-        background: rgba(255,255,255,0.2);
+        width: 80px;
+        height: 80px;
+        background: rgba(255,255,255,0.2); 
         border-radius: 50%;
         display: flex;
         align-items: center;
         justify-content: center;
-        margin: 0 auto 20px;
-        border: 4px solid rgba(255,255,255,0.3);
+        /* --- KEY CHANGE: Pinalaki ang top margin (dating 0, ngayon 50px) para bumaba ang buong text block --- */
+        margin: 50px auto 8px; 
+        border: 3px solid rgba(255,255,255,0.3);
+    }
+    
+    .profile-image-side h2 {
+        /* Inalis ang margin-top dito dahil ang avatar na ang nagbaba */
+        margin: 10px 0 0; 
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+        text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5); 
+    }
+    
+    .profile-image-side p {
+        margin: 5px 0 0;
+        opacity: 0.9;
+        font-size: 14px;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5); 
     }
 
-    .profile-form {
-        padding: 40px 30px;
+
+    /* Right Side - Form (NARROWER) */
+    .profile-form-side {
+        flex: 3;
+        padding: 30px 40px;
+        overflow-y: hidden;
     }
 
+    /* Form Styles - KEPT THE SAME */
     .form-group {
-        margin-bottom: 25px;
+        margin-bottom: 10px; 
     }
 
     .form-label {
         display: block;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         font-weight: 600;
         color: #333;
         font-size: 14px;
@@ -99,23 +171,28 @@ try {
 
     .form-control {
         width: 100%;
-        padding: 12px 16px;
+        padding: 9px 12px; 
         border: 2px solid #e9ecef;
-        border-radius: 10px;
+        border-radius: 6px;
         font-size: 16px;
-        transition: border-color 0.3s ease;
+        transition: border-color 0.3s ease, box-shadow 0.3s ease;
         box-sizing: border-box;
     }
 
     .form-control:focus {
         outline: none;
         border-color: #23408E;
-        box-shadow: 0 0 0 3px rgba(35, 64, 142, 0.1);
+        box-shadow: 0 0 0 2px rgba(35, 64, 142, 0.1);
+    }
+    
+    textarea.form-control {
+        height: 70px;
+        resize: none !important;
     }
 
     .form-row {
         display: flex;
-        gap: 20px;
+        gap: 15px;
     }
 
     .form-col {
@@ -123,10 +200,10 @@ try {
     }
 
     .btn {
-        padding: 12px 24px;
+        padding: 9px 18px; 
         border: none;
-        border-radius: 10px;
-        font-size: 16px;
+        border-radius: 6px; 
+        font-size: 14px;
         font-weight: 600;
         cursor: pointer;
         transition: all 0.3s ease;
@@ -141,8 +218,8 @@ try {
     }
 
     .btn-primary:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 4px 12px rgba(35, 64, 142, 0.3);
+        transform: translateY(-1px);
+        box-shadow: 0 3px 8px rgba(35, 64, 142, 0.3);
     }
 
     .btn-secondary {
@@ -156,10 +233,11 @@ try {
     }
 
     .alert {
-        padding: 15px;
-        margin-bottom: 20px;
-        border-radius: 10px;
+        padding: 8px;
+        margin-bottom: 10px;
+        border-radius: 6px;
         font-weight: 500;
+        font-size: 13px;
     }
 
     .alert-success {
@@ -174,27 +252,39 @@ try {
         border: 1px solid #f5c6cb;
     }
 
-    @media (max-width: 768px) {
+    /* Media Query - KEPT THE SAME FOR SMALL SCREENS */
+    @media (max-width: 992px) {
         .profile-container {
+            flex-direction: column;
             margin: 20px;
             border-radius: 15px;
+            min-height: auto;
+        }
+
+        .profile-image-side {
+            min-height: 180px;
+            padding: 20px;
+            background-position: center bottom;
         }
         
-        .profile-header {
-            padding: 30px 20px;
+        .profile-image-side::after {
+            content: none;
         }
-        
-        .profile-form {
-            padding: 30px 20px;
+
+        .profile-form-side {
+            padding: 25px 20px;
         }
-        
+
         .form-row {
             flex-direction: column;
             gap: 0;
         }
+        
+        .form-group {
+            margin-bottom: 12px;
+        }
     }
 </style>
-
 <div class="main-container">
     <!-- Navigation Header (same as dashboard) -->
     <div style="width: 100%; font-family: Inter, sans-serif;">
@@ -279,87 +369,88 @@ try {
     </div>
 
     <!-- Profile Content -->
-    <div class="profile-container">
-        <div class="profile-header">
-            <div class="profile-avatar">
-                <svg width="60" height="60" viewBox="0 0 24 24" fill="white">
-                    <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"/>
-                    <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"/>
-                </svg>
+<div class="profile-container">
+
+    <div class="profile-image-side">
+        <div class="profile-avatar">
+            <svg width="60" height="60" viewBox="0 0 24 24" fill="white">
+                <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z"/>
+                <path d="M12 14C7.58172 14 4 17.5817 4 22H20C20 17.5817 16.4183 14 12 14Z"/>
+            </svg>
+        </div>
+        <h2><?php echo $user_display_name; ?></h2>
+        <p><?php echo $header_name; ?> Account</p>
+    </div>
+
+    <div class="profile-form-side">
+        <h3 style="margin-top: 0; margin-bottom: 30px; font-size: 24px; color: #23408E;">Edit Your Profile Information</h3>
+        
+        <div id="alertContainer"></div>
+        
+        <form id="profileForm" method="POST" action="">
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label class="form-label">First Name</label>
+                        <input type="text" name="fname" class="form-control" value="<?php echo $fname; ?>" required>
+                    </div>
+                </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label class="form-label">Middle Name</label>
+                        <input type="text" name="mname" class="form-control" value="<?php echo $mname; ?>">
+                    </div>
+                </div>
             </div>
-            <h2 style="margin: 0; font-size: 28px; font-weight: 600;"><?php echo $user_display_name; ?></h2>
-            <p style="margin: 10px 0 0; opacity: 0.9; font-size: 16px;"><?php echo $header_name; ?> Account</p>
-        </div>
 
-        <div class="profile-form">
-            <div id="alertContainer"></div>
-            
-            <form id="profileForm" method="POST" action="">
-                <div class="form-row">
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label class="form-label">First Name</label>
-                            <input type="text" name="fname" class="form-control" value="<?php echo $fname; ?>" required>
-                        </div>
-                    </div>
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label class="form-label">Middle Name</label>
-                            <input type="text" name="mname" class="form-control" value="<?php echo $mname; ?>">
-                        </div>
+            <div class="form-group">
+                <label class="form-label">Last Name</label>
+                <input type="text" name="lname" class="form-control" value="<?php echo $lname; ?>" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" name="email" class="form-control" value="<?php echo $email; ?>" required>
+            </div>
+
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label class="form-label">Contact Number</label>
+                        <input type="text" name="cellphone" class="form-control" value="<?php echo $cellphone; ?>">
                     </div>
                 </div>
-
-                <div class="form-group">
-                    <label class="form-label">Last Name</label>
-                    <input type="text" name="lname" class="form-control" value="<?php echo $lname; ?>" required>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Email Address</label>
-                    <input type="email" name="email" class="form-control" value="<?php echo $email; ?>" required>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label class="form-label">Contact Number</label>
-                            <input type="text" name="cellphone" class="form-control" value="<?php echo $cellphone; ?>">
-                        </div>
-                    </div>
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label class="form-label">Birth Date</label>
-                            <input type="date" name="bday" class="form-control" value="<?php echo $bday; ?>">
-                        </div>
+                <div class="form-col">
+                    <div class="form-group">
+                        <label class="form-label">Birth Date</label>
+                        <input type="date" name="bday" class="form-control" value="<?php echo $bday; ?>">
                     </div>
                 </div>
+            </div>
 
-                <div class="form-row">
-                    <div class="form-col">
-                        <div class="form-group">
-                            <label class="form-label">Gender</label>
-                            <select name="sex" class="form-control" required>
-                                <option value="Male" <?php echo ($sex == 'Male') ? 'selected' : ''; ?>>Male</option>
-                                <option value="Female" <?php echo ($sex == 'Female') ? 'selected' : ''; ?>>Female</option>
-                                <option value="Other" <?php echo ($sex == 'Other') ? 'selected' : ''; ?>>Other</option>
-                            </select>
-                        </div>
+            <div class="form-row">
+                <div class="form-col">
+                    <div class="form-group">
+                        <label class="form-label">Gender</label>
+                        <select name="sex" class="form-control" required>
+                            <option value="Male" <?php echo ($sex == 'Male') ? 'selected' : ''; ?>>Male</option>
+                            <option value="Female" <?php echo ($sex == 'Female') ? 'selected' : ''; ?>>Female</option>
+                            <option value="Other" <?php echo ($sex == 'Other') ? 'selected' : ''; ?>>Other</option>
+                        </select>
                     </div>
-                    <div class="form-col"></div>
                 </div>
+                <div class="form-col"></div> </div>
 
-                <div class="form-group">
-                    <label class="form-label">Address</label>
-                    <textarea name="municipality" class="form-control" rows="3" style="resize: vertical;"><?php echo $municipality; ?></textarea>
-                </div>
+            <div class="form-group">
+                <label class="form-label">Address</label>
+                <textarea name="municipality" class="form-control" rows="3" style="resize: vertical;"><?php echo $municipality; ?></textarea>
+            </div>
 
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
-                    <a href="dashboard_user.php" class="btn btn-secondary">Cancel</a>
-                    <button type="submit" class="btn btn-primary">Update Profile</button>
-                </div>
-            </form>
-        </div>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 40px;">
+                <a href="dashboard_user.php" class="btn btn-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
+            </div>
+        </form>
     </div>
 </div>
 

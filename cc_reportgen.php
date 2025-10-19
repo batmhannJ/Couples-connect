@@ -13,32 +13,26 @@ if($_SESSION['usertype'] == 'DSK'){
 
 ?>
 
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
-    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
-    <div class="container-fluid">
-        <div class='row bg-white' style="height:99px">
-            <div class="col-3 pe-0 d-flex align-items-center">
-                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+<link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+<link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
+<div class="container-fluid">
+    <div class='row bg-white' style="height:99px">
+        <div class="col-3 pe-0 d-flex align-items-center">
+            <img src="images/350 x 88.png" style='height:76px;width:auto;'>
+        </div>
+        <div class="col-3 offset-6 d-none">
+            <div style="flex:0.5;text-align:right;margin-right:10px">
+                <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
             </div>
-
-            <div class="col-3 offset-6" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
-                <div style="flex:0.5;text-align:right;margin-right:10px">
-                    <a href="http://localhost/couples-connect/select_option.php" style='color:black;text-decoration:none' class='has_hover'>HOME</a>
-                </div>
-
-                <div style="flex:.1;text-align:center;padding-right:10px">
-                    <a style='color:black;text-decoration:none'>|</a>
-                </div>
-
-                <div style="flex:.3;text-align:center;padding-right:15px">
-                    <a style='color:black;text-decoration:none'><?php echo $header_name;?> </a>
-                </div>
-
-                <div style="flex:0.6;text-align:right;padding-right:35px">
-                    <a href="http://localhost/couples-connect/logout_cc.php"  class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
-                </div>
-
-            </div> 
+            <div style="flex:.1;text-align:center;padding-right:10px">
+                <a style='color:black;text-decoration:none'>|</a>
+            </div>
+            <div style="flex:.3;text-align:center;padding-right:15px">
+                <a style='color:black;text-decoration:none'><?php echo $header_name;?> </a>
+            </div>
+            <div style="flex:0.6;text-align:right;padding-right:35px">
+                <a href="http://localhost/couples-connect/logout_cc.php" class='has_hover' style='color:black;text-decoration:none'>LOGOUT</a>
+            </div>
         </div>
     </div>
 
@@ -75,7 +69,6 @@ if($_SESSION['usertype'] == 'DSK'){
                 <div style="height: 3px; background: linear-gradient(90deg, #1e40af 0%, #0ea5e9 100%); border-radius: 2px; width: 240px; margin: 0 auto;"></div>
             </div>
 
-            <!-- Date Selection Section -->
             <div style="padding: 24px 32px; flex-shrink: 0;">
                 <div style="background: linear-gradient(135deg, rgba(30, 64, 175, 0.05) 0%, rgba(14, 165, 233, 0.05) 100%); border-radius: 16px; padding: 28px; border: 2px solid rgba(30, 64, 175, 0.1); box-shadow: 0 4px 16px rgba(0, 0, 0, 0.05);">
                     <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
@@ -101,7 +94,6 @@ if($_SESSION['usertype'] == 'DSK'){
                 </div>
             </div>
 
-            <!-- Statistics Content -->
             <div style="flex: 1; padding: 0 32px 24px 32px; display: flex; flex-direction: column; gap: 20px; min-height: 0;">
                 
                 <!-- Planning Applications Section -->
@@ -176,6 +168,7 @@ if($_SESSION['usertype'] == 'DSK'){
                     </h3>
                     <div style="display: flex; flex-direction: column; gap: 12px;">
                         <?php
+                            // PHP logic for Couples/Concerns
                             $select_db_ac = "SELECT * FROM mf_concerns";
                             $stmt = $link->prepare($select_db_ac);
                             $stmt->execute();
@@ -184,7 +177,7 @@ if($_SESSION['usertype'] == 'DSK'){
                             
                             while($rs_ac = $stmt->fetch()){
                                 try {
-                                    $select_db_ac2 = "SELECT COUNT(*) as xcount FROM pro_counselorbooking";
+                                    $select_db_ac2 = "SELECT COUNT(*) as xcount FROM pro_counselorbooking"; // NOTE: This query counts ALL bookings, not bookings specific to $rs_ac['concerns']
                                     $stmt2 = $link->prepare($select_db_ac2);
                                     $stmt2->execute();
                                     $xcount = 0;
@@ -209,7 +202,6 @@ if($_SESSION['usertype'] == 'DSK'){
                     </div>
                 </div>
 
-                <!-- Export Button -->
                 <div style="display: flex; justify-content: center; padding: 20px 0;">
                     <button type="button" onclick="acc_choose('DEC')" style="background: linear-gradient(135deg, #1e40af 0%, #0ea5e9 100%); color: white; border: none; padding: 16px 48px; border-radius: 16px; font-size: 16px; font-family: Inter; font-weight: 700; box-shadow: 0 8px 24px rgba(30, 64, 175, 0.4); cursor: pointer; transition: all 0.3s ease; display: flex; align-items: center; gap: 12px;" onmouseover="this.style.transform='translateY(-3px)'; this.style.boxShadow='0 12px 32px rgba(30, 64, 175, 0.5)'" onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 8px 24px rgba(30, 64, 175, 0.4)'">
                         <i class="bi bi-download" style="font-size: 20px;"></i>
@@ -220,52 +212,72 @@ if($_SESSION['usertype'] == 'DSK'){
         </div>
     </div>
 
-    <!-- Responsive Design -->
-    <style>
-        @media (max-width: 1200px) {
-            form > div {
-                grid-template-columns: 1fr !important;
-                gap: 16px !important;
-            }
-            
-            form > div > div:first-child {
-                order: 2;
-                height: auto !important;
-                max-height: none !important;
-            }
-            
-            form > div > div:last-child {
-                order: 1;
-                height: auto !important;
-            }
+<style>
+    /* Global Styles (unchanged) */
+    #search_text:focus { outline: none; }
+    .has_hover:hover { color: #4f46e5 !important; transition: color 0.2s ease; }
+    input[type="date"]:focus { border-color: #4f46e5 !important; box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1) !important; outline: none !important; }
+    .btn-filter:hover { transform: translateY(-2px) !important; box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4) !important; }
+    tbody tr:hover button { transform: scale(1.05) !important; }
+
+    /* ======================================================= */
+    /* RESPONSIVE LAYOUT & SIDEBAR COLLAPSE STYLES             */
+    /* ======================================================= */
+
+    /* 1. Default (Desktop/Tablet Grid) - RETAINED */
+    .dashboard-grid {
+        grid-template-columns: 320px 1fr; /* Default Grid: Sidebar and Content side-by-side */
+        gap: 24px;
+        height: auto; 
+        max-width: 1400px; 
+        display: grid; 
+    }
+    .cc-sidebar { height: calc(100vh - 80px); max-height: 650px; }
+    /* Corrected to main-content for consistency with HTML structure, though it's not strictly needed here */
+    .main-content { height: calc(100vh - 80px); max-height: 650px; } 
+
+    /* 2. Medium Screen Collapse (1200px) - Shrinks Sidebar to ONLY ICONS */
+    @media (max-width: 1200px) {
+        .dashboard-grid { 
+            grid-template-columns: 80px 1fr !important; /* Sidebar width is 80px */
+            gap: 16px !important; 
+        }
+        .dashboard-grid > div:first-child { width: 80px; }
+        
+        /* *** CRITICAL FIX ENFORCEMENT *** */
+        
+        /* Force-hide the text label and related elements (Primary target) */
+        .sidebar-label { 
+            display: none !important; 
+            opacity: 0 !important;
+            width: 0 !important;
+            overflow: hidden !important;
+            max-width: 0 !important; /* Ensure it collapses fully */
+        } 
+        
+        /* Hide Profile/Search elements that may contain text */
+        .cc-profile-info, .cc-search-bar input { 
+            display: none !important; 
         }
         
-        @media (max-width: 768px) {
-            form {
-                padding: 12px !important;
-            }
-            
-            form > div > div:nth-child(2) > div:nth-child(2) > div > div {
-                grid-template-columns: 1fr !important;
-                gap: 16px !important;
-            }
-            
-            h1 {
-                font-size: 24px !important;
-            }
-            
-            h2 {
-                font-size: 20px !important;
-            }
-            
-            h3 {
-                font-size: 18px !important;
-            }
-            
-            .period_from, .period_to {
-                padding: 10px 12px !important;
-                font-size: 13px !important;
-            }
+        /* Force menu link to collapse and center the icon */
+        .cc-menu-link { 
+            display: flex !important; 
+            flex-direction: column !important; /* Stack icon and text label (which is hidden above) */
+            justify-content: center !important; 
+            align-items: center !important;
+            padding: 10px 0 !important; /* Vertical padding only */
+            width: 100% !important; /* Takes full 80px width */
+            overflow: hidden !important; /* Hides anything that overflows */
+            text-align: center !important; /* Centers any remaining text/element */
+            max-width: 80px !important; /* Ensures the link does not exceed 80px */
+        } 
+        
+        /* Ensure the icon wrapper itself has no margin and the list item is clean */
+        .cc-menu-link .cc-icon-wrap { margin: 0 !important; }
+        .cc-sidebar li {
+            padding: 0 !important;
+            margin: 0 !important;
         }
         
         .period_from:focus, .period_to:focus {
@@ -283,11 +295,18 @@ if($_SESSION['usertype'] == 'DSK'){
             background: rgba(0, 0, 0, 0.05);
             border-radius: 5px;
         }
+        .cc-menu-link .cc-icon-wrap { margin: 0 !important; }
+
         
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, #1e40af 0%, #0ea5e9 100%);
             border-radius: 5px;
         }
+
+        /* Content Padding Adjustments */
+        .main-content > div:first-child { padding: 16px 16px 12px 16px !important; } /* Header */
+        .main-content > div:nth-child(2) { padding: 12px 16px !important; } /* Period Filter */
+        .main-content > div:nth-child(3) { padding: 0 16px 16px 16px !important; } /* Stats and Button */
         
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, #1e3a8a 0%, #0284c7 100%);
@@ -298,7 +317,17 @@ if($_SESSION['usertype'] == 'DSK'){
             transform: translateX(4px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
         }
-    </style>
+
+        /* Font size/spacing adjustments */
+        h1 { font-size: 22px !important; }
+        h3 { font-size: 18px !important; }
+        .main-content button {
+             padding: 12px 32px !important;
+             font-size: 14px !important;
+        }
+    }
+</style>
+</form>
 
     <!-- Modal -->
     <div class="modal fade xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
