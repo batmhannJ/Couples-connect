@@ -5,9 +5,6 @@ error_reporting(E_ALL);
 
 session_start();
 
-// if(!isset($_SESSION['userdesc']) || !isset($_SESSION['password'])){
-//     header('location: login_cc.php');
-// }
 require_once("resources/db_init.php") ;
 require_once("resources/connect4.php");
 require_once("resources/lx2.pdodb.php");
@@ -18,10 +15,7 @@ require_once("resources/stdfunc100.php");
 <html lang="en" class="full-height">
 
     <head>
-        <!-- NEEDED TO MMAKE THE SIZE AND FORMAT OF WEBPAGE RIGHT -->
         <meta charset="utf-8">
-        <!-- uses device width -->
-        <!-- <meta name="viewport" content="width=device-width" /> -->
         
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="shortcut icon" href="images/logo_short.png">

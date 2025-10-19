@@ -466,38 +466,54 @@ require "includes/cc_header.php";
 }
 // Handle reapply button click
         $(document).ready(function() {
-            $('#reapply-btn').click(function() {
-                var recid = $(this).data('recid');
-                
-                // Show loading state
-                $(this).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
-                $(this).prop('disabled', true);
-                
-                $.ajax({
-                    url: 'reapply_handler.php',
-                    type: 'POST',
-                    data: { recid: recid },
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status) {
-                            $('.error_msg').html(response.msg);
-                            $('#reapply-section').hide();
-                        } else {
-                            $('.error_msg').html('Error: ' + response.msg);
-                        }
-                        
-                        // Reset button
-                        $('#reapply-btn').html('<i class="fas fa-redo"></i> Click to Reapply');
-                        $('#reapply-btn').prop('disabled', false);
-                    },
-                    error: function() {
-                        $('.error_msg').html('An error occurred. Please try again.');
-                        $('#reapply-btn').html('<i class="fas fa-redo"></i> Click to Reapply');
-                        $('#reapply-btn').prop('disabled', false);
-                    }
-                });
-            });
+    // Handle reapply button click
+    $('#reapply-btn').click(function() {
+        var recid = $(this).data('recid');
+        
+        // Show confirmation dialog
+        if (!confirm('Your previous application will be removed and you will need to register again. Continue?')) {
+            return;
+        }
+        
+        // Show loading state
+        $(this).html('<i class="fas fa-spinner fa-spin"></i> Processing...');
+        $(this).prop('disabled', true);
+        
+        $.ajax({
+            url: 'reapply_handler.php',
+            type: 'POST',
+            data: { recid: recid },
+            dataType: 'json',
+            success: function(response) {
+                if (response.status && response.redirect) {
+                    // Show success message briefly
+                    $('.error_msg').html(response.msg + '<br><br>Redirecting in 2 seconds...');
+                    
+                    // Redirect to registration page after 2 seconds
+                    setTimeout(function() {
+                        window.location.href = response.redirect_url;
+                    }, 2000);
+                    
+                } else if (response.status && !response.redirect) {
+                    $('.error_msg').html(response.msg);
+                    $('#reapply-section').hide();
+                } else {
+                    $('.error_msg').html('Error: ' + response.msg);
+                    // Reset button on error
+                    $('#reapply-btn').html('<i class="fas fa-redo"></i> Click to Reapply');
+                    $('#reapply-btn').prop('disabled', false);
+                }
+            },
+            error: function(xhr, status, error) {
+                console.error('AJAX Error:', error);
+                $('.error_msg').html('An error occurred. Please try again.');
+                // Reset button
+                $('#reapply-btn').html('<i class="fas fa-redo"></i> Click to Reapply');
+                $('#reapply-btn').prop('disabled', false);
+            }
         });
+    });
+});
     </script>
 
 </body>

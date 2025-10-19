@@ -169,6 +169,153 @@ function safe_date_format($date_string, $format = 'F d, Y') {
         .floating-btn:hover {
             background-color: #0056b3;
         }
+        .appointment-container {
+            background-color: white;
+            border-radius: 15px;
+            padding: 25px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        .appointment-header {
+            font-size: 22px;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .divider {
+            width: 80%;
+            height: 4px;
+            background-color: #e0e0e0;
+            margin: 0 auto 25px;
+            border-radius: 2px;
+        }
+
+        .appointment-content {
+            display: flex;
+            gap: 15px;
+        }
+
+        .appointment-icon {
+            flex-shrink: 0;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .appointment-icon img {
+            width: 100%;
+            height: 100%;
+        }
+
+        .appointment-details {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .appointment-datetime {
+            font-size: 18px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 8px;
+            word-break: break-word;
+        }
+
+        .appointment-info {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .info-item {
+            font-size: 13px;
+            color: #616161;
+            font-weight: 400;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            word-break: break-word;
+        }
+
+        .info-label {
+            font-weight: 600;
+            color: #333;
+            min-width: fit-content;
+        }
+
+        .info-value {
+            word-break: break-word;
+            flex: 1;
+        }
+
+        .booking-type {
+            font-size: 12px;
+            color: #999;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px solid #f0f0f0;
+        }
+
+        .online-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            color: #23408E;
+            text-decoration: none;
+            font-weight: 600;
+            word-break: break-all;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+
+        .online-link:hover {
+            background-color: #f0f0f0;
+            text-decoration: underline;
+        }
+
+        .online-badge {
+            display: inline-block;
+            background-color: #23408E;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-weight: 600;
+            margin-left: 8px;
+        }
+
+        .no-appointment {
+            text-align: center;
+            font-size: 16px;
+            font-weight: 600;
+            color: #999;
+            padding: 20px;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 480px) {
+            .appointment-container {
+                padding: 18px;
+            }
+
+            .appointment-header {
+                font-size: 18px;
+            }
+
+            .appointment-datetime {
+                font-size: 15px;
+            }
+
+            .info-item {
+                font-size: 12px;
+            }
+        }
 </style>
 
 <div class="main-container">
@@ -357,8 +504,7 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                 <td class="d-flex align-items-top mx-0 px-0">
                     <div class="d-flex" style="display:flex;flex-direction:row;width:200%">
                         <div style="width:50%;display:flex;justify-content:center;flex-direction:column;align-items:center">
-
-                            <div style='width:80%;height:40%;background-color:white;border-radius:15px' class="mt-4">
+                            <div style='width:80%;height:25%;background-color:white;border-radius:15px' class="mt-4">
                                 <div class="pt-3" style='font-size:22px;font-family:inter;font-weight:700;text-align:center'>Status</div>
                                 <div style='width:100%;display:flex;justify-content:center'>
                                     <img src="images/Rectangle 11934.png" style='width:80%;height:4px'>
@@ -371,100 +517,96 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                     $pmc_book_disabled = "disabled";
 
                                     if($act_status == "APR"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                        echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
                                             echo "<img src='images/Group.png'>";
                                             echo "<span style='margin-left:10px'>Account is approved.</span>";
                                         echo "</div>";
-
                                         $req_now_disabled = "disabled";
 
                                     }else if($act_status == "PMO"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                        echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
                                             echo "<img src='images/Group.png'>";
                                             echo "<span style='margin-left:10px'>Account is approved.</span>";
                                         echo "</div>";
                                         $req_now_disabled = "disabled";
+
                                     } else if($act_status == "PMC"){
                                         if($xcert_status == "PRP"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:28px;font-weight:700;margin-top:20px'>";
-                                            echo "<span style='margin-left:10px'>Our staff is preparing your document</span>";
-                                        echo "</div>";
-                                    } else if($xcert_status == "PUP"){
-
-                                        echo "<div class='text-center' style='font-family:inter;font-size:28px;font-weight:700;margin-top:20px'>";
-                                            echo "<span style='margin-left:10px'>Your certificate is ready for pickup</span>";
-                                        echo "</div>";
-                                        
-                                    } else if($xcert_status == "RCV"){
-
-                                        echo "<div class='text-center' style='font-family:inter;font-size:28px;font-weight:700;margin-top:20px'>";
-                                            echo "<span style='margin-left:10px'>Your certificate has been received</span>";
-                                        echo "</div>";
-                                        
-                                    } else if ($xcert_status === "APRV") {
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
-                                            echo "<span style='margin-left:10px'>Certificate Approved</span>";
-                                        echo "</div>";
-                                    } else if ($xcert_status === "DEC") {
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
-                                            echo "<span style='margin-left:10px'>Certificate Declined.</span>";
-                                        echo "</div>";
-                                        echo "<div class='text-center'>" . $xcertremarks ."</div>";
-                                    } else {
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
-                                            echo "<img src='images/Group.png'>";
-                                            echo "<span style='margin-left:10px'>Eligible for Post Marriage Counseling</span>";
-                                        echo "</div>";
-                                    }
-
+                                            echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
+                                                echo "<span style='margin-left:10px'>Our staff is preparing your document</span>";
+                                            echo "</div>";
+                                        } else if($xcert_status == "PUP"){
+                                            echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
+                                                echo "<span style='margin-left:10px'>Your certificate is ready for pickup</span>";
+                                            echo "</div>";
+                                        } else if($xcert_status == "RCV"){
+                                            echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
+                                                echo "<span style='margin-left:10px'>Your certificate has been received</span>";
+                                            echo "</div>";
+                                        } else if ($xcert_status === "APRV") {
+                                            echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
+                                                echo "<span style='margin-left:10px'>Certificate Approved</span>";
+                                            echo "</div>";
+                                        } else if ($xcert_status === "DEC") {
+                                            echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
+                                                echo "<span style='margin-left:10px'>Certificate Declined.</span>";
+                                            echo "</div>";
+                                            echo "<div class='text-center'>" . $xcertremarks ."</div>";
+                                        } else {
+                                            echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
+                                                echo "<img src='images/Group.png'>";
+                                                echo "<span style='margin-left:10px'>Eligible for Post Marriage Counseling</span>";
+                                            echo "</div>";
+                                        }
                                         $req_now_disabled = "";
+
                                     } else if($act_status == "NCT"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                        echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
                                             echo "<img src='images/red_x.png' style='width:20px;height:20px;'>";
                                             echo "<span style='margin-left:10px'>Certification Declined</span>";
                                         echo "</div>";
-
                                         $book_now_disbaled = "disabled";
                                         $req_now_disabled = "disabled";
+
                                     }else if($act_status == "RVW"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                        echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
                                             echo "<img src='images/Group.png'>";
                                             echo "<span style='margin-left:10px'>Account application for review</span>";
                                         echo "</div>";
-
                                         $book_now_disbaled = "disabled";
                                         $req_now_disabled = "disabled";
 
                                     }else if($act_status == "DEC"){
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                        echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
                                             echo "<img src='images/red_x.png' style='width:20px;height:20px;'>";
                                             echo "<span style='margin-left:10px; color: #ff0000;'>Account Declined</span>";
                                         echo "</div>";
-
                                         echo "<div class='text-center'>" . $remarks ."</div>";
-
                                         $book_now_disbaled = "disabled";
                                         $req_now_disabled = "disabled";
+
                                     }else if ($act_status === "PCT" && ($prnt_status == "1" || $prnt_status == 1)) {
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                        echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
                                             echo "<img src='images/Group.png'>";
                                             echo "<span style='margin-left:10px'>Move on to Certification</span>";
                                         echo "</div>";
-
                                         $book_now_disbaled = "disabled";
-                                        $pmc_book_disabled = ""; // Enable the button
+                                        $pmc_book_disabled = "";
+
                                     } else if ($act_status === "PCT") {
                                         $req_now_disabled = "";
                                         $book_now_disbaled = "disabled";
+
                                     } else if ($act_status === "POST") {
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                        echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
                                             echo "<img src='images/Group.png'>";
                                             echo "<span style='margin-left:10px'>Post Marriage Counselling</span>";
                                         echo "</div>";
                                         $req_now_disabled = "disables";
                                         $book_now_disbaled = "disabled";
+
                                     } else {
-                                        echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                        echo "<div class='text-center' style='font-family:inter;font-size:16px;font-weight:700;margin-top:10px'>";
                                             echo "<img src='images/Group.png'>";
                                             echo "<span style='margin-left:10px'>No Status</span>";
                                         echo "</div>";
@@ -472,61 +614,121 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                     ?>
                                 </div>
                             </div>
-                            <div style='width:80%;height:40%;background-color:white;border-radius:15px' class="mt-4">
-                                    <div class="pt-3" style='font-size:22px;font-family:inter;font-weight:700;text-align:center'>Appointment</div>
-                                    <div style='width:100%;display:flex;justify-content:center'>
-                                        <img src="images/Rectangle 11934.png" style='width:80%;height:4px'>
-                                    </div>
-                                    <div style='width:100%;display:flex;justify-content:center'>
+                            <div style='width:80%;height:55%;background-color:white;border-radius:15px' class="mt-4">
+                                <div class="pt-3" style='font-size:22px;font-family:inter;font-weight:700;text-align:center'>Appointment Details</div>
+                                <div style='width:100%;display:flex;justify-content:center'>
+                                    <img src="images/Rectangle 11934.png" style='width:80%;height:4px'>
+                                </div>
+                                <div style='width:100%;display:flex;justify-content:center;overflow-y:auto;padding:15px 0;'>
+                                
                                         <?php
-                                            if($act_status == "PMO"){
-                                                $select_db2="SELECT ext_mf_meiform.date as 'mf_date', ext_mf_meiform.from_to as 'from_to'  FROM ext_mf_meiform LEFT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  WHERE ext_mf_meiform.userid=? AND pro_meiform.status = 'PMO' LIMIT 1";
-                                                $stmt2	= $link->prepare($select_db2);
-                                                $stmt2->execute(array($_SESSION['usr_id']));
-                                                $row2 = $stmt2->fetch();
+                                            $select_cancelled = "SELECT * FROM mf_prog_users 
+                                                                WHERE userid = ? 
+                                                                AND act_status IN ('APR', 'PMC')
+                                                                AND last_booking_cancelled = 1";
+                                            $stmt_cancelled = $link->prepare($select_cancelled);
+                                            $stmt_cancelled->execute(array($_SESSION['usr_id']));
+                                            $is_cancelled = $stmt_cancelled->fetch();
 
-                                                $from_to = $row2["from_to"] ?? '';
-                                                $date_formatted = safe_date_format($row2["mf_date"] ?? null);
-
-                                                if(!empty($from_to) && $date_formatted !== 'No Date Available' && $date_formatted !== 'Invalid Date'){
-                                                    echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
-                                                        echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
-                                                        echo "<div style='display:flex;flex-direction:column'>";
-                                                            echo "<span style='margin-left:10px'>".$date_formatted."(".$from_to.")</span>";
-                                                            echo "<span style='margin-left:10px;font-size:11px;color:#616161;font-weight:400'>Pre-Marriage Orientation</span>";
-                                                        echo "</div>";
-                                                        
+                                            if($is_cancelled) {
+                                                // Show cancellation notice
+                                                echo "<div style='text-align:center;padding:20px;background:#fff3cd;border-radius:10px;margin:20px;border-left:5px solid #ff6600'>";
+                                                    echo "<div style='color:#856404;font-family:inter;font-size:20px;font-weight:700;margin-bottom:10px'>";
+                                                        echo "<i class='fas fa-exclamation-triangle' style='font-size:30px;display:block;margin-bottom:10px'></i>";
+                                                        echo "Appointment Cancelled";
                                                     echo "</div>";
-
-                                                }
-                                                $req_now_disabled = "disabled";
-                                            } else if($act_status == "PMC"){
-                                                $select_db2="SELECT ext_mf_meiform.date as 'mf_date', ext_mf_meiform.from_to as 'from_to'  FROM ext_mf_meiform RIGHT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid  WHERE ext_mf_meiform.userid=? AND pro_meiform.status = 'PMC' LIMIT 1";
-                                                $stmt2	= $link->prepare($select_db2);
-                                                $stmt2->execute(array($_SESSION['usr_id']));
-                                                $row2 = $stmt2->fetch();
-
-                                                $from_to = $row2["from_to"] ?? '';
-                                                $date_formatted = safe_date_format($row2["mf_date"] ?? null);
-
-                                                if(!empty($from_to) && $date_formatted !== 'No Date Available' && $date_formatted !== 'Invalid Date'){
-                                                    echo "<div style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px;display:flex;flex-direction:row'>";
-                                                        echo "<img src='images/calendar_yellow.png' style='width:35px;height:35px;margin-top:15px'>";
-                                                        echo "<div style='display:flex;flex-direction:column'>";
-                                                            echo "<span style='margin-left:10px'>".$date_formatted."(".$from_to.")</span>";
-                                                            echo "<span style='margin-left:10px;font-size:11px;color:#616161;font-weight:400'>Post Marriage Counseling</span>";
-                                                        echo "</div>";
+                                                    echo "<div style='color:#856404;font-size:16px;line-height:1.6'>";
+                                                        echo "Your scheduled appointment has been cancelled by the counselor.<br>";
+                                                        echo "Please book another schedule at your earliest convenience.";
                                                     echo "</div>";
-                                                    $book_now_disbaled = "";
-                                                    $req_now_disabled = "disabled";
-                                                }else{
-                                                    $book_now_disbaled = "";
-                                                }
-                                            } else {
-
-                                                echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
-                                                    echo "<span style='margin-left:10px'>No Appointment.</span>";
+                                                    echo "<button onclick='clearCancellationNotice()' class='btn btn-warning' style='margin-top:15px;font-weight:600'>";
+                                                        echo "<i class='fas fa-calendar-check'></i> Book New Schedule";
+                                                    echo "</button>";
                                                 echo "</div>";
+                                                
+                                                $clear_flag = "UPDATE mf_prog_users SET last_booking_cancelled = 0 WHERE userid = ?";
+                                                $stmt_clear = $link->prepare($clear_flag);
+                                                $stmt_clear->execute(array($_SESSION['usr_id']));
+                                            } else {
+                                                // Get appointment data
+                                                $select_all_bookings = "SELECT ext_mf_meiform.date as 'mf_date', 
+                                                                        ext_mf_meiform.from_to as 'from_to',
+                                                                        ext_mf_meiform.venue as 'venue',
+                                                                        mf_venue.venue_link,
+                                                                        mf_venue.is_online,
+                                                                        pro_meiform.status as 'booking_status',
+                                                                        pro_meiform.usermeiformid as 'meiformid'
+                                                                        FROM ext_mf_meiform 
+                                                                        LEFT JOIN pro_meiform ON ext_mf_meiform.meiformid = pro_meiform.usermeiformid
+                                                                        LEFT JOIN mf_venue ON ext_mf_meiform.venue = mf_venue.venue
+                                                                        WHERE ext_mf_meiform.userid=? 
+                                                                        ORDER BY ext_mf_meiform.date DESC
+                                                                        LIMIT 1";
+                                                $stmt_all_bookings = $link->prepare($select_all_bookings);
+                                                $stmt_all_bookings->execute(array($_SESSION['usr_id']));
+                                                $booking_data = $stmt_all_bookings->fetch();
+
+                                                if($booking_data && !empty($booking_data['from_to'])) {
+                                                    $booking_type = '';
+                                                    if($booking_data['booking_status'] == 'PMO') {
+                                                        $booking_type = 'Pre-Marriage Orientation';
+                                                    } else if($booking_data['booking_status'] == 'PMC' || $booking_data['booking_status'] == 'POST') {
+                                                        $booking_type = 'Post Marriage Counseling';
+                                                    } else {
+                                                        $booking_type = 'Appointment';
+                                                    }
+                                                    
+                                                    $date_formatted = safe_date_format($booking_data["mf_date"], 'F d, Y');
+                                                    
+                                                    echo "<div style='padding: 20px; padding-left: 0;'>";
+                                                        echo "<div style='display: flex; gap: 15px;'>";
+                                                            // Calendar Icon
+                                                            echo "<div style='flex-shrink: 0; width: 50px; height: 50px; display: flex; align-items: center; justify-content: center;'>";
+                                                                echo "<svg width='40' height='40' viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'>";
+                                                                    echo "<rect width='40' height='40' rx='8' fill='#FFF3CD'/>";
+                                                                    echo "<path d='M12 14H28C28.55 14 29 14.45 29 15V27C29 27.55 28.55 28 28 28H12C11.45 28 11 27.55 11 27V15C11 14.45 11.45 14 12 14ZM12 16V27H28V16H12ZM14 19H26V20H14V19Z' fill='#F59E0B'/>";
+                                                                echo "</svg>";
+                                                            echo "</div>";
+                                                            
+                                                            // Details
+                                                            echo "<div style='flex: 1; min-width: 0;'>";
+                                                                echo "<div style='font-size: 18px; font-weight: 700; color: #333; margin-bottom: 8px; word-break: break-word;'>";
+                                                                    echo $date_formatted . " (" . htmlspecialchars($booking_data['from_to']) . ")";
+                                                                echo "</div>";
+                                                                
+                                                                echo "<div style='display: flex; flex-direction: column; gap: 6px;'>";
+                                                                    // Venue
+                                                                    echo "<div style='font-size: 13px; color: #616161; font-weight: 400; display: flex; align-items: flex-start; gap: 8px; word-break: break-word;'>";
+                                                                        echo "<span style='font-weight: 600; color: #333; min-width: fit-content;'>Venue:</span>";
+                                                                        echo "<span style='word-break: break-word; flex: 1;'>" . htmlspecialchars($booking_data['venue']) . "</span>";
+                                                                    echo "</div>";
+                                                                    
+                                                                    // Type
+                                                                    echo "<div style='font-size: 13px; color: #616161; font-weight: 400; display: flex; align-items: flex-start; gap: 8px;'>";
+                                                                        echo "<span style='font-weight: 600; color: #333; min-width: fit-content;'>Type:</span>";
+                                                                        echo "<span>" . $booking_type . "</span>";
+                                                                    echo "</div>";
+                                                                    
+                                                                    // Online Link (if exists)
+                                                                    // Online Link (if exists)
+                                            if(!empty($booking_data['venue_link'])) {
+                                                echo "<div style='font-size: 13px; color: #616161; font-weight: 400; display: flex; align-items: center; gap: 8px; flex-wrap: wrap;'>";
+                                                    echo "<span style='font-weight: 600; color: #333;'>Meeting:</span>";
+                                                    echo "<a href='" . htmlspecialchars($booking_data['venue_link']) . "' target='_blank' style='color: #23408E; text-decoration: underline; font-weight: 600; word-break: break-all; cursor: pointer;'>";
+                                                        echo htmlspecialchars($booking_data['venue_link']);
+                                                    echo "</a>";
+                                                    echo "<span style='display: inline-block; background-color: #23408E; color: white; font-size: 10px; padding: 2px 6px; border-radius: 3px; font-weight: 600;'>ONLINE</span>";
+                                                echo "</div>";
+                                            }
+                                                                echo "</div>";
+                                                            echo "</div>";
+                                                        echo "</div>";
+                                                    echo "</div>";
+                                                } else {
+                                                    echo "<div class='text-center' style='font-family:inter;font-size:22px;font-weight:700;margin-top:20px'>";
+                                                        echo "<span style='margin-left:10px'>No Appointment.</span>";
+                                                    echo "</div>";
+                                                }
                                             }
                                         ?>
                                     </div>
@@ -596,68 +798,64 @@ function safe_date_format($date_string, $format = 'F d, Y') {
                                             </div>
                                             <div class="d-flex justify-content-center">
                                                     <button type="button" <?php echo $req_now_disabled; ?> class="btn" <?php
-    if($act_status === "PCT") {
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            // When PCT and print_status is 1, button should be disabled
-            // No modal or onclick needed since button is disabled
-            echo "disabled";
-        } else {
-            // When PCT but print_status is not 1, allow normal certification flow
-            echo "onclick='onRequesting()'";
-        }
-    } else if($xcert_status==="PMC") {
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
-        } else {
-            echo "onclick='onRequesting()'";
-        }
-    } else if ($xcert_status==="DEC") { 
-        echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
-    } else if ($xcert_status === "APRV") {
-        if ($prnt_status == "1" || $prnt_status == 1) {
-            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
-        } else {
-            echo "onclick='onRequesting()'";
-        }
-    } else if ($requested_btn === true || $prnt_status == "1" || $prnt_status == 1) { 
-        echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";  
-    } else if ($act_status === "PMC") {
-        echo "onclick='onRequesting()'";
-    }
-?> style="background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:200px;height:36px;font-size:17px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">
+                                                    if($act_status === "PCT") {
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo "disabled";
+                                                        } else {
+                                                            echo "onclick='onRequesting()'";
+                                                        }
+                                                    } else if($xcert_status==="PMC") {
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
+                                                        } else {
+                                                            echo "onclick='onRequesting()'";
+                                                        }
+                                                    } else if ($xcert_status==="DEC") { 
+                                                        echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
+                                                    } else if ($xcert_status === "APRV") {
+                                                        if ($prnt_status == "1" || $prnt_status == 1) {
+                                                            echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";
+                                                        } else {
+                                                            echo "onclick='onRequesting()'";
+                                                        }
+                                                    } else if ($requested_btn === true || $prnt_status == "1" || $prnt_status == 1) { 
+                                                        echo "data-bs-toggle='modal' data-bs-target='#modal_cert_reason'";  
+                                                    } else if ($act_status === "PMC") {
+                                                        echo "onclick='onRequesting()'";
+                                                    }
+                                                ?> style="background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:200px;height:36px;font-size:17px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">
 
-<?php
-// Modified button text logic
-$print = "Print Now"; 
-$requests = "Request To Print";
+                                                <?php
+                                                $print = "Print Now"; 
+                                                $requests = "Request To Print";
 
-if($act_status === "PCT") {
-    if ($prnt_status == "1" || $prnt_status == 1) {
-        echo "Already Requested"; // Change button text when disabled
-    } else {
-        echo $print;
-    }
-} else if($xcert_status==="PMC") { 
-    if ($prnt_status == "1" || $prnt_status == 1) {
-        echo $requests;
-    } else {
-        echo $print;
-    }
-} else if($xcert_status==="DEC") { 
-    echo $requests;
-} else if ($xcert_status === "APRV") { 
-    if ($prnt_status == "1" || $prnt_status == 1) {
-        echo $requests;
-    } else {
-        echo $print;
-    }
-} else if($requested_btn === false) {
-    echo $requests;
-} else if ($prnt_status == "1" || $prnt_status == 1) {
-    echo $requests;
-}
-?>
-</button>
+                                                if($act_status === "PCT") {
+                                                    if ($prnt_status == "1" || $prnt_status == 1) {
+                                                        echo "Already Requested"; // Change button text when disabled
+                                                    } else {
+                                                        echo $print;
+                                                    }
+                                                } else if($xcert_status==="PMC") { 
+                                                    if ($prnt_status == "1" || $prnt_status == 1) {
+                                                        echo $requests;
+                                                    } else {
+                                                        echo $print;
+                                                    }
+                                                } else if($xcert_status==="DEC") { 
+                                                    echo $requests;
+                                                } else if ($xcert_status === "APRV") { 
+                                                    if ($prnt_status == "1" || $prnt_status == 1) {
+                                                        echo $requests;
+                                                    } else {
+                                                        echo $print;
+                                                    }
+                                                } else if($requested_btn === false) {
+                                                    echo $requests;
+                                                } else if ($prnt_status == "1" || $prnt_status == 1) {
+                                                    echo $requests;
+                                                }
+                                                ?>
+                                                </button>
                                             </div>
                                         </div>
 
@@ -834,23 +1032,44 @@ if($act_status === "PCT") {
             $("#modal_feedback").modal("show");
         }
         function ajaxSubmit(){
-            var email_subject = $("#feedback_subject").val();
-            var email_remarks = $("#feedback_remarks").val();
+            var email_subject = $("#feedback_subject").val().trim();
+            var email_remarks = $("#feedback_remarks").val().trim();
+
+            if(!email_subject || !email_remarks) {
+                alert("Please fill in all fields");
+                return;
+            }
+
+            $("button[onclick='ajaxSubmit()']").html("Submitting...").prop('disabled', true);
 
             jQuery.ajax({    
                 data:{
-                    email_subject:email_subject,
-                    email_remarks:email_remarks
+                    email_subject: email_subject,
+                    email_remarks: email_remarks
                 },
                 dataType:"json",
                 type:"post",
                 url:"dashboard_user_ajax.php", 
                 success: function(xdata){
-                    $("#modal_feedback").modal("hide");
+                    if(xdata.status === true) {
+                        alert("Feedback submitted successfully! Thank you for your feedback.");
+                        $("#modal_feedback").modal("hide");
+                        $("#feedback_subject").val('');
+                        $("#feedback_remarks").val('');
+                    } else {
+                        alert("Error: " + xdata.message);
+                    }
+                    
+                    $("button[onclick='ajaxSubmit()']").html("Submit").prop('disabled', false);
                 },
                 error: function (request, status, error) {
+                    console.error("AJAX Error:", error);
+                    console.error("Response:", request.responseText);
+                    alert("An error occurred while submitting feedback. Please try again.");
+                    
+                    $("button[onclick='ajaxSubmit()']").html("Submit").prop('disabled', false);
                 }
-            })
+            });
         }
 
         function onBooking(){
@@ -916,6 +1135,9 @@ if($act_status === "PCT") {
                 console.log(request)
             }
         });
+    }
+    function clearCancellationNotice() {
+        window.location.href = 'booking.php';
     }
     </script>
 <?php 

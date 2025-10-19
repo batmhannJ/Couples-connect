@@ -574,10 +574,13 @@ if($_SESSION['usertype'] == 'DSK'){
                                                                 echo "Review";
                                                             echo "</button>";
 
-                                                            echo"<ul class='dropdown-menu'>";
-                                                                echo"<li onclick=\"schedule_func('get_sched',".$rs_ac['ext_recid'].")\"><a class='dropdown-item dd_action' style='color:#4d4dff!important;font-weight:bold;'><i class='fas fa-pencil-alt'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Edit</span></a></li>";
-                                                                echo"<li onclick=\"schedule_func('delete_sched',".$rs_ac['ext_recid'].")\"><a class='dropdown-item dd_action' style='color:#cc0000!important;font-weight:bold;'><i class='fas fa-trash-alt'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Delete</span></a></li>";
-                                                            echo"</ul>";
+                                                            echo "<ul class='dropdown-menu'>";
+                                                                echo "<li onclick=\"schedule_func('get_sched',".$rs_ac['ext_recid'].")\"><a class='dropdown-item dd_action' style='color:#4d4dff!important;font-weight:bold;cursor:pointer;'><i class='fas fa-pencil-alt'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Edit</span></a></li>";
+                                                                
+                                                                echo "<li onclick=\"confirmCancelSchedule(".$rs_ac['ext_recid'].", '".$rs_ac['clinic_date']."', '".$rs_ac['time_from']."', '".$rs_ac['time_to']."', '".$rs_ac['venue']."')\"><a class='dropdown-item dd_action' style='color:#ff6600!important;font-weight:bold;cursor:pointer;'><i class='fas fa-times-circle'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Cancel Schedule</span></a></li>";
+                                                                
+                                                                echo "<li onclick=\"schedule_func('delete_sched',".$rs_ac['ext_recid'].")\"><a class='dropdown-item dd_action' style='color:#cc0000!important;font-weight:bold;cursor:pointer;'><i class='fas fa-trash-alt'></i><span style='margin-left:7px;font-size:17px;font-family:arial'>Delete</span></a></li>";
+                                                            echo "</ul>";
                                                         echo "</div>";
                                                     echo "</td>";
                                             echo "</tr>";
@@ -878,9 +881,9 @@ if($_SESSION['usertype'] == 'DSK'){
             var select_type_val = $('#select_type').find(":selected").val();
 
             if(select_type_val == "PMO"){
-                var hours_add = 4
+                var hours_add = 2;
             }else{
-                var hours_add = 1
+                var hours_add = 1;
             }
 
             var xtime_input = $(this).val();
@@ -890,25 +893,26 @@ if($_SESSION['usertype'] == 'DSK'){
 
         $("#select_type").on("change", function(event) { 
             var select_type_val = $('#select_type').find(":selected").val();
-
+            
             if(select_type_val == "PMO"){
-                var hours_add = 4
-            }else{
-                var hours_add = 1
+                var hours_add = 2;
+            } else {
+                var hours_add = 1;
             }
 
             var xtime_input = $("#sched_from").val();
-            let time_result = addHoursToTime(xtime_input, hours_add);
-            $("#sched_to").val(time_result)
+            
+            // Only recalculate if there's a time selected
+            if(xtime_input) {
+                let time_result = addHoursToTime(xtime_input, hours_add);
+                $("#sched_to").val(time_result);
+            }
         });
 
-
         function addHoursToTime(timeString, hoursToAdd) {
-            // Parse the input time string
             let [time, modifier] = timeString.split(/(AM|PM)/);
             let [hours, minutes] = time.split(':').map(Number);
             
-            // Convert to 24-hour format
             if (modifier === 'PM' && hours !== 12) {
                 hours += 12;
             }
@@ -916,32 +920,161 @@ if($_SESSION['usertype'] == 'DSK'){
                 hours = 0;
             }
 
-            // Create a new Date object with today's date and the parsed time
             let date = new Date();
             date.setHours(hours, minutes);
 
-            // Add the specified number of hours
             date.setHours(date.getHours() + hoursToAdd);
 
-            // Format the new time string
             let newHours = date.getHours();
             let newMinutes = date.getMinutes();
             let newModifier = newHours >= 12 ? 'PM' : 'AM';
 
             newHours = newHours % 12;
-            newHours = newHours ? newHours : 12; // handle case for 12:00 AM/PM
+            newHours = newHours ? newHours : 12;
             newMinutes = newMinutes < 10 ? '0' + newMinutes : newMinutes;
 
             return `${newHours}:${newMinutes}${newModifier}`;
         }
 
+        function schedule_func(xevent, xrecid) {
+            if(xrecid !== undefined){
+                new_xrecid = xrecid;
+            } else {
+                new_xrecid = "";
+            }
 
+            if(xevent === 'add_sched') {
+                var select_type = $('#select_type').val();
+                var time_from = $('#sched_from').val();
+                var time_to = $('#sched_to').val();
+                
+                var hourDiff = calculateHourDifference(time_from, time_to);
+                
+                if(select_type === 'PMO' && hourDiff !== 2) {
+                    alert('PMO schedules must be exactly 2 hours long!');
+                    return false;
+                }
+                
+                if(select_type === 'PMC' && hourDiff !== 1) {
+                    alert('PMC schedules must be exactly 1 hour long!');
+                    return false;
+                }
+            }
+
+            var xdata = $("#myforms *").serialize()+"&event_action="+xevent+"&xrecid="+new_xrecid;
+
+            jQuery.ajax({    
+                data:xdata,
+                dataType:"json",
+                type:"post",
+                url:"cc_timeslotmanage2_ajax.php", 
+                success: function(xdata){
+                    if(xevent == 'add_sched'){
+                        if(xdata['status'] == false){
+                            $('.error_msg').html(xdata['msg']);
+                            $(".xerror_modal").modal("show");
+                        } else {
+                            document.forms.myforms.method = "post";
+                            document.forms.myforms.target = "_self";
+                            document.forms.myforms.action = "cc_timeslotmanage2.php";
+                            document.forms.myforms.submit();                          
+                        }
+                    } else if(xevent == 'get_sched'){
+                        var sched_type = xdata['retEdit']['sched_type'];
+                        var clinic_date = xdata['retEdit']['clinic_date'];
+                        var time_from = xdata['retEdit']['time_from'];
+                        var time_to = xdata['retEdit']['time_to'];
+                        var ext_recid = xdata['retEdit']['recid'];
+
+                        if(sched_type == "PMC"){
+                            $("#modal_participants").prop('disabled', true);
+                        }
+
+                        $("#modal_clinicdate").val(clinic_date);
+                        $("#modal_service option[value='"+sched_type+"']").prop('selected', true);
+
+                        $("#modal_schedfrom option").filter(function() {
+                            return $(this).val() === time_from;
+                        }).attr('selected', 'selected');
+
+                        $("#modal_schedto option").filter(function() {
+                            return $(this).val() === time_to;
+                        }).attr('selected', 'selected');
+
+                        $("#modal_venue option").filter(function() {
+                            return $(this).val() === xdata['retEdit']['venue_id'];
+                        }).attr('selected', 'selected');
+
+                        $("#modal_participants").val(xdata['retEdit']['slots_avail']);
+
+                        $(".innerhtml_btn").html("<button type='button' class='btn btn-primary' onclick='schedule_func(\"setEdit\",\""+ext_recid+"\")'>Save</button>");
+                        $(".xedit_modal").modal("show");
+                        
+                    } else if(xevent == 'setEdit'){
+                        if(xdata['status'] == false){
+                            var xerror_msg = xdata['msg'];
+                            $(".xerror_alert").html(`
+                                <div class='alert alert-danger' role="alert">
+                                    ${xerror_msg}
+                                </div>
+                            `);
+                        } else {
+                            $(".xedit_modal").modal("hide");
+                            document.forms.myforms.method = "post";
+                            document.forms.myforms.target = "_self";
+                            document.forms.myforms.action = "cc_timeslotmanage2.php";
+                            document.forms.myforms.submit();  
+                        }
+                    } else if(xevent == 'delete_sched'){
+                        document.forms.myforms.method = "post";
+                        document.forms.myforms.target = "_self";
+                        document.forms.myforms.action = "cc_timeslotmanage2.php";
+                        document.forms.myforms.submit();  
+                    }
+                },
+                error: function (request, status, error) {
+                    console.error('AJAX Error:', error);
+                }
+            });
+        }
+
+        function calculateHourDifference(timeFrom, timeTo) {
+            let [fromTime, fromModifier] = timeFrom.split(/(AM|PM)/);
+            let [fromHours, fromMinutes] = fromTime.split(':').map(Number);
+            
+            if (fromModifier === 'PM' && fromHours !== 12) {
+                fromHours += 12;
+            }
+            if (fromModifier === 'AM' && fromHours === 12) {
+                fromHours = 0;
+            }
+            
+            let [toTime, toModifier] = timeTo.split(/(AM|PM)/);
+            let [toHours, toMinutes] = toTime.split(':').map(Number);
+            
+            if (toModifier === 'PM' && toHours !== 12) {
+                toHours += 12;
+            }
+            if (toModifier === 'AM' && toHours === 12) {
+                toHours = 0;
+            }
+            
+            let fromTotalMinutes = fromHours * 60 + fromMinutes;
+            let toTotalMinutes = toHours * 60 + toMinutes;
+            
+            let diffMinutes = toTotalMinutes - fromTotalMinutes;
+            
+            if (diffMinutes < 0) {
+                diffMinutes += 24 * 60;
+            }
+            
+            return diffMinutes / 60;
+        }
 
         function handleVenueChange(event) {
             const selectedOption = event.target.options[event.target.selectedIndex];
             if (selectedOption.id === 'add-zoom-option') {
                 openZoomModal();
-                // Reset the select element to prevent auto-selecting the "Add zoom" option
                 event.target.selectedIndex = 0;
             }
         }
@@ -980,21 +1113,36 @@ if($_SESSION['usertype'] == 'DSK'){
         }
     })
 
-
-
     $('#modal_service').on('change', function() {
-    
         var dd_val = this.value;
-
+        
         if(dd_val == "PMC"){
             $("#modal_participants").prop('disabled', true);
             $("#modal_participants").attr('Placeholder', '');
             $("#modal_participants").val('');
-        }else{
+        } else {
             $("#modal_participants").prop('disabled', false);
             $("#modal_participants").attr('Placeholder', '1-15');
         }
-    })
+        
+        var time_from = $("#modal_schedfrom").val();
+        if(time_from) {
+            var hours_add = dd_val === "PMO" ? 2 : 1;
+            var time_to = addHoursToTime(time_from, hours_add);
+            $("#modal_schedto").val(time_to);
+        }
+    });
+
+    $("#modal_schedfrom").on("change", function() {
+        var service_type = $('#modal_service').val();
+        var hours_add = service_type === "PMO" ? 2 : 1;
+        var time_from = $(this).val();
+        
+        if(time_from) {
+            var time_to = addHoursToTime(time_from, hours_add);
+            $("#modal_schedto").val(time_to);
+        }
+    });
 
     function schedule_func(xevent,xrecid){
 
@@ -1127,7 +1275,126 @@ if($_SESSION['usertype'] == 'DSK'){
         })         
     }
 
-    
+    function confirmCancelSchedule(recid, date, timeFrom, timeTo, venue) {
+        var dateObj = new Date(date);
+        var formattedDate = dateObj.toLocaleDateString('en-US', { 
+            year: 'numeric', 
+            month: 'long', 
+            day: 'numeric' 
+        });
+        
+        var scheduleInfo = '<strong>Venue:</strong> ' + venue + '<br>' +
+                        '<strong>Date:</strong> ' + formattedDate + '<br>' +
+                        '<strong>Time:</strong> ' + timeFrom + ' - ' + timeTo;
+        
+        if ($('#cancelScheduleModal').length === 0) {
+            var modalHTML = `
+                <div class="modal fade" id="cancelScheduleModal" data-bs-backdrop="static" tabindex="-1">
+                    <div class="modal-dialog modal-dialog-centered">
+                        <div class="modal-content" style="border-radius:15px">
+                            <div class="modal-header" style="background: linear-gradient(90deg, #e60000 35%, #990000 100%); color: white; border-radius: 15px 15px 0 0;">
+                                <h5 class="modal-title" style="font-family:inter;font-weight:bold">
+                                    <i class="fas fa-exclamation-triangle"></i> Cancel Schedule Confirmation
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body" style="font-family:inter;padding:30px">
+                                <div style="text-align:center;margin-bottom:20px">
+                                    <i class="fas fa-calendar-times" style="font-size:60px;color:#ff6600"></i>
+                                </div>
+                                <h6 style="font-weight:bold;color:#333;margin-bottom:15px">Schedule Details:</h6>
+                                <div id="scheduleDetailsContent" style="background:#f8f9fa;padding:15px;border-radius:8px;margin-bottom:20px"></div>
+                                <div style="background:#fff3cd;border-left:4px solid #ff6600;padding:15px;border-radius:5px;margin-bottom:20px">
+                                    <strong style="color:#856404">⚠️ Important Notice:</strong>
+                                    <p style="margin:10px 0 0 0;color:#856404">
+                                        All users with bookings on this schedule will be notified and their appointments will be automatically cancelled. They will need to rebook another schedule.
+                                    </p>
+                                </div>
+                                <p style="font-size:16px;color:#666;text-align:center">
+                                    Are you sure you want to cancel this schedule?
+                                </p>
+                            </div>
+                            <div class="modal-footer" style="justify-content:center;padding:20px">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" style="width:140px;height:45px;font-size:17px;font-family:inter;font-weight:600;border-radius:8px">
+                                    <i class="fas fa-times"></i> No, Keep It
+                                </button>
+                                <button type="button" id="confirmCancelBtn" class="btn" style="background: linear-gradient(90deg, #e60000 35%, #990000 100%);color:white;width:140px;height:45px;font-size:17px;font-family:inter;font-weight:600;border-radius:8px">
+                                    <i class="fas fa-check"></i> Yes, Cancel
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            $('body').append(modalHTML);
+        }
+        
+        $('#scheduleDetailsContent').html(scheduleInfo);
+        
+        $('#confirmCancelBtn').off('click').on('click', function() {
+            $(this).prop('disabled', true).html('<i class="fas fa-spinner fa-spin"></i> Cancelling...');
+            cancelScheduleAjax(recid);
+        });
+        
+        $('#cancelScheduleModal').modal('show');
+    }
+
+    function cancelScheduleAjax(recid) {
+        $.ajax({
+            url: 'cc_timeslotmanage2_ajax.php',
+            type: 'POST',
+            dataType: 'json',
+            data: {
+                event_action: 'cancel_schedule',
+                xrecid: recid
+            },
+            success: function(response) {
+                $('#cancelScheduleModal').modal('hide');
+                
+                if(response.status === true) {
+                    $('.error_msg').html(
+                        '<div style="color:#28a745">' +
+                        '<i class="fas fa-check-circle" style="font-size:24px;margin-bottom:10px"></i><br>' +
+                        '<strong>Schedule Cancelled Successfully!</strong><br>' +
+                        '<span style="font-size:16px">' + response.affected_users + ' user(s) notified and their bookings have been cancelled.</span>' +
+                        '</div>'
+                    );
+                    $('.xerror_modal').modal('show');
+                    
+                    $('.xerror_modal').on('hidden.bs.modal', function() {
+                        location.reload();
+                    });
+                } else {
+                    $('.error_msg').html(
+                        '<div style="color:#dc3545">' +
+                        '<i class="fas fa-times-circle" style="font-size:24px;margin-bottom:10px"></i><br>' +
+                        '<strong>Cancellation Failed!</strong><br>' +
+                        '<span style="font-size:16px">' + response.msg + '</span>' +
+                        '</div>'
+                    );
+                    $('.xerror_modal').modal('show');
+                }
+                
+                $('#confirmCancelBtn').prop('disabled', false).html('<i class="fas fa-check"></i> Yes, Cancel');
+            },
+            error: function(xhr, status, error) {
+                $('#cancelScheduleModal').modal('hide');
+                console.error('Cancel Schedule Error:', error);
+                console.error('Response:', xhr.responseText);
+                
+                $('.error_msg').html(
+                    '<div style="color:#dc3545">' +
+                    '<i class="fas fa-exclamation-triangle" style="font-size:24px;margin-bottom:10px"></i><br>' +
+                    '<strong>Error Occurred!</strong><br>' +
+                    '<span style="font-size:16px">Failed to cancel schedule. Please try again.</span>' +
+                    '</div>'
+                );
+                $('.xerror_modal').modal('show');
+                
+                $('#confirmCancelBtn').prop('disabled', false).html('<i class="fas fa-check"></i> Yes, Cancel');
+            }
+        });
+    }
 
     </script>
 

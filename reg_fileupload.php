@@ -1,173 +1,484 @@
-<?php
-require "includes/cc_header.php";
-?>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmation - Document Upload</title>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css' rel='stylesheet'>
     <style>
-        .overflowYScroll{
-            overflow-y:scroll;
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .instruction-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 4px solid #667eea;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .requirement-item {
+            display: flex;
+            align-items: start;
+            padding: 12px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .requirement-item i {
+            color: #667eea;
+            font-size: 20px;
+            margin-right: 12px;
+            margin-top: 2px;
+        }
+        
+        .file-upload-zone {
+            border: 3px dashed #cbd5e1;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            background: #f8fafc;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .file-upload-zone:hover {
+            border-color: #667eea;
+            background: #f1f5ff;
+        }
+        
+        .file-upload-zone.active {
+            border-color: #10b981;
+            background: #ecfdf5;
+        }
+        
+        .accepted-formats {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        
+        .format-badge {
+            background: #667eea;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .warning-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 15px;
+        }
+        
+        .success-box {
+            background: #d1fae5;
+            border-left: 4px solid #10b981;
+            border-radius: 12px;
+            padding: 16px;
+            margin-top: 15px;
+        }
+        
+        .example-docs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-top: 15px;
+        }
+        
+        .example-doc-card {
+            background: white;
+            border-radius: 10px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border: 2px solid #e2e8f0;
+        }
+        
+        .example-doc-card i {
+            font-size: 32px;
+            color: #667eea;
+            margin-bottom: 8px;
+        }
+        
+        .example-doc-card .doc-name {
+            font-size: 13px;
+            font-weight: 600;
+            color: #1e293b;
+        }
+        
+        .pmoc-info-card {
+            background: linear-gradient(135deg, #fef3c7 0%, #fed7aa 100%);
+            border-radius: 16px;
+            padding: 24px;
+            margin-bottom: 20px;
+            border: 2px solid #f59e0b;
+        }
+        
+        .pmoc-criteria {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 15px;
+        }
+        
+        .criteria-item {
+            display: flex;
+            align-items: center;
+            padding: 12px;
+            margin-bottom: 10px;
+            background: #fef3c7;
+            border-radius: 8px;
+        }
+        
+        .criteria-item i {
+            color: #f59e0b;
+            font-size: 24px;
+            margin-right: 15px;
+        }
+        
+        .file-name-display {
+            background: #10b981;
+            color: white;
+            padding: 12px 20px;
+            border-radius: 10px;
+            margin-top: 15px;
+            display: none;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .file-name-display.show {
+            display: flex;
         }
     </style>
-
-    <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" />
-    <script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-
-    <div class="container-fluid">
-        <div class='row bg-white' style="height:99px">
-            <div class="col-3 pe-0 d-flex align-items-center">
-                <img src="images/350 x 88.png" style='height:76px;width:auto;'>
-            </div>
-
-            <div class="col-4 offset-5" style="display:flex;flex-direction:row;justify-content:center;font-family:inter;font-size:21px;align-items:center"> 
-                <div style="flex:0.8">
-                    <a href="http://localhost/couples-connect/index.php"  class="has_hover" style='color:black;text-decoration:none'>HOME</a>
-                </div>
-
-                <div style="flex:1.1">
+</head>
+<body>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card shadow-lg border-0" style="border-radius: 24px; overflow: hidden;">
+                    <!-- Header -->
+                    <div class="card-header text-white" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px;">
+                        <h2 class="mb-2" style="font-weight: 700; font-size: 32px;">
+                            <i class="bi bi-shield-check"></i> Document Verification
+                        </h2>
+                        <p class="mb-0" style="font-size: 16px; opacity: 0.95;">
+                            Please provide the required documents to complete your application
+                        </p>
+                    </div>
                     
-                    <a href="http://localhost/couples-connect_wp/about-us/"  class="has_hover" style='color:black;text-decoration:none'>ABOUT US</a>
-
-                </div>
-
-                <div style="flex:1.1">
-                    <a href="http://localhost/couples-connect_wp/contact-us/"  class="has_hover" style='color:black;text-decoration:none'>CONTACTS</a>
-                </div>
-
-                <div style="flex:1">
-                    <a href="http://localhost/couples-connect/index.php" class="has_hover" style='color:black;text-decoration:none'>| index.php</a>
-                </div>
-
-            </div> 
-        </div>
-    </div>
-    
-    <form name='myforms' id="myforms" method="post" target="_self" style='height:100%'> 
-        <table style="width:100%;height:calc(100% - 100px);	filter: drop-shadow(0px 4px 15px rgba(0, 0, 0, 0.25))">
-            <tr>
-                <td>
-                    <div class="row justify-content-center align-items-center">
-                        <div class='confirm_main_div' style='width:1400px;height:500px;background-color:white;border-radius:30px'>
-                            <div class="mx-5 px-3 pt-4 text-left login_form_header">
-                                <p style="margin-bottom:0;font-weight:bold;font-family:inter;font-size:33px">Confirmation</p>
-                                <p style="line-height:0.9;margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:21px;color:#9B9B9B">Personal Information</p>
-                                <img src="images/Rectangle 11942.png"/>
-                            </div>
-
-                            <div class="mx-5 px-3 pt-3 form-group">
-                                <label class='form-label'style="color:black;font-size:21px;font-family:inter">Please attach proof that one partner is from/ is a resident of Cabuyao City (i.e. Government ID, Birth Certificate, other government documents, letter of recommendation)</label>
-                                <div class="container mt-3 mx-0 px-0">
-                                    <input type="file"  name="file_1" id="file_1" class="form-control">
+                    <div class="card-body p-4 p-md-5">
+                        
+                        <!-- SECTION 1: Proof of Residency -->
+                        <div class="mb-5">
+                            <h3 class="mb-4" style="font-weight: 700; color: #1e293b; font-size: 24px;">
+                                <i class="bi bi-geo-alt-fill text-primary"></i> 
+                                Proof of Residency Requirement
+                            </h3>
+                            
+                            <div class="instruction-box">
+                                <div class="d-flex align-items-start mb-3">
+                                    <i class="bi bi-info-circle-fill" style="font-size: 24px; color: #667eea; margin-right: 12px;"></i>
+                                    <div>
+                                        <h5 style="font-weight: 700; color: #1e293b; margin-bottom: 8px;">Why do we need this?</h5>
+                                        <p style="color: #475569; margin: 0; line-height: 1.6;">
+                                            At least ONE partner must be a resident of Cabuyao City. Please submit valid proof of residency from either partner.
+                                        </p>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="mx-5 px-3 pt-2">
-                                <img src="images/Rectangle 11942.png" style="width:100%"/>
+                            
+                            <h5 style="font-weight: 700; color: #1e293b; margin-bottom: 15px;">
+                                ✅ Acceptable Documents (choose ONE):
+                            </h5>
+                            
+                            <div class="example-docs">
+                                <div class="example-doc-card">
+                                    <i class="bi bi-person-badge"></i>
+                                    <div class="doc-name">Valid Government ID</div>
+                                    <small style="color: #64748b;">with Cabuyao address</small>
+                                </div>
+                                
+                                <div class="example-doc-card">
+                                    <i class="bi bi-file-earmark-text"></i>
+                                    <div class="doc-name">Birth Certificate</div>
+                                    <small style="color: #64748b;">PSA certified</small>
+                                </div>
+                                
+                                <div class="example-doc-card">
+                                    <i class="bi bi-file-earmark-ruled"></i>
+                                    <div class="doc-name">Barangay Certificate</div>
+                                    <small style="color: #64748b;">of Residency</small>
+                                </div>
+                                
+                                <div class="example-doc-card">
+                                    <i class="bi bi-house-door"></i>
+                                    <div class="doc-name">Utility Bill</div>
+                                    <small style="color: #64748b;">recent (3 months)</small>
+                                </div>
+                                
+                                <div class="example-doc-card">
+                                    <i class="bi bi-envelope-paper"></i>
+                                    <div class="doc-name">Letter of Recommendation</div>
+                                    <small style="color: #64748b;">from Barangay</small>
+                                </div>
                             </div>
-
-                            <div class="mt-3 mx-5 px-3 form-group" style="color:black;font-size:21px;font-family:inter">
-                                <label class='form-label'>(Available only for special cases i.e. partner living overseas, partner is pregnant, persons with disabilities)</label>
-                                <div class="row">
-                                    <div class="col-sm-12">
-                                        <div class="input-group input-group-sm" style='height:100%'>
-                                            <div style='height:100%;display:flex;align-items:center'>
-                                                <input type="checkbox" name="chk_pmoc" id="chk_pmoc" style="width:30px;height:auto" value="0" />
+                            
+                            <div class="requirement-item mt-4">
+                                <i class="bi bi-check-circle-fill"></i>
+                                <div>
+                                    <strong>Valid Government IDs include:</strong>
+                                    <div style="color: #64748b; margin-top: 4px;">
+                                        Driver's License, Passport, UMID, SSS ID, PhilHealth ID, Postal ID, Voter's ID, Senior Citizen ID, PWD ID
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="requirement-item">
+                                <i class="bi bi-file-earmark-check-fill"></i>
+                                <div>
+                                    <strong>Document must be:</strong>
+                                    <div style="color: #64748b; margin-top: 4px;">
+                                        Clear, readable, not expired, and shows complete name matching your application
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="requirement-item">
+                                <i class="bi bi-image-fill"></i>
+                                <div>
+                                    <strong>Image Requirements:</strong>
+                                    <div style="color: #64748b; margin-top: 4px;">
+                                        High quality photo/scan • Max 5MB • JPG, PNG, or PDF format
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Upload Zone -->
+                            <div class="mt-4">
+                                <label class="form-label" style="font-weight: 700; color: #1e293b; font-size: 16px;">
+                                    Upload Your Document:
+                                </label>
+                                
+                                <div class="file-upload-zone" id="uploadZone1" onclick="document.getElementById('file_1').click()">
+                                    <i class="bi bi-cloud-upload" style="font-size: 48px; color: #667eea;"></i>
+                                    <h5 style="margin-top: 15px; font-weight: 600; color: #1e293b;">Click to Upload or Drag & Drop</h5>
+                                    <p style="color: #64748b; margin: 8px 0 0 0;">Choose your proof of residency document</p>
+                                    
+                                    <div class="accepted-formats">
+                                        <span class="format-badge">JPG</span>
+                                        <span class="format-badge">PNG</span>
+                                        <span class="format-badge">PDF</span>
+                                        <span class="format-badge">Max 5MB</span>
+                                    </div>
+                                </div>
+                                
+                                <input type="file" id="file_1" name="file_1" class="d-none" accept=".jpg,.jpeg,.png,.pdf">
+                                
+                                <div class="file-name-display" id="fileName1">
+                                    <div>
+                                        <i class="bi bi-file-earmark-check"></i>
+                                        <span id="fileNameText1">No file selected</span>
+                                    </div>
+                                    <button type="button" class="btn btn-sm btn-light" onclick="removeFile(1)">
+                                        <i class="bi bi-x-lg"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <div class="warning-box">
+                                <div class="d-flex align-items-start">
+                                    <i class="bi bi-exclamation-triangle-fill" style="font-size: 20px; color: #f59e0b; margin-right: 10px;"></i>
+                                    <div>
+                                        <strong style="color: #92400e;">Important:</strong>
+                                        <span style="color: #78350f;"> Make sure all information is clearly visible. Blurry or unclear documents will be rejected.</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr style="border-top: 2px dashed #cbd5e1; margin: 40px 0;">
+                        
+                        <!-- SECTION 2: Online PMOC Application -->
+                        <div class="mb-5">
+                            <h3 class="mb-4" style="font-weight: 700; color: #1e293b; font-size: 24px;">
+                                <i class="bi bi-laptop text-warning"></i> 
+                                Online PMOC Application (Optional)
+                            </h3>
+                            
+                            <div class="pmoc-info-card">
+                                <div class="d-flex align-items-start mb-3">
+                                    <i class="bi bi-info-circle-fill" style="font-size: 28px; color: #f59e0b; margin-right: 15px;"></i>
+                                    <div>
+                                        <h4 style="font-weight: 700; color: #78350f; margin-bottom: 10px;">
+                                            What is Online PMOC?
+                                        </h4>
+                                        <p style="color: #92400e; margin: 0; line-height: 1.6;">
+                                            Pre-Marriage Orientation and Counseling (PMOC) is normally conducted in-person. However, we offer online sessions for couples in special circumstances who cannot attend physically.
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="form-check mb-4" style="padding: 20px; background: #f8fafc; border-radius: 12px;">
+                                <input class="form-check-input" type="checkbox" id="chk_pmoc" style="width: 24px; height: 24px; margin-top: 0;">
+                                <label class="form-check-label" for="chk_pmoc" style="margin-left: 15px; font-size: 18px; font-weight: 600; color: #1e293b; cursor: pointer;">
+                                    Yes, I wish to apply for Online PMOC
+                                </label>
+                            </div>
+                            
+                            <!-- PMOC Details (Hidden initially) -->
+                            <div id="pmocDetails" style="display: none;">
+                                
+                                <h5 style="font-weight: 700; color: #1e293b; margin-bottom: 15px;">
+                                    📋 Eligibility Criteria (Must meet ONE of the following):
+                                </h5>
+                                
+                                <div class="pmoc-criteria">
+                                    <div class="criteria-item">
+                                        <i class="bi bi-airplane"></i>
+                                        <div>
+                                            <strong>Partner Living Overseas</strong>
+                                            <div style="color: #64748b; font-size: 14px; margin-top: 4px;">
+                                                One partner is currently working or residing abroad (OFW, immigrant, etc.)
                                             </div>
-    
-                                            <label class="checkbox-inline mt-2" aria-describedby="ProcessingConsultantYN" id="lbProcessingConsultant" for="ProcessingConsultantYN">Do you wish to apply for Online PMOC? </label>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="criteria-item">
+                                        <i class="bi bi-heart-pulse"></i>
+                                        <div>
+                                            <strong>Pregnant Bride</strong>
+                                            <div style="color: #64748b; font-size: 14px; margin-top: 4px;">
+                                                Bride is pregnant and has medical restrictions for travel
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="criteria-item">
+                                        <i class="bi bi-universal-access"></i>
+                                        <div>
+                                            <strong>Person with Disability (PWD)</strong>
+                                            <div style="color: #64748b; font-size: 14px; margin-top: 4px;">
+                                                Either partner has physical limitations preventing in-person attendance
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class="criteria-item">
+                                        <i class="bi bi-briefcase"></i>
+                                        <div>
+                                            <strong>Critical Work Commitment</strong>
+                                            <div style="color: #64748b; font-size: 14px; margin-top: 4px;">
+                                                Cannot take leave due to urgent work obligations (healthcare workers, etc.)
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <!-- Justification -->
+                                <div class="mt-4">
+                                    <label class="form-label" style="font-weight: 700; color: #1e293b; font-size: 16px;">
+                                        <i class="bi bi-pencil-square"></i> Explain Your Situation:
+                                    </label>
+                                    <p style="color: #64748b; font-size: 14px; margin-bottom: 10px;">
+                                        Please provide a detailed explanation of why you need online PMOC. Be specific about your circumstances.
+                                    </p>
+                                    <textarea 
+                                        class="form-control" 
+                                        id="justification" 
+                                        name="justification" 
+                                        rows="5"
+                                        placeholder="Example: My fiancé is currently working as a nurse in Dubai, UAE and cannot return to the Philippines until December 2024 due to contract obligations. We are planning our wedding for January 2025..."
+                                        style="border: 2px solid #cbd5e1; border-radius: 12px; padding: 15px; font-size: 14px;"
+                                    ></textarea>
+                                </div>
+                                
+                                <!-- Supporting Documents -->
+                                <div class="mt-4">
+                                    <label class="form-label" style="font-weight: 700; color: #1e293b; font-size: 16px;">
+                                        <i class="bi bi-file-earmark-medical"></i> Upload Supporting Evidence:
+                                    </label>
+                                    
+                                    <div class="instruction-box mb-3">
+                                        <p style="margin: 0; color: #475569; font-size: 14px;">
+                                            <strong>Required documents based on your situation:</strong>
+                                        </p>
+                                        <ul style="margin: 10px 0 0 0; color: #64748b;">
+                                            <li><strong>Overseas:</strong> Passport, visa, employment contract, or OEC</li>
+                                            <li><strong>Pregnant:</strong> Medical certificate or ultrasound result</li>
+                                            <li><strong>PWD:</strong> PWD ID or medical certificate</li>
+                                            <li><strong>Work:</strong> Employment certificate or company letter</li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="file-upload-zone" id="uploadZone2" onclick="document.getElementById('file_2').click()">
+                                        <i class="bi bi-cloud-upload" style="font-size: 48px; color: #f59e0b;"></i>
+                                        <h5 style="margin-top: 15px; font-weight: 600; color: #1e293b;">Click to Upload Supporting Document</h5>
+                                        <p style="color: #64748b; margin: 8px 0 0 0;">Medical certificate, passport copy, PWD ID, etc.</p>
+                                        
+                                        <div class="accepted-formats">
+                                            <span class="format-badge" style="background: #f59e0b;">JPG</span>
+                                            <span class="format-badge" style="background: #f59e0b;">PNG</span>
+                                            <span class="format-badge" style="background: #f59e0b;">PDF</span>
+                                            <span class="format-badge" style="background: #f59e0b;">Max 5MB</span>
+                                        </div>
+                                    </div>
+                                    
+                                    <input type="file" id="file_2" name="file_2" class="d-none" accept=".jpg,.jpeg,.png,.pdf">
+                                    
+                                    <div class="file-name-display" id="fileName2">
+                                        <div>
+                                            <i class="bi bi-file-earmark-check"></i>
+                                            <span id="fileNameText2">No file selected</span>
+                                        </div>
+                                        <button type="button" class="btn btn-sm btn-light" onclick="removeFile(2)">
+                                            <i class="bi bi-x-lg"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                                
+                                <div class="success-box mt-3">
+                                    <div class="d-flex align-items-start">
+                                        <i class="bi bi-check-circle-fill" style="font-size: 20px; color: #10b981; margin-right: 10px;"></i>
+                                        <div style="color: #065f46;">
+                                            <strong>Note:</strong> Your online PMOC application will be reviewed within 3-5 business days. You will receive an email notification regarding approval status.
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
-                            <div class="mx-5 mb-5 px-3 pmoc_tab" style='display:none'>
-
-                                <div class="pt-4 text-left index.php_form_header">
-                                    <p style="margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:33px">PMOC Application</p>
-                                    <p style="line-height:0.9;margin-bottom:0;font-weight:bold;font-size:25px;font-family:inter;font-size:21px;color:#9B9B9B">Personal Information</p>
-                                    <img src="images/Rectangle 11942.png" style='width:100%'/>
-                                </div>
-
-                                <label class='form-label' style="color:black;font-size:21px;font-family:inter">
-                                    Justification
-                                </label>
-
-                                <textarea class="form-control" rows="3" name="justification" id="justification"></textarea>
-                                
-                                <label class='form-label mt-3' style="color:black;font-size:21px;font-family:inter">
-                                    Please attach evidence (Official government documents or medical certificate:)
-                                </label>
-
-                                <div class="container mx-0 px-0">
-                                    <input type="file" name="file_2" id="file_2" class="form-control">
-                                </div>
                         </div>
-
+                        
+                        <!-- Submit Button -->
+                        <div class="text-center mt-5">
+                            <button 
+                                type="button" 
+                                onclick="submit_user()" 
+                                class="btn btn-lg px-5"
+                                style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; font-weight: 700; font-size: 18px; border-radius: 12px; padding: 15px 60px; box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);"
+                            >
+                                <i class="bi bi-check-circle me-2"></i>
+                                Submit Application
+                            </button>
+                            
+                            <p class="mt-3" style="color: #64748b; font-size: 14px;">
+                                By submitting, you confirm that all information provided is accurate and complete.
+                            </p>
                         </div>
-                    </div>
-
-                                
-
-                    <div class="pt-4 mt-1 form-group d-flex align-items-center justify-content-center">
-                        <button onclick="submit_user()" type="button" class="btn" style="background: rgb(35,64,142);background: linear-gradient(90deg, rgba(35,64,142,1) 35%, rgba(60,148,198,1) 100%);color:white;width:300px;height:50px;font-size:25px;font-family:inter;font-weight:700;border-radius:10px;filter: drop-shadow(0px 4px 11px rgba(0, 0, 0, 0.25))">Submit</button>
-                    </div>
-                </td>
-            </tr>
-
-        
-        </table>
-
-        <div class="modal fade  xerror_modal" data-bs-backdrop="static" id="xerror_modal" tabindex="-1">
-            <div class="modal-dialog modal-dialog-centered modal-lg">
-                <div class="modal-content" style='border-radius:15px'>
-                    <div class="modal-header">
-                        <h5 class="modal-title error_msg_title" style="font-size:38px;font-family:inter;font-weight:bold">Confirmation!</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <p class="error_msg" style='font-family:inter;font-size:24px;font-weight:300'>Modal body text goes here.</p>
-                    </div>
-     
-                </div>
-            </div>
-        </div>
-
-        <footer style='height:100px;background-color:#23408E' class='footer'>
-            <div class="container-fluid"  style='height:100px'>
-
-                <div class="row"  style='height:100px'>
-                    <div class="col-4">
-                        <div class="row ms-3"  style='height:100px'>
-                            <div class="col-2 d-flex align-items-center">
-                                <img src="images/op office logo.png" style="height:77px;width:auto">
-                            </div>
-
-                            <div class="col-10 d-flex align-items-center">
-                                <div class="container" style='font-family:inter;color:white'>
-                                    <div class="col-12" style='font-size:15px;font-weight:bold'>
-                                        City Population Office of Cabuyao
-                                    </div>
-
-                                    <div class="col-12" style='font-size:9px'>
-                                        Brgy Dos. Cabuyao Retail Plaza, Cabuyao, Philippines
-                                    </div>
-
-                                    <div class="col-12" style='font-size:9px'>
-                                        cpocabuyao@gmail.com
-                                    </div>
-
-                                </div>
-          
-                            </div>
-                        </div>       
-                    </div>
-
-                    <div class="col-8 d-flex align-items-center justify-content-end">
-                        <div>
-                            <img src="images/pajamas_question.png" style='width:63px;height:auto;'>
-                        </div>   
-                    </div>
-                </div>
-
-            </div>
-        </footer>
-        <input type="hidden" name="hdn_mode" id="hdn_mode">
+                        <input type="hidden" name="hdn_mode" id="hdn_mode">
 
 
 
@@ -198,8 +509,37 @@ require "includes/cc_header.php";
         <input type="hidden" name="confirm_email_h" id="confirm_email_h" value ="<?php echo $_POST['confirm_email_h'];?>">
         <input type="hidden" name="reg_pwd_h" id="reg_pwd_h" value ="<?php echo $_POST['reg_pwd_h'];?>">
         
-    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    
+    
+    <!-- Success Modal -->
+    <div class="modal fade" id="successModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content" style="border-radius: 20px; border: none;">
+                <div class="modal-body text-center p-5">
+                    <div style="width: 80px; height: 80px; background: #d1fae5; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                        <i class="bi bi-check-lg" style="font-size: 48px; color: #10b981;"></i>
+                    </div>
+                    <h3 style="font-weight: 700; color: #1e293b; margin-bottom: 15px;">Application Submitted!</h3>
+                    <p style="color: #64748b; line-height: 1.6;">
+                        Thank you for providing the information. Your account details are currently under review for verification. 
+                        <strong>Please anticipate an email update within the next 2-3 business days.</strong>
+                    </p>
+                    <button type="button" class="btn btn-primary mt-3" onclick="window.location.href='index.php'">
+                        Return to Home
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
 
         $("#xerror_modal").on("hidden.bs.modal", function () {
@@ -267,7 +607,38 @@ require "includes/cc_header.php";
 
             //justification
             var justification = $("#justification").val();
-
+const file1 = document.getElementById('file_1').files[0];
+            if (!file1) {
+                alert('Please upload your proof of residency document!');
+                return;
+            }
+            
+            // If PMOC is checked, validate requirements
+            const pmocChecked = document.getElementById('chk_pmoc').checked;
+            if (pmocChecked) {
+                const justification = document.getElementById('justification').value.trim();
+                const file2 = document.getElementById('file_2').files[0];
+                
+                if (!justification) {
+                    alert('Please provide a justification for your online PMOC application!');
+                    return;
+                }
+                
+                if (justification.length < 50) {
+                    alert('Please provide a more detailed justification (at least 50 characters)!');
+                    return;
+                }
+                
+                if (!file2) {
+                    alert('Please upload supporting evidence for your online PMOC application!');
+                    return;
+                }
+            }
+            
+            // Show success modal
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+            
             var xdata = new FormData();
 
             xdata.append('first_name_h',first_name_h);
@@ -316,16 +687,122 @@ require "includes/cc_header.php";
                 }
             })
         }
+        // File upload handling
+        document.getElementById('file_1').addEventListener('change', function(e) {
+            handleFileSelect(e, 1);
+        });
+        
+        document.getElementById('file_2').addEventListener('change', function(e) {
+            handleFileSelect(e, 2);
+        });
+        
+        function handleFileSelect(e, fileNum) {
+            const file = e.target.files[0];
+            if (file) {
+                // Validate file size (5MB)
+                if (file.size > 5 * 1024 * 1024) {
+                    alert('File size must be less than 5MB!');
+                    e.target.value = '';
+                    return;
+                }
                 
-
-
+                // Validate file type
+                const validTypes = ['image/jpeg', 'image/jpg', 'image/png', 'application/pdf'];
+                if (!validTypes.includes(file.type)) {
+                    alert('Please upload JPG, PNG, or PDF files only!');
+                    e.target.value = '';
+                    return;
+                }
+                
+                // Show file name
+                document.getElementById('fileNameText' + fileNum).textContent = file.name;
+                document.getElementById('fileName' + fileNum).classList.add('show');
+                document.getElementById('uploadZone' + fileNum).classList.add('active');
+            }
+        }
+        
+        function removeFile(fileNum) {
+            document.getElementById('file_' + fileNum).value = '';
+            document.getElementById('fileName' + fileNum).classList.remove('show');
+            document.getElementById('uploadZone' + fileNum).classList.remove('active');
+        }
+        
+        // Show/hide PMOC section
+        document.getElementById('chk_pmoc').addEventListener('change', function() {
+            const pmocDetails = document.getElementById('pmocDetails');
+            if (this.checked) {
+                pmocDetails.style.display = 'block';
+                pmocDetails.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } else {
+                pmocDetails.style.display = 'none';
+            }
+        });
+        
+        // Form submission
+        function submitForm() {
+            // Validate file 1 is uploaded
+            const file1 = document.getElementById('file_1').files[0];
+            if (!file1) {
+                alert('Please upload your proof of residency document!');
+                return;
+            }
+            
+            // If PMOC is checked, validate requirements
+            const pmocChecked = document.getElementById('chk_pmoc').checked;
+            if (pmocChecked) {
+                const justification = document.getElementById('justification').value.trim();
+                const file2 = document.getElementById('file_2').files[0];
+                
+                if (!justification) {
+                    alert('Please provide a justification for your online PMOC application!');
+                    return;
+                }
+                
+                if (justification.length < 50) {
+                    alert('Please provide a more detailed justification (at least 50 characters)!');
+                    return;
+                }
+                
+                if (!file2) {
+                    alert('Please upload supporting evidence for your online PMOC application!');
+                    return;
+                }
+            }
+            
+            // Show success modal
+            const successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+            
+            // Here you would normally submit the form via AJAX
+            // For demonstration, we're just showing the modal
+        }
+        
+        // Drag and drop functionality
+        ['uploadZone1', 'uploadZone2'].forEach((zoneId, index) => {
+            const zone = document.getElementById(zoneId);
+            const fileNum = index + 1;
+            
+            zone.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                zone.style.borderColor = '#667eea';
+                zone.style.background = '#f1f5ff';
+            });
+            
+            zone.addEventListener('dragleave', (e) => {
+                e.preventDefault();
+                if (!zone.classList.contains('active')) {
+                    zone.style.borderColor = '#cbd5e1';
+                    zone.style.background = '#f8fafc';
+                }
+            });
+            
+            zone.addEventListener('drop', (e) => {
+                e.preventDefault();
+                const fileInput = document.getElementById('file_' + fileNum);
+                fileInput.files = e.dataTransfer.files;
+                handleFileSelect({ target: fileInput }, fileNum);
+            });
+        });
     </script>
-
-
-    
-
-
-
-<?php 
-require "includes/cc_footer.php";
-?>
+</body>
+</html>

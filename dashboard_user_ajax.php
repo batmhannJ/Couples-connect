@@ -1,55 +1,50 @@
 <?php
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
-error_reporting(E_ALL);
-
 session_start();
 require_once('resources/db_init.php');
-require_once('resources/lx2.pdodb.php');
-
-use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
-
-require 'phpmailer/src/Exception.php';
-require 'phpmailer/src/PHPMailer.php';
-require 'phpmailer/src/SMTP.php';
-
-$chkusertype = $_SESSION["username"];
-$ret=array();
-$ret['status']= true;
-
 require_once('resources/connect4.php');
 
-
-$xemail_title = "From user";
-$xemail_body = "User has sent an email";
-
-if(isset($_POST['email_subject']) && !empty($_POST['email_subject'])){
-    $xemail_title = $_SESSION["username"]." says: ".$_POST['email_subject'];
-}
-if(isset($_POST['email_remarks']) && !empty($_POST['email_remarks'])){
-    $xemail_body = $_POST['email_remarks'];
-}
-
-// EMAIL SEDING
-$mail = new PHPMailer(true);
-$mail->isSMTP();
-$mail->Host='smtp.gmail.com';
-$mail->SMTPAuth=true;
-$mail->Username='lennardleework@gmail.com';
-$mail->Password='dsfs xoai msta xgrh';
-$mail->SMTPSecure='ssl';
-$mail->Port=465;
-
-$mail->setFrom('lennardleework@gmail.com');
-$mail->addAddress('lennardleework@gmail.com');
-$mail->isHTML(true);
-$mail->Subject = $xemail_title;
-$mail->Body = $xemail_body;
-$mail->send();
-
-
+// Remove ALL PHPMailer related code
+// NO MORE: use PHPMailer\PHPMailer\PHPMailer;
+// NO MORE: require 'phpmailer/src/Exception.php';
 
 header('Content-Type: application/json');
-echo json_encode($ret);
+
+if(isset($_POST['email_subject']) && isset($_POST['email_remarks'])) {
+    
+    // Get user info
+    $user_id = $_SESSION['usr_id'];
+    $subject = trim($_POST['email_subject']);
+    $message = trim($_POST['email_remarks']);
+    
+    // Validation
+    if(empty($subject) || empty($message)) {
+        $response = array('status' => false, 'message' => 'Please fill in all fields');
+        echo json_encode($response);
+        exit;
+    }
+    
+    try {
+        // Insert feedback into database ONLY
+        $insert_feedback = "INSERT INTO user_feedback (user_id, subject, message, status, date_submitted) VALUES (?, ?, ?, 'unread', NOW())";
+        $stmt = $link->prepare($insert_feedback);
+        $result = $stmt->execute(array($user_id, $subject, $message));
+        
+        if($result) {
+            $response = array('status' => true, 'message' => 'Feedback submitted successfully');
+        } else {
+            $response = array('status' => false, 'message' => 'Failed to submit feedback. Please try again.');
+        }
+        
+    } catch(Exception $e) {
+        $response = array('status' => false, 'message' => 'Database error occurred. Please try again.');
+        error_log("Feedback submission error: " . $e->getMessage());
+    }
+    
+    echo json_encode($response);
+    exit;
+}
+
+// Return error if no valid request
+$response = array('status' => false, 'message' => 'Invalid request');
+echo json_encode($response);
 ?>

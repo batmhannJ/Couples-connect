@@ -1,118 +1,196 @@
 <?php
-// FPDF VERSION - Fixed for database column issues
-// File: generate_pdf_report.php
-
-// IMPORTANT: No output before this point - no echo, print, HTML, or whitespace!
-
-// Check if PDF generation is requested FIRST
 if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
     
-    // Clear any output buffer and start fresh
     if (ob_get_level()) {
         ob_end_clean();
     }
     ob_start();
     
-    // Download FPDF from http://www.fpdf.org/ - just need fpdf.php file
-    require('fpdf.php'); // Just download this one file and put it in your project
-    require "includes/cc_header.php"; // Your database connection
+    require('fpdf.php');
+    require "includes/cc_header.php"; 
     
     $period_from = $_POST['period_from'] ?? '';
     $period_to = $_POST['period_to'] ?? '';
     
-    // FIXED: Define date_condition properly
     $date_condition = !empty($period_from) && !empty($period_to);
     
-    // Custom PDF class
     class PDF extends FPDF {
+        private $period_from;
+        private $period_to;
+        
+        function __construct($period_from = '', $period_to = '') {
+            parent::__construct();
+            $this->period_from = $period_from;
+            $this->period_to = $period_to;
+        }
+        
         function Header() {
-            // Logo/Image (optional)
-            // $this->Image('images/logo.png', 10, 6, 30);
+            // Republic Header
+            $this->SetFont('Arial', 'B', 11);
+            $this->SetTextColor(0, 0, 0);
+            $this->Cell(0, 5, 'Republic of the Philippines', 0, 1, 'C');
             
-            // Title
-            $this->SetFont('Arial', 'B', 20);
-            $this->SetTextColor(35, 64, 142); // Blue color
-            $this->Cell(0, 15, 'COUPLES CONNECT REPORT', 0, 1, 'C');
+            $this->SetFont('Arial', '', 10);
+            $this->Cell(0, 5, 'CITY OF CALOOCAN', 0, 1, 'C');
+            
+            $this->SetFont('Arial', 'B', 10);
+            $this->Cell(0, 5, 'OFFICE OF THE CITY PLANNING AND DEVELOPMENT', 0, 1, 'C');
+            
+            $this->SetFont('Arial', '', 9);
+            $this->Cell(0, 5, 'City Hall, Caloocan City, Metro Manila', 0, 1, 'C');
+            $this->Ln(3);
+            
+            // Seal/Logo placeholder (you can add actual image)
+            // $this->Image('images/cpo_seal.png', 10, 8, 25);
+            
+            // Divider line
+            $this->SetDrawColor(0, 0, 0);
+            $this->SetLineWidth(0.8);
+            $this->Line(20, 35, 190, 35);
+            $this->SetLineWidth(0.3);
+            $this->Line(20, 36, 190, 36);
+            
+            $this->Ln(8);
+            
+            // Report Title
+            $this->SetFont('Arial', 'B', 16);
+            $this->SetTextColor(0, 51, 102);
+            $this->Cell(0, 8, 'STATISTICAL REPORT', 0, 1, 'C');
+            
+            // Report Period
+            $this->SetFont('Arial', 'B', 11);
+            $this->SetTextColor(0, 0, 0);
+            if (!empty($this->period_from) && !empty($this->period_to)) {
+                $from = date('F j, Y', strtotime($this->period_from));
+                $to = date('F j, Y', strtotime($this->period_to));
+                $this->Cell(0, 6, 'For the Period: ' . $from . ' to ' . $to, 0, 1, 'C');
+            } else {
+                $this->Cell(0, 6, 'Comprehensive Report (All Records)', 0, 1, 'C');
+            }
+            
             $this->Ln(5);
-            
-            // Line
-            $this->SetDrawColor(35, 64, 142);
-            $this->Line(20, 30, 190, 30);
-            $this->Ln(10);
         }
         
         function Footer() {
-            $this->SetY(-15);
+            $this->SetY(-25);
+            
+            // Signature lines
+            $this->SetFont('Arial', '', 9);
+            $this->SetTextColor(0);
+            
+            $this->Cell(95, 5, 'Prepared by:', 0, 0, 'L');
+            $this->Cell(95, 5, 'Noted by:', 0, 1, 'L');
+            
+            $this->Ln(8);
+            
+            $this->SetFont('Arial', 'B', 10);
+            $this->Cell(95, 5, '_________________________________', 0, 0, 'L');
+            $this->Cell(95, 5, '_________________________________', 0, 1, 'L');
+            
+            $this->SetFont('Arial', '', 9);
+            $this->Cell(95, 4, 'Planning Officer III', 0, 0, 'L');
+            $this->Cell(95, 4, 'City Planning and Development Officer', 0, 1, 'L');
+            
+            // Page number
+            $this->SetY(-10);
             $this->SetFont('Arial', 'I', 8);
             $this->SetTextColor(128);
-            $this->Cell(0, 10, 'Page ' . $this->PageNo() . ' - Generated on: ' . date('Y-m-d H:i:s A'), 0, 0, 'C');
+            $this->Cell(0, 5, 'Page ' . $this->PageNo() . ' | Generated: ' . date('F j, Y g:i A'), 0, 0, 'C');
         }
         
-        function SectionTitle($title) {
-            $this->SetFont('Arial', 'B', 14);
-            $this->SetTextColor(35, 64, 142);
-            $this->Cell(0, 10, $title, 0, 1);
-            $this->SetDrawColor(35, 64, 142);
-            $this->Line(20, $this->GetY(), 190, $this->GetY());
-            $this->Ln(5);
-        }
-        
-        function NormalText($text, $indent = 0) {
-            $this->SetFont('Arial', '', 11);
-            $this->SetTextColor(0);
-            if ($indent > 0) {
-                $this->Cell($indent, 8, '', 0, 0); // Indentation
-                $this->Cell(0, 8, $text, 0, 1);
+        function SectionHeader($title, $num = '') {
+            $this->SetFont('Arial', 'B', 13);
+            $this->SetFillColor(0, 51, 102);
+            $this->SetTextColor(255, 255, 255);
+            $this->SetDrawColor(0, 51, 102);
+            
+            if ($num) {
+                $this->Cell(0, 8, $num . '. ' . strtoupper($title), 1, 1, 'L', true);
             } else {
-                $this->Cell(0, 8, $text, 0, 1);
+                $this->Cell(0, 8, strtoupper($title), 1, 1, 'L', true);
             }
+            $this->Ln(2);
         }
         
-        function BoldText($text, $indent = 0) {
+        function DataRow($label, $value, $indent = 0, $bold = false) {
+            $this->SetTextColor(0);
+            
+            if ($bold) {
+                $this->SetFont('Arial', 'B', 11);
+            } else {
+                $this->SetFont('Arial', '', 10);
+            }
+            
+            // Add indent
+            if ($indent > 0) {
+                $this->Cell($indent, 6, '', 0, 0);
+            }
+            
+            // Label
+            $this->Cell(120 - $indent, 6, $label, 0, 0, 'L');
+            
+            // Value with background
             $this->SetFont('Arial', 'B', 11);
-            $this->SetTextColor(0);
-            if ($indent > 0) {
-                $this->Cell($indent, 8, '', 0, 0); // Indentation
-                $this->Cell(0, 8, $text, 0, 1);
-            } else {
-                $this->Cell(0, 8, $text, 0, 1);
-            }
+            $this->SetFillColor(240, 240, 240);
+            $this->Cell(70, 6, $value, 1, 1, 'C', true);
         }
         
-        // FIXED: Add method to handle text that might be too long
-        function MultiCellText($text, $indent = 0) {
-            $this->SetFont('Arial', '', 11);
-            $this->SetTextColor(0);
-            if ($indent > 0) {
-                $this->Cell($indent, 0, '', 0, 0); // Indentation
+        function SubDataRow($label, $value) {
+            $this->SetFont('Arial', '', 10);
+            $this->SetTextColor(60, 60, 60);
+            $this->Cell(10, 6, '', 0, 0);
+            $this->Cell(110, 6, '- ' . $label, 0, 0, 'L');
+            
+            $this->SetFont('Arial', 'B', 10);
+            $this->SetTextColor(0, 0, 0);
+            $this->Cell(70, 6, $value, 0, 1, 'C');
+        }
+        
+        function TableHeader($headers) {
+            $this->SetFont('Arial', 'B', 10);
+            $this->SetFillColor(0, 51, 102);
+            $this->SetTextColor(255, 255, 255);
+            $this->SetDrawColor(0, 51, 102);
+            
+            $widths = [100, 90];
+            
+            foreach ($headers as $i => $header) {
+                $this->Cell($widths[$i], 7, $header, 1, 0, 'C', true);
             }
-            $this->MultiCell(0, 8, $text, 0, 'L');
+            $this->Ln();
+        }
+        
+        function TableRow($data, $alt = false) {
+            $this->SetFont('Arial', '', 10);
+            $this->SetTextColor(0);
+            
+            if ($alt) {
+                $this->SetFillColor(245, 245, 245);
+            } else {
+                $this->SetFillColor(255, 255, 255);
+            }
+            
+            $widths = [100, 90];
+            
+            foreach ($data as $i => $cell) {
+                $align = ($i == 1) ? 'C' : 'L';
+                $this->Cell($widths[$i], 6, $cell, 1, 0, $align, true);
+            }
+            $this->Ln();
         }
     }
     
     try {
         // Create PDF
-        $pdf = new PDF();
+        $pdf = new PDF($period_from, $period_to);
+        $pdf->SetAutoPageBreak(true, 30);
         $pdf->AddPage();
         
-        // Report period
-        if ($period_from && $period_to) {
-            $pdf->SetFont('Arial', 'B', 12);
-            $pdf->SetTextColor(0);
-            $pdf->Cell(0, 10, 'Report Period: ' . $period_from . ' to ' . $period_to, 0, 1, 'C');
-            $pdf->Ln(5);
-        } else {
-            $pdf->SetFont('Arial', 'B', 12);
-            $pdf->SetTextColor(0);
-            $pdf->Cell(0, 10, 'Complete Report (All Records)', 0, 1, 'C');
-            $pdf->Ln(5);
-        }
-        
-        // ORIENTATIONS SECTION - FIXED: Check what columns exist first
-        $pdf->SectionTitle('ORIENTATIONS');
+        // SECTION I: ORIENTATIONS
+        $pdf->SectionHeader('ORIENTATIONS', 'I');
         
         try {
-            // First, let's check what columns exist in pro_meiform table
+            // Check available columns
             $check_columns = "DESCRIBE pro_meiform";
             $stmt_check = $link->prepare($check_columns);
             $stmt_check->execute();
@@ -121,7 +199,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
                 $available_columns[] = $col['Field'];
             }
             
-            // Determine which date column to use
+            // Determine date column
             $date_column = '';
             if (in_array('created_at', $available_columns)) {
                 $date_column = 'created_at';
@@ -131,7 +209,7 @@ if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
                 $date_column = 'registration_date';
             }
             
-            // Build the correct query based on date condition and available columns
+            // Query orientations
             if ($date_condition && !empty($date_column)) {
                 $select_db_totalpmo = "SELECT COUNT(*) as xcount FROM pro_meiform WHERE status='PMO' AND DATE($date_column) BETWEEN ? AND ?";
                 $stmt_totalpmo = $link->prepare($select_db_totalpmo);
@@ -147,25 +225,23 @@ if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
                 $orientation_count = $rs_totalpmo['xcount'];
             }
             
-            $pdf->BoldText('Total Number of Orientation Sessions Held: ' . $orientation_count);
-            
-            // Calculate attendees - Based on your original logic (multiply by 10)
             $total_attendees = $orientation_count * 10;
             
-            $pdf->NormalText('Total Number of Attendees: ' . $total_attendees, 10);
+            $pdf->DataRow('Total Orientation Sessions Conducted:', $orientation_count, 0, true);
+            $pdf->SubDataRow('Total Number of Attendees', $total_attendees);
             
         } catch(PDOException $e) {
-            $pdf->NormalText('Error retrieving orientation data: ' . $e->getMessage());
-            error_log("Orientation query error: " . $e->getMessage());
+            $pdf->SetFont('Arial', 'I', 9);
+            $pdf->SetTextColor(200, 0, 0);
+            $pdf->Cell(0, 6, 'Error: Unable to retrieve orientation data', 0, 1);
         }
         
         $pdf->Ln(5);
         
-        // COUNSELING SECTION - FIXED: Same approach
-        $pdf->SectionTitle('COUNSELING');
+        // SECTION II: COUNSELING SERVICES
+        $pdf->SectionHeader('COUNSELING SERVICES', 'II');
         
         try {
-            // Build the correct query based on date condition and available columns
             if ($date_condition && !empty($date_column)) {
                 $select_db_totalpmc = "SELECT COUNT(*) as xcount FROM pro_meiform WHERE status='PMC' AND DATE($date_column) BETWEEN ? AND ?";
                 $stmt_totalpmc = $link->prepare($select_db_totalpmc);
@@ -181,22 +257,23 @@ if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
                 $counseling_count = $rs_totalpmc['xcount'];
             }
             
-            $pdf->BoldText('Total Number of Counseling Sessions Held: ' . $counseling_count);
-            $pdf->NormalText('Total Number of Pre-marriage Counseling: ' . $counseling_count, 10);
-            $pdf->NormalText('Total Number of Post-marriage Counseling: 0', 10);
+            $pdf->DataRow('Total Counseling Sessions Conducted:', $counseling_count, 0, true);
+            $pdf->SubDataRow('Pre-Marriage Counseling', $counseling_count);
+            $pdf->SubDataRow('Post-Marriage Counseling', '0');
             
         } catch(PDOException $e) {
-            $pdf->NormalText('Error retrieving counseling data: ' . $e->getMessage());
-            error_log("Counseling query error: " . $e->getMessage());
+            $pdf->SetFont('Arial', 'I', 9);
+            $pdf->SetTextColor(200, 0, 0);
+            $pdf->Cell(0, 6, 'Error: Unable to retrieve counseling data', 0, 1);
         }
         
         $pdf->Ln(5);
         
-        // COUPLES SECTION - FIXED: Check pro_counselorbooking table structure
-        $pdf->SectionTitle('COUPLES');
+        // SECTION III: COUPLES SERVED BY CONCERN TYPE
+        $pdf->SectionHeader('COUPLES SERVED BY CONCERN TYPE', 'III');
         
         try {
-            // Check what columns exist in pro_counselorbooking table
+            // Check booking table structure
             $check_booking_columns = "DESCRIBE pro_counselorbooking";
             $stmt_check_booking = $link->prepare($check_booking_columns);
             $stmt_check_booking->execute();
@@ -205,7 +282,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
                 $booking_columns[] = $col['Field'];
             }
             
-            // Determine which date column to use for bookings
             $booking_date_column = '';
             if (in_array('booking_date', $booking_columns)) {
                 $booking_date_column = 'booking_date';
@@ -213,24 +289,23 @@ if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
                 $booking_date_column = 'date';
             } elseif (in_array('created_at', $booking_columns)) {
                 $booking_date_column = 'created_at';
-            } elseif (in_array('date_created', $booking_columns)) {
-                $booking_date_column = 'date_created';
             }
             
-            // Check if concern_id exists
             $has_concern_id = in_array('concern_id', $booking_columns);
             
-            // First, get all concern types
+            // Create table
+            $pdf->TableHeader(['Concern Type', 'Number of Reports']);
+            
+            // Get concerns
             $select_db_ac = "SELECT * FROM mf_concerns";
             $stmt = $link->prepare($select_db_ac);
             $stmt->execute();
             
-            $concerns_found = false;
+            $alt = false;
+            $total_all_concerns = 0;
+            
             while($rs_ac = $stmt->fetch()){
-                $concerns_found = true;
-                
                 try {
-                    // FIXED: Get count for each specific concern type if concern_id exists
                     if ($has_concern_id) {
                         if ($date_condition && !empty($booking_date_column)) {
                             $select_db_ac2 = "SELECT COUNT(*) as xcount FROM pro_counselorbooking 
@@ -244,7 +319,6 @@ if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
                             $stmt2->execute([$rs_ac['id']]);
                         }
                     } else {
-                        // If no concern_id, just get total count for all concerns
                         if ($date_condition && !empty($booking_date_column)) {
                             $select_db_ac2 = "SELECT COUNT(*) as xcount FROM pro_counselorbooking 
                                              WHERE DATE($booking_date_column) BETWEEN ? AND ?";
@@ -262,115 +336,62 @@ if (isset($_POST['action']) && $_POST['action'] == 'generate_pdf') {
                         $xcount = $rs_ac2["xcount"];
                     }
                     
-                    // If no concern_id, distribute the total count evenly among concerns
-                    if (!$has_concern_id) {
-                        // Get total number of concerns
-                        $total_concerns_stmt = $link->prepare("SELECT COUNT(*) as total FROM mf_concerns");
-                        $total_concerns_stmt->execute();
-                        $total_concerns_result = $total_concerns_stmt->fetch();
-                        $total_concerns = $total_concerns_result['total'];
-                        
-                        // Distribute evenly (this is just for display purposes)
-                        $xcount = $total_concerns > 0 ? floor($xcount / $total_concerns) : 0;
-                    }
-                    
-                    // FIXED: Use MultiCellText for long concern names
-                    $concern_text = 'Total Number of Reports of ' . $rs_ac['concerns'] . ': ' . $xcount;
-                    if (strlen($concern_text) > 80) {
-                        $pdf->MultiCellText($concern_text, 0);
-                    } else {
-                        $pdf->BoldText($concern_text);
-                    }
+                    $pdf->TableRow([$rs_ac['concerns'], $xcount], $alt);
+                    $total_all_concerns += $xcount;
+                    $alt = !$alt;
                     
                 } catch(PDOException $e) {
-                    $pdf->NormalText('Error retrieving data for ' . $rs_ac['concerns'] . ': ' . $e->getMessage());
-                    error_log("Couples query error for concern " . $rs_ac['id'] . ": " . $e->getMessage());
+                    $pdf->TableRow([$rs_ac['concerns'], 'Error'], $alt);
+                    $alt = !$alt;
                 }
             }
             
-            if (!$concerns_found) {
-                $pdf->NormalText('No concern categories found in database.');
-            }
-            
-            // FIXED: Add overall totals
-            $pdf->Ln(5);
-            
-            try {
-                // Get total couples count
-                if ($date_condition && !empty($booking_date_column)) {
-                    $select_total_couples = "SELECT COUNT(*) as total FROM pro_counselorbooking 
-                                           WHERE DATE($booking_date_column) BETWEEN ? AND ?";
-                    $stmt_total = $link->prepare($select_total_couples);
-                    $stmt_total->execute([$period_from, $period_to]);
-                } else {
-                    $select_total_couples = "SELECT COUNT(*) as total FROM pro_counselorbooking";
-                    $stmt_total = $link->prepare($select_total_couples);
-                    $stmt_total->execute();
-                }
-                
-                $total_couples = 0;
-                if($rs_total = $stmt_total->fetch()){
-                    $total_couples = $rs_total['total'];
-                }
-                
-                $pdf->BoldText('Total Number of Couples Served: ' . $total_couples);
-                
-            } catch(PDOException $e) {
-                $pdf->NormalText('Error retrieving total couples data: ' . $e->getMessage());
-                error_log("Total couples query error: " . $e->getMessage());
-            }
+            // Total row
+            $pdf->SetFont('Arial', 'B', 11);
+            $pdf->SetFillColor(0, 51, 102);
+            $pdf->SetTextColor(255, 255, 255);
+            $pdf->Cell(100, 7, 'TOTAL COUPLES SERVED', 1, 0, 'R', true);
+            $pdf->Cell(90, 7, $total_all_concerns, 1, 1, 'C', true);
             
         } catch(PDOException $e) {
-            $pdf->NormalText('Error retrieving couples data: ' . $e->getMessage());
-            error_log("Couples section error: " . $e->getMessage());
+            $pdf->SetFont('Arial', 'I', 9);
+            $pdf->SetTextColor(200, 0, 0);
+            $pdf->Cell(0, 6, 'Error: Unable to retrieve couples data', 0, 1);
         }
         
-        // FIXED: Add summary section
         $pdf->Ln(10);
-        $pdf->SectionTitle('SUMMARY');
         
-        // Add summary calculations here if needed
-        $pdf->NormalText('Report generated successfully.');
-        $pdf->NormalText('Data extracted from: ' . date('Y-m-d H:i:s'));
+        // CERTIFICATION
+        $pdf->SetFont('Arial', '', 10);
+        $pdf->SetTextColor(0);
+        $pdf->MultiCell(0, 5, 'This is to certify that the above statistics are true and correct based on the records of the Office of the City Planning and Development for the period indicated.', 0, 'J');
         
-        if ($date_condition) {
-            $pdf->NormalText('Date range: ' . $period_from . ' to ' . $period_to);
-        } else {
-            $pdf->NormalText('All available records included.');
-        }
-        
-        // Clean any remaining output buffer
+        // Clean output buffer
         if (ob_get_level()) {
             ob_end_clean();
         }
         
-        // Set headers for PDF download
+        // Output PDF
         header('Content-Type: application/pdf');
-        header('Content-Disposition: attachment; filename="CouplesConnect_Report_' . date('Y-m-d_H-i-s') . '.pdf"');
+        header('Content-Disposition: attachment; filename="CPO_Statistical_Report_' . date('Y-m-d') . '.pdf"');
         header('Cache-Control: private, max-age=0, must-revalidate');
         header('Pragma: public');
         
-        // Generate filename and output
-        $filename = 'CouplesConnect_Report_' . date('Y-m-d_H-i-s') . '.pdf';
-        $pdf->Output('D', $filename); // 'D' = force download
+        $pdf->Output('D', 'CPO_Statistical_Report_' . date('Y-m-d') . '.pdf');
         
     } catch(Exception $e) {
-        // If PDF generation fails, clean output and show error
         if (ob_get_level()) {
             ob_end_clean();
         }
         
-        // Log the error
         error_log("PDF Generation Error: " . $e->getMessage());
-        
-        // Show user-friendly error
         echo "<script>alert('Error generating PDF report. Please try again.'); window.history.back();</script>";
     }
     
     exit();
 }
 
-// If not generating PDF, redirect back to the report page
+// If not generating PDF, redirect back
 header('Location: ' . $_SERVER['HTTP_REFERER']);
 exit();
 ?>
